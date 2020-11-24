@@ -11,6 +11,7 @@ use Conduction\CommonGroundBundle\Service\PtcService;
 use Conduction\CommonGroundBundle\Service\VrcService;
 use DateTime;
 use function GuzzleHttp\Promise\all;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -29,6 +30,7 @@ class PtcController extends AbstractController
 {
     /**
      * @Route("/user")
+     *
      * @Template
      */
     public function userAction(Session $session, Request $request, CommonGroundService $commonGroundService, ApplicationService $applicationService, ParameterBagInterface $params, string $slug = 'home')
@@ -41,6 +43,7 @@ class PtcController extends AbstractController
 
     /**
      * @Route("/organisation")
+     * @Security("is_granted('ROLE_group.admin')")
      * @Template
      */
     public function organisationAction(Session $session, Request $request, CommonGroundService $commonGroundService, ApplicationService $applicationService, ParameterBagInterface $params, string $slug = 'home')
@@ -88,7 +91,9 @@ class PtcController extends AbstractController
 
         // Lets load a request
         if ($loadrequest = $request->query->get('request')) {
-            $variables['request'] = $commonGroundService->getResource($loadrequest);
+            $requestUUID = $commonGroundService->getUuidFromUrl($loadrequest);
+            $variables['request'] = $commonGroundService->getResource(['component'=>'vrc', 'type'=>'requests', 'id'=>$requestUUID]);
+            $variables['submit'] = 'true';
             $session->set('request', $variables['request']);
         }
 
@@ -106,7 +111,7 @@ class PtcController extends AbstractController
 
         // What if the request in session is defrend then the procces type that we are currently running? Or if we dont have a process_type at all? Then we create a base request
         if (
-            (array_key_exists('processType', $variables['request']) && $variables['request']['processType'] != $variables['process']['@id'])
+            (array_key_exists('processType', $variables['request']) && $commonGroundService->getUuidFromUrl($variables['request']['processType']) != $variables['process']['id'])
             ||
             !array_key_exists('processType', $variables['request'])
         ) {
@@ -122,7 +127,6 @@ class PtcController extends AbstractController
         if ($stage && $stage != 'start') {
             $variables['request']['currentStage'] = $stage;
         }
-
         // Aditionally some one might have tried to pre-fill the form, wich we will then use overwrite the data
         $variables['request'] = array_merge($variables['request'], $request->query->all());
 
@@ -180,14 +184,16 @@ class PtcController extends AbstractController
             }
 
             // We only support the posting and saving of
-            if ($this->getUser()) {
+            if ($this->getUser() || in_array($request['status'], ['submitted'])) {
                 $request = $commonGroundService->saveResource($request, ['component' => 'vrc', 'type' => 'requests']);
             }
 
             // stores an attribute in the session for later reuse
             $variables['request'] = $request;
+
             $session->set('request', $request);
         }
+
         // Let load the request on the procces and validate it
         $variables['process'] = $ptcService->extendProcess($variables['process'], $variables['request']);
 

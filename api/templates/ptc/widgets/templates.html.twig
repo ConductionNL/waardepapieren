@@ -1,11 +1,10 @@
 {% set requestType = commonground_resource(process.requestType) %}
-
+{% if requestType.templates is defined and requestType.templates is not empty %}
     <div class="content-background">
         <div class="content">
             <h2>{{ 'download documents'|trans|capitalize }}</h2>
-
+            {% if requestType is defined and requestType is not empty and request.id is defined and request.id is not empty %}
             <ul class="list list--files">
-                {% if requestType is defined and requestType is not empty and request.id is defined and request.id is not empty %}
                 {% if requestType.templates is defined and requestType.templates is not empty %}
                     {% for template in requestType.templates %}
                         <li class="file">
@@ -21,7 +20,7 @@
                         </li>
                     {% endfor %}
             </ul>
-            {% endif %}
+                {% endif %}
             {% if request.order is defined and request.order is not empty %}
             <h5>{{ 'orders'|trans|capitalize }}</h5>
             <ul style="margin-top: 0 !important;" class="list list--files">
@@ -39,7 +38,7 @@
             </ul>
             {% endif %}
             {% if request.order is defined and request.order is not empty %}
-            {% set invoices = commonground_resource_list({'component':'bc', 'type':'invoices'}, {'order': commonground_resource(request.order)['@id'] })['hydra:member'] %}
+                {% set invoices = commonground_resource_list({'component':'bc', 'type':'invoices'}, {'order': commonground_resource(request.order)['@id'] })['hydra:member'] %}
             {% endif %}
             {% if invoices is defined and invoices is not empty %}
                 <h5>{{ 'invoices'|trans|capitalize }}</h5>
@@ -58,6 +57,7 @@
                         </li>
                     </ul>
                 {% endfor %}
+            {% endif %}
             {% endif %}
         </div>
     </div>

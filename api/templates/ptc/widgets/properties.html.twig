@@ -58,7 +58,7 @@
                         {% for property in section.propertiesForms %}
                             <li class="definition-list__item definition-list__item--horizontal">
                                 <div class="definition-list__title" style="max-width: 100%;">
-                                    <span>{{ property.title|capitalize }}</span>
+                                    <span>{{ property.title|raw }}</span>
                                 </div>
 
                                 <div class="definition-list__description">
@@ -133,6 +133,10 @@
                                                 {{ commonground_resource(property.value).straat|capitalize }} {{ commonground_resource(property.value).huisnummer }}
                                             {% else %}
                                                 {{ commonground_resource(property.value).name|capitalize }}
+                                            {% endif %}
+                                        {% elseif property.format == 'calendar' %}
+                                            {% if property.value is not empty %}
+                                                {{ property.value|date('d-m-Y h:i','Europe/Paris') }}
                                             {% endif %}
                                         {% else %}
                                             {{ property.value|capitalize }}

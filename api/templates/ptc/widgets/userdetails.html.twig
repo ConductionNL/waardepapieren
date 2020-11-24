@@ -1,0 +1,75 @@
+
+{% set user = commonground_resource(app.user.person) %}
+<div class="content-background" style="margin-top: 20px">
+    <div class="content">
+        <h2>{{ 'submitter'|trans|capitalize }}</h2>
+        <ul class="definition-list">
+            {% if user.naam.voornamen is defined and user.naam.voornamen is not empty %}
+                <li class="definition-list__item definition-list__item--horizontal">
+                    <div class="definition-list__title">
+                        Voornamen
+                    </div>
+                    <div class="definition-list__description">
+                        <p>{{ user.naam.voornamen }}</p>
+                    </div>
+                </li>
+            {% endif %}
+            {% if user.naam.geslachtsnaam is defined and user.naam.geslachtsnaam is not empty %}
+                <li class="definition-list__item definition-list__item--horizontal">
+                    <div class="definition-list__title">
+                        Achternaam
+                    </div>
+                    <div class="definition-list__description">
+                        <p>{{ user.naam.geslachtsnaam }}</p>
+                    </div>
+                </li>
+            {% endif %}
+            {% if user.naam.voorvoegsel is defined and user.naam.voorvoegsel is not empty%}
+                <li class="definition-list__item definition-list__item--horizontal">
+                    <div class="definition-list__title">
+                        Voorvoegsel
+                    </div>
+                    <div class="definition-list__description">
+                        <p>{{ user.naam.voorvoegsel }}</p>
+                    </div>
+                </li>
+            {% endif %}
+            {% if user.leeftijd is defined and user.leeftijd is not empty%}
+                <li class="definition-list__item definition-list__item--horizontal">
+                    <div class="definition-list__title">
+                        Leeftijd
+                    </div>
+                    <div class="definition-list__description">
+                        <p>{{ user.leeftijd }}</p>
+                    </div>
+                </li>
+            {% endif %}
+            {% if user.geslachtsaanduiding is defined and user.geslachtsaanduiding is not empty%}
+                <li class="definition-list__item definition-list__item--horizontal">
+                    <div class="definition-list__title">
+                        Geslacht
+                    </div>
+                    <div class="definition-list__description">
+                        <p>{{ user.geslachtsaanduiding }}</p>
+                    </div>
+                </li>
+            {% endif %}
+            <li class="definition-list__item definition-list__item--horizontal">
+                <div class="definition-list__title">
+                    Adres
+                </div>
+                <div class="definition-list__description">
+                    <p>
+                        {% if user.verblijfplaats.straatnaam is defined and user.verblijfplaats.straatnaam is not empty %}{{ user.verblijfplaats.straatnaam }}{% endif %}
+                        {% if user.verblijfplaats.huisnummer is defined and user.verblijfplaats.huisnummer is not empty %}{{ user.verblijfplaats.huisnummer }}{% endif %}
+                        {% if user.verblijfplaats.huisletter is defined and user.verblijfplaats.huisletter is not empty %}{{ user.verblijfplaats.huisletter }}{% endif %}
+                        {% if user.verblijfplaats.huisnummertoevoeging is defined and user.verblijfplaats.huisnummertoevoeging is not empty %}{{ user.verblijfplaats.huisnummertoevoeging }}{% endif %}
+                        <br>
+                        {% if user.verblijfplaats.postcode is defined and user.verblijfplaats.postcode is not empty %}{{ user.verblijfplaats.postcode }}{% endif%}
+                        {% if user.verblijfplaats.woonplaatsnaam is defined and user.verblijfplaats.woonplaatsnaam is not empty %}{{ user.verblijfplaats.woonplaatsnaam }}{% endif %}
+                    </p>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>

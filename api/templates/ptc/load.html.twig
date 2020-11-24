@@ -5,8 +5,10 @@
     <div class="col-md-12">
         <div class="content">
             <header class="content__header">
+                {% if process.showBackButton is defined and process.showBackButton %}
                 <a class="backlink" href="{{ path('app_ptc_index') }}">{{ 'processes'|trans|capitalize }}</a>
-                <header class="content__header">
+                {% endif %}
+                <header class="content__header" style="margin-top: 20px;">
                     <h1 class="content__header-title">{{ process.name|capitalize }}</h1>
                 </header>
             </header>
@@ -25,7 +27,7 @@
 
 <div class="row">
     <div class="col-md-8  col-sm-12">
-        <form method="post" action="{{ path('app_ptc_slug',{id:process.id, slug:slug}) }}" class="form" enctype="multipart/form-data">
+        <form method="post" action="{{ url('app_ptc_slug',{id:process.id, slug:slug}) }}" class="form" enctype="multipart/form-data">
             {% include 'ptc/widgets/default.html.twig' %}
 
             {% if slug is not defined or slug == 'instruction' %}
@@ -38,7 +40,7 @@
             {% elseif slug == 'processed' %}
                 {% include 'ptc/widgets/processed.html.twig' %}
             {% elseif stage.sections is defined and stage.sections is not null %}
-                {% include 'ptc/widgets/form.html.twig' %}
+                {% include 'ptc/widgets/procces.html.twig' %}
             {% endif %}
 
             {% if slug == 'instruction' %}

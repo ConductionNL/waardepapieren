@@ -1,0 +1,44 @@
+
+<div>
+    <label class="input__label" for="{{ property.id }}" id="{{ property.id }}_label">
+        {% if property.icon is defined and property.icon is not empty %}
+            <i style="margin-right: 10px;" class="{{ property.icon }}"></i>
+        {% endif %}
+        {{ property.title|first|capitalize ~ property.title|slice(1) }}
+        {% if property.required is defined and property.required %}<span style="color: red;"><strong>*</strong></span>{% endif %}</label>
+    {%  if property.description %}<span class="input__hint" id="{{ property.id }}_name">{{ property.description|raw }}</span>{% endif %}
+</div>
+<div class="row">
+    <div class="col-xs-12 col-md-4">
+        <div class="input input--horizontal {%if property.valid is defined and not property.valid %}input--invalid{% endif %}">
+            <label class="input__label" for="iban">IBAN{% if property.required is defined and property.required %}<span style="color: red;"><strong>*</strong></span>{% endif %}</label>
+            <input class="input__control input__control--text input__control--l" id="iban" type="text" name="request[properties][{{ property.name }}][iban]" {% if property.required is defined and property.required %}required{% endif %}
+                {% if property.example is defined and property.example is not empty %}placeholder="{{ property.example }}" {% endif %}
+                {% if request['properties'][property.name]['iban'] is defined and  request['properties'][property.name]['iban'] is not empty %}
+                value="{{  request['properties'][property.name]['iban'] }}"
+                {% endif %}>
+        </div>
+    </div>
+    <div class="col-xs-12 col-md-4">
+        <div class="input input--horizontal {%if property.valid is defined and not property.valid %}input--invalid{% endif %}">
+            <label class="input__label" for="swift">SWIFT</label>
+            <input class="input__control input__control--text input__control--l" id="swift" type="text" name="request[properties][{{ property.name }}][swift]"
+                {% if property.example is defined and property.example is not empty %}placeholder="{{ property.example }}" {% endif %}
+                {% if request['properties'][property.name]['swift'] is defined and  request['properties'][property.name]['swift'] is not empty %}
+                value="{{  request['properties'][property.name]['swift'] }}"
+                {% endif %}>
+        </div>
+    </div>
+    <div class="col-xs-12 col-md-4">
+        <div class="input input--horizontal {%if property.valid is defined and not property.valid %}input--invalid{% endif %}">
+            <label class="input__label" for="tenaamstelling">{{ 'account name'|trans|capitalize }}{% if property.required is defined and property.required %}<span style="color: red;"><strong>*</strong></span>{% endif %}</label>
+            <input class="input__control input__control--text input__control--l" id="tenaamstelling" type="text" name="request[properties][{{ property.name }}][tenaamstelling]" {% if property.required is defined and property.required %}required{% endif %}
+                {% if property.example is defined and property.example is not empty %}placeholder="{{ property.example }}" {% endif %}
+                {% if request['properties'][property.name]['tenaamstelling'] is defined and  request['properties'][property.name]['tenaamstelling'] is not empty %}
+                value="{{  request['properties'][property.name]['tenaamstelling'] }}"
+                {% endif %}>
+        </div>
+    </div>
+</div>
+
+

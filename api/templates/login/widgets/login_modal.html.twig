@@ -35,14 +35,14 @@
                 {% if application['defaultConfiguration']['configuration']['login']['digid'] is defined and application['defaultConfiguration']['configuration']['login']['digid'] %}
                     <h2 id="inloggen-verzuimloket">{{ 'for citizen'|trans|capitalize }}</h2>
                     <p>
-                        <a href="{{ commonground_cleanurl({"component":"ds"}) }}?responceUrl={{ absolute_url(path('app_default_index')) }}digispoof&backUrl={{ absolute_url(path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params'))) }}"
+                        <a href="{{ commonground_cleanurl({"component":"ds"}) }}?responceUrl={{ absolute_url(path('app_user_digispoof')) }}&backUrl={{ absolute_url(path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params'))) }}"
                            class="btn btn--digid btn-block">{{ 'digid'|trans|capitalize }}</a></p>
                 {% endif %}
 
                 {% if application['defaultConfiguration']['configuration']['login']['eherkening'] is defined and application['defaultConfiguration']['configuration']['login']['eherkening'] %}
                     <h2 id="inloggen-verzuimloket">{{ 'for businesses'|trans|capitalize }}</h2>
                     <p>
-                        <a href="{{ commonground_cleanurl({"component":"eh"}) }}?responceUrl={{ absolute_url(path('app_default_index')) }}eherkenning&backUrl={{ absolute_url(path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params'))) }}"
+                        <a href="{{ commonground_cleanurl({"component":"eh"}) }}?responceUrl={{ absolute_url(path('app_user_eherkenning')) }}&backUrl={{ absolute_url(path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params'))) }}"
                            class="btn btn--eherkenning btn-block">{{ 'e-herkening'|trans|capitalize }}</a></p>
                 {% endif %}
 

@@ -2,39 +2,65 @@
     app.request.attributes.get('_route_params')) %}
 
 <nav class="top-nav" id="docs-nav">
-    <div class="container">
-        <ul class="navigation">
-            {% set currentPath = path(app.request.attributes.get('_route'),
-                app.request.attributes.get('_route_params')) %}
+    <div class="container" style="display: flex">
+        {% if application.defaultConfiguration.configuration.navImage is defined and application.defaultConfiguration.configuration.navImage is not empty %}
+            {% set navImage = application.defaultConfiguration.configuration.navimage %}
+            <div class="nav-image">
+                <img style="width: 35px; height: 35px; display: block" src="data:image/file;base64,{{ navImage['base64'] }})" alt="">
+            </div>
+        {% endif %}
+        <div class="nav-position">
+            <ul class="navigation">
+                {% set currentPath = path(app.request.attributes.get('_route'),
+                    app.request.attributes.get('_route_params')) %}
 
-            {% if application.defaultConfiguration.configuration.mainMenu is defined %}
-                {% set menu = commonground_resource(application.defaultConfiguration.configuration.mainMenu) %}
-                {% for item in menu.menuItems|sort((a, b) => a.order <=> b.order) %}
-                    <li class="navigation__item col-xs" >
-                        <a class="navigation__link {% if item.href == currentPath %} navigation__link--active {% endif %}"
-                           href="{{ item.href }}">
-                            <i class="{{ item.icon }}" role="presentation"></i> {{ item.name }}
-                        </a>
+                {% if application.defaultConfiguration.configuration.mainMenu is defined %}
+                    {% set menuItems = commonground_resource_list({"component":"wrc","type":"menu_items"},{"menu.id":application.defaultConfiguration.configuration.mainMenu}) %}
+                    {% for item in menuItems['hydra:member']|sort((a, b) => a.order <=> b.order) %}
+                        <li class="navigation__item col-xs" >
+                            <a class="navigation__link {% if item.href == currentPath %} navigation__link--active {% endif %}"
+                               href="{{ item.href }}">
+                                <i class="{{ item.icon }}" role="presentation"></i> {{ item.name }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                    <li class="navigation__item navigation__item--has-popout col-xs-hidden">
+                        <a class="navigation__link" href="#"><i class="icon icon-hamburger" role="presentation"></i> Menu</a>
+                        <div class="navigation__popout" style="z-index: 5 !important; left: 0;">
+                            <ul class="list list--links list--chevrons navigation__popout-items">
+                                {% for item in  menuItems['hydra:member']|sort((a, b) => a.order <=> b.order) %}
+                                <li class="navigation__popout-item  {% if item.href == currentPath %} navigation__link--active {% endif %}">
+                                    <a class="navigation__popout-link" href="{{ item.href }}"><i class="{{ item.icon }}" role="presentation"></i> {{ item.name }}</a>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
                     </li>
-                {% endfor %}
-                <li class="navigation__item navigation__item--has-popout col-xs-hidden">
-                    <a class="navigation__link" href="#"><i class="icon icon-hamburger" role="presentation"></i> Menu</a>
-                    <div class="navigation__popout">
+                {% endif %}
+            </ul>
+        </div>
+
+
+        <div class="top-nav__block top-nav__block--right" style="display: flex; justify-content: flex-end; order: 3">
+
+            <ul class="navigation">
+
+                <li class="navigation__item navigation__item--has-popout">
+                    <a class="navigation__link" href="#"><i class="fas fa-language" role="presentation"></i> {{ app.request.locale|upper }}</a>
+                    <div class="navigation__popout" style="min-width: 70px;">
                         <ul class="list list--links list--chevrons navigation__popout-items">
-                            {% for item in menu.menuItems|sort((a, b) => a.order <=> b.order) %}
-                            <li class="navigation__popout-item  {% if item.href == currentPath %} navigation__link--active {% endif %}">
-                                <a class="navigation__popout-link" href="{{ item.href }}"><i class="{{ item.icon }}" role="presentation"></i> {{ item.name }}</a>
+                            {% set query = app.request.attributes.get('_route_params') %}
+                            {% set query = query|merge({'_locale': 'nl'}) %}
+                            <li class="navigation__popout-item">{# absolute_url(path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params'))) #}
+                                <a class="navigation__popout-link" href="{{ absolute_url(path(app.request.attributes.get('_route'), query)) }}"  style="padding: 0; color: #000"> <i class="" role="presentation"></i>NL</a>
                             </li>
-                            {% endfor %}
+                            {% set query = query|merge({'_locale': 'en'}) %}
+                            <li class="navigation__popout-item">{# absolute_url(path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params'))) #}
+                                <a class="navigation__popout-link" href="{{ absolute_url(path(app.request.attributes.get('_route'), query)) }}" style="padding: 0; color: #000"> <i class="" role="presentation"></i>EN</a>
+                            </li>
                         </ul>
                     </div>
                 </li>
-            {% endif %}
-        </ul>
-
-        <div class="top-nav__block top-nav__block--right" style="display: flex; justify-content: flex-end">
-
-            <ul class="navigation">
 
                 {# onderstaande is nu bij wijze van hotfix, de ventigid het coole rechts zwevende menu item #}
                 {% if not app.user %}
@@ -46,9 +72,12 @@
                 {% else %}
                     {% if application.defaultConfiguration.configuration.userPage is defined %}
                         <li class="navigation__item">
+
+
                             <a href="/{{ application.defaultConfiguration.configuration.userPage }}" title="Profile"
                                class="navigation__link  ">
-                                <i style="margin-right: 10px" class="fas fa-user"></i>
+
+                                <i class="user--circle">{{ app.user.name|first|upper }}</i>
                                 <span>{{ app.user.name }}</span>
                             </a>
                         </li>
@@ -61,6 +90,7 @@
                     </li>
                 {% endif %}
             </ul>
+
             {% if application.defaultConfiguration.configuration.search is defined %}
             <form method="post" action="{{ path('app_search_index') }}"
                   style="float: right; margin-left: 20px;">

@@ -1,0 +1,107 @@
+<div class="content-background">
+    <div class="content">
+        {% if stage.sections is defined and stage.sections is not empty %}
+            {% for section in stage.sections|sort((a, b) => a.orderNumber <=> b.orderNumber) %}
+                <div>
+                    <h2>{% if section.icon is defined and section.icon is not empty %}
+                            <i style="margin-right: 10px;" class="{{ section.icon }}"></i>
+                        {% endif %}
+                        {{ section.name|capitalize }} {% if section.valid is defined and section.valid and section.properties|length > 0 %}<span class="icon icon-check" role="presentation" x-uno-tooltip="" title="{{ 'You have correctly filled out all required questions for this section'|trans|capitalize }}"></span>{% endif %}</h2>
+                    {% autoescape false %}
+                        <p>{{ section.description|first|capitalize ~ section.description|slice(1)|raw }}</p>
+                    {% endautoescape %}
+                    {% for property in section.properties %}
+                        {% set property = commonground_resource(property) %}
+
+                        {% if property.type == 'array' and property.format == 'bsn' %}
+                            {% include 'ptc/formelements/person.html.twig' %}
+                            {# should be depracticed#}
+                        {% elseif property.format == 'bag' %}
+                            {% include 'ptc/formelements/bag/address.html.twig' %}
+                        {% elseif property.iri == 'bag/address' %}
+                            {% include 'ptc/formelements/bag/address.html.twig' %}
+                        {% elseif property.iri == 'wrc/organizations' %}
+                            {% include 'ptc/formelements/organizations.html.twig' %}
+                        {% elseif property.iri == 'grc/cemetery' %}
+                            {% include 'ptc/formelements/cemetery.html.twig' %}
+                        {% elseif property.iri == 'grc/grave_type' %}
+                            {% include 'ptc/formelements/grave_type.html.twig' %}
+                        {% elseif property.iri == 'arc/event' %}
+                            {% include 'ptc/formelements/event.html.twig' %}
+
+                        {% elseif property.iri == 'lc/accommodation' %}
+                            {% include 'ptc/formelements/accommodation.html.twig' %}
+                        {% elseif property.iri == 'pdc/offer' %}
+                            {% include 'ptc/formelements/pdc/offer.html.twig' %}
+
+                        {% elseif property.iri == 'brp/ingeschrevenpersoon' %}
+                            {% include 'widgets/brp/ingeschreven_persoon.html.twig' %}
+                        {% elseif property.iri == 'irc/assents' %}
+                            {% include 'ptc/formelements/assent.html.twig' %}
+                        {% elseif property.iri == 'cc/people' %}
+                            {% include 'ptc/formelements/people.html.twig' %}
+                        {% elseif property.iri == 'cc/organizations' %}
+                            {% include 'ptc/formelements/ccOrganization.html.twig' %}
+                        {% elseif property.iri == 'cc/addresses' %}
+                            {% include 'ptc/formelements/ccAddress.html.twig' %}
+                        {% elseif property.iri == 'wrc/organization' %}
+                            {% include 'ptc/formelements/wrcOrganization.html.twig' %}
+
+                            {# Let slook for formats #}
+                        {% elseif property.format == 'iban' and property.type == 'array' %}
+                            {% include 'ptc/formelements/iban.html.twig' %}
+                        {% elseif property.format == 'phonenumber' %}
+                            {% include 'ptc/formelements/generic.html.twig'  with {'type': 'tel'} %}
+                        {% elseif property.format == 'datetime' %}
+                            {% include 'ptc/formelements/generic.html.twig'  with {'type': 'datetime-local'} %}
+                        {% elseif property.format == 'date-time' %}
+                            {% include 'ptc/formelements/generic.html.twig'  with {'type': 'datetime-local'} %}
+                        {% elseif property.format == 'textarea' %}
+                            {% include 'ptc/formelements/textarea.html.twig' %}
+                        {% elseif property.format == 'text-area' %}
+                            {% include 'ptc/formelements/textarea.html.twig' %}
+                        {% elseif property.format == 'radio' %}
+                            {% include 'ptc/formelements/radio.html.twig' %}
+                        {% elseif property.format == 'rdw' %}
+                            {% include 'ptc/formelements/rdw.html.twig' %}
+                        {% elseif property.format == 'file' %}
+                            {% include 'ptc/formelements/file.html.twig' %}
+                        {% elseif property.format == 'location' %}
+                            {% include 'ptc/formelements/location.html.twig' %}
+                        {% elseif property.format == 'meeverhuizen' %}
+                            {% include 'ptc/formelements/mee_verhuizers.html.twig' %}
+                        {% elseif property.format == 'calendar' %}
+                            {% include 'ptc/formelements/calendar.html.twig' %}
+                        {% elseif property.format == 'tofrom-time' %}
+                            {% include 'ptc/formelements/tofromtime.html.twig' %}
+                        {% elseif property.format == 'kvk' %}
+                            {% include 'ptc/formelements/kvk.html.twig' %}
+                        {% elseif property.format == 'btw' %}
+                            {% include 'ptc/formelements/btw.html.twig' %}
+
+
+                        {% elseif property.format == 'checkbox' %}
+                            {% include 'ptc/formelements/checkbox.html.twig' %}
+
+                            {# Generic HTML 5 input types #}
+                        {% elseif property.format in {'button':'','color':'','date':'','datetime-local':'','email':'','file':'','hidden':'','image':'','month':'','number':'','password':'','radio':'','range':'','reset':'','search':'','submit':'','tel':'','text':'','time':'','url':'','week':''}|keys %}
+                            {% include 'ptc/formelements/generic.html.twig'  with {'type': property.format} %}
+                        {% else %}
+                            <p>No applicable format {{ property.format }}, type {{ property.type }} or
+                                iri {{ property.iri }}</p>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div><!-- /.content -->
+</div><!-- /.content-background -->
+
+<div class="row">
+    <div class="col-xs-12 col-md-6">
+        <a class="btn btn--primary btn--block" style="width: 100%; margin-top: 20px" href=" {% if stage.previous is defined and stage.previous is not null and stage.previous != false %}{{ path('app_ptc_process_stage',{id: process.id, stage: stage.previous.slug}) }}{% else %}{{ path('app_ptc_process',{id: process.id}) }}{% endif %}">{{ 'previous step'|trans|capitalize }}</a>
+    </div>
+    <div class="col-xs-12 col-md-6">
+        <button class="btn btn--block" style="width: 100%; margin-top: 20px" name="submit">{% if not app.user %}{{ 'continue'|trans|capitalize }}{% else %}{{ 'next step'|trans|capitalize }}{% endif %}</button>
+    </div>
+</div>

@@ -5,7 +5,7 @@
             {% if property.icon is defined and property.icon is not empty %}
                 <i style="margin-right: 10px;" class="{{ property.icon }}"></i>
             {% endif %}
-            {{ property.title }}
+            {{ property.title|first|capitalize ~ property.title|slice(1) }}
             {% if property.required is defined and property.required %}<span style="color: red;"><strong>*</strong></span>{% endif %}</label>
     </div>
     {%  if property.description %}<span class="input__hint" id="{{ property.id }}_name">{{ property.description|raw }}</span>{% endif %}
