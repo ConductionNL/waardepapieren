@@ -1,16 +1,16 @@
 openapi: 3.0.2
 info:
-  title: 'Proto Applicatie NL Design'
+  title: Waardepapieren
   version: V1.0
   description: |
     API Details
-    - Component: Proto Applicatie NL Design
-    - Reference: pan
+    - Component: Waardepapieren
+    - Reference: waardepapieren
     - Enviroment: dev
     - Version: V1.0
-    - Repository: [online](https://github.com/ConductionNL/pan) / [zip](https://github.com/ConductionNL/pan/archive/master.zip)
-    - Docker Image: [online](https://hub.docker.com/repository/docker/conduction/pc-php) 
-    - Datamodel: [postman](/schema/pan.postman_collection.json) / [oas](/schema/openapi.yaml) / [pdf](/schema/datamodel.pdf) / [modelio (zip)](/schema/Datamodel_Modelio.zip) 
+    - Repository: [online](https://github.com/ConductionNL/waardepapieren) / [zip](https://github.com/ConductionNL/waardepapieren/archive/master.zip)
+    - Docker Image: [online](https://hub.docker.com/repository/docker/conduction/waardepapieren-php) 
+    - Datamodel: [postman](/schema/waardepapieren.postman_collection.json) / [oas](/schema/openapi.yaml) / [pdf](/schema/datamodel.pdf) / [modelio (zip)](/schema/Datamodel_Modelio.zip) 
     
     Naast deze JSON rest API is er ook een [graphql](/graphql) interface beschikbaar.         
     
@@ -3538,12 +3538,12 @@ definitions:
         description: 'The moment this request was created'
         type: string
         format: date-time
-        example: '2020-09-17 17:32:46'
+        example: '2020-11-24 09:24:59'
       dateModified:
         description: 'The moment this request last Modified'
         type: string
         format: date-time
-        example: '2020-09-17 17:32:46'
+        example: '2020-11-24 09:24:59'
     required: []
   AuditTrail-write:
     properties:
@@ -3591,12 +3591,12 @@ definitions:
         description: 'The moment this request was created'
         type: string
         format: date-time
-        example: '2020-09-17 17:32:46'
+        example: '2020-11-24 09:24:59'
       dateModified:
         description: 'The moment this request last Modified'
         type: string
         format: date-time
-        example: '2020-09-17 17:32:46'
+        example: '2020-11-24 09:24:59'
     required: []
   ChangeLog-write:
     properties:
@@ -3699,7 +3699,7 @@ host: irc.zaakonline.nl
 servers:
   -
     name: zuid-drecht.nl
-    url: pan.dev.zuid-drecht.nl
+    url: waardepapieren.dev.zuid-drecht.nl
 externalDocs:
   -
     description: 'OAS Documentatie'
