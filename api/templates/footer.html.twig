@@ -1,0 +1,94 @@
+<footer class="footer col-xs">
+    <div class="container">
+        <div class="row">
+            {% if application is defined
+                and application.defaultConfiguration.configuration is defined
+                and application.defaultConfiguration.configuration.footer1 is defined
+                and application.defaultConfiguration.configuration.footer1 is not empty %}
+            {% set footer1 = commonground_resource(application.defaultConfiguration.configuration.footer1) %}
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 footer1">
+                    {# lets deal with menu's #}
+                    {% if footer1['@type'] == 'Menu' %}
+                        <span class="footer__header">{{ footer1.name }}</span>
+                        <ul class="list list--links footer__nav">
+                            {% for item in footer1.menuItems %}
+                                <li><a href="{{ item.href }}">{{ item.name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                    {# lets deal with templates #}
+                    {% if footer1['@type'] == 'Template' %}
+                        {{ include(template_from_string(footer1.content|raw)) }}
+                    {% endif %}
+                </div>
+                {% endif %}
+
+                {% if application is defined
+                    and application.defaultConfiguration.configuration is defined
+                    and application.defaultConfiguration.configuration.footer2 is defined
+                    and application.defaultConfiguration.configuration.footer2 is not empty %}
+                {% set footer2 = commonground_resource(application.defaultConfiguration.configuration.footer2) %}
+                <div class="col-sm-6 col-md-4 col-lg-3 footer2">
+                    {# lets deal with menu's #}
+                    {% if footer2['@type'] == 'Menu' %}
+                        <span class="footer__header">{{ footer2.name }}</span>
+                        <ul class="list list--links footer__nav">
+                            {% for item in footer2.menuItems %}
+                                <li><a href="{{ item.href }}">{{ item.name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                    {# lets deal with templates #}
+                    {% if footer2['@type'] == 'Template' %}
+                        {{ include(template_from_string(footer2.content|raw)) }}
+                    {% endif %}
+                </div>
+            {% endif %}
+
+            {% if application is defined
+                and application.defaultConfiguration.configuration is defined
+                and application.defaultConfiguration.configuration.footer3 is defined
+                and application.defaultConfiguration.configuration.footer3 is not empty %}
+            {% set footer3 = commonground_resource(application.defaultConfiguration.configuration.footer3) %}
+                <div class=" col-sm-6 col-md-4 col-lg-3 footer3">
+                    {# lets deal with menu's #}
+                    {% if footer3['@type'] == 'Menu' %}
+                        <span class="footer__header">{{ footer3.name }}</span>
+                        <ul class="list list--links footer__nav">
+                            {% for item in footer3.menuItems %}
+                                <li><a href="{{ item.href }}">{{ item.name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                    {# lets deal with templates #}
+                    {% if footer3['@type'] == 'Template' %}
+                        {{ include(template_from_string(footer3.content|raw)) }}
+                    {% endif %}
+                </div>
+                {% endif %}
+
+                {% if application is defined
+                    and application.defaultConfiguration.configuration is defined
+                    and application.defaultConfiguration.configuration.footer4 is defined
+                    and application.defaultConfiguration.configuration.footer4 is not empty %}
+                {% set footer4 = commonground_resource(application.defaultConfiguration.configuration.footer4) %}
+                <div class="col-sm-6 col-md-4 col-lg-3 footer4">
+                    {# lets deal with menu's #}
+                    {% if footer4['@type'] == 'Menu' %}
+                        <span class="footer__header">{{ footer4.name }}</span>
+                        <ul class="list list--links footer__nav">
+                            {% for item in footer4.menuItems %}
+                                <li><a href="{{ item.href }}">{{ item.name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                    {# lets deal with templates #}
+                    {% if footer4['@type'] == 'Template' %}
+                        {{ include(template_from_string(footer4.content|raw)) }}
+                    {% endif %}
+                </div>
+            {% endif %}
+
+        </div>
+    </div>
+</footer>

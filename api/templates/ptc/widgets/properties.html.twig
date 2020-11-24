@@ -1,0 +1,154 @@
+{% if resource is defined and resource is not empty %}
+    <!-- Page Break -->
+    <div style="height: 20px"></div>
+
+    <div class="content-background">
+        <div class="content">
+            <h2>
+                {{ 'properties'|trans|capitalize }}
+            </h2>
+            <ul class="definition-list">
+                <li class="definition-list__item definition-list__item--horizontal">
+                    <div class="definition-list__title" style="max-width: 100%">
+                        {{ 'process'|trans|capitalize }}
+                    </div>
+                    <div class="definition-list__description">
+                        <p>
+                            {{ process.name|capitalize }}
+                        </p>
+                    </div>
+                </li>
+                <li class="definition-list__item definition-list__item--horizontal">
+                    <div class="definition-list__title" style="max-width: 100%">
+                        {{ 'description'|trans|capitalize }}
+                    </div>
+                    <div class="definition-list__description">
+                        <p>
+                            {{ process.description }}
+                        </p>
+                    </div>
+                </li>
+                {% if resource.reference is defined and resource.reference is not empty %}
+                    <li class="definition-list__item definition-list__item--horizontal">
+                        <div class="definition-list__title" style="max-width: 100%">
+                            {{ 'reference'|trans|capitalize }}
+                        </div>
+                        <div class="definition-list__description">
+                            <p>
+                                {{ resource.reference }}
+                            </p>
+                        </div>
+                    </li>
+                {% endif %}
+                {% if resource.reference is defined and resource.reference is not empty %}
+                    <li class="definition-list__item definition-list__item--horizontal">
+                        <div class="definition-list__title" style="max-width: 100%">
+                            {{ 'status'|trans|capitalize }}
+                        </div>
+                        <div class="definition-list__description">
+                            <p>
+                                {{ resource['status']|trans|capitalize }}
+                            </p>
+                        </div>
+                    </li>
+                {% endif %}
+
+                {% for stage in process.stages %}
+                    {% for section in stage.sections %}
+                        {% for property in section.propertiesForms %}
+                            <li class="definition-list__item definition-list__item--horizontal">
+                                <div class="definition-list__title" style="max-width: 100%;">
+                                    <span>{{ property.title|raw }}</span>
+                                </div>
+
+                                <div class="definition-list__description">
+                                    <p>
+                                        {% if property.value is iterable %}
+                                        {% for key, value in property.value %}
+                                        {% if value is iterable %}
+                                    <ul style="text-align: center;border: 2px solid #19c3e6; list-style: none; padding: 10px; width: 100%; margin-left: 0px;">
+                                        {% for item in value %}
+                                            {% if item is iterable %}
+                                                {% for subItem in item %}
+                                                    {% if 'http' in subItem and commonground_is_resource(subItem) %}
+                                                        <li>{{ commonground_resource(subItem).name|capitalize }}</li>
+                                                    {% else %}
+                                                        {% if subItem != '' %}
+                                                            {% if subItem is iterable %}
+                                                                {% for item in subItem %}
+                                                                    <li>{{ item|capitalize }}</li>
+                                                                {% endfor %}
+                                                            {% else %}
+                                                                <li>{{ subItem|capitalize }}</li>
+                                                            {% endif %}
+                                                        {% endif %}
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% else %}
+                                                {% if 'http' in item and commonground_is_resource(item) %}
+                                                    <li>{{ commonground_resource(item).name|capitalize }}</li>
+                                                {% else %}
+                                                    {% if item != '' %}
+                                                        <li>{{ item|capitalize }}</li>
+                                                    {% endif %}
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </ul>
+                                    {% else %}
+                                        {% if 'http' in value and commonground_is_resource(value) %}
+                                            {% if commonground_resource(value)['@type'] == 'Ingeschrevenpersoon' %}
+                                                {{ commonground_resource(value).naam.voornamen }} {{ commonground_resource(value).naam.geslachtsnaam }}
+                                                <br>
+                                            {% else %}
+                                                {{ commonground_resource(value).name }}<br>
+                                            {% endif %}
+                                        {% else %}
+                                            {{ value|capitalize }}<br>
+                                        {% endif %}
+                                    {% endif %}
+                                    {% endfor %}
+                                    {# non array properties #}
+                                    {# else %}
+                                        {% if commonground_is_resource(property) %}
+                                            {% set property = commonground_resource(property) %}
+                                            {% if property.naam.voornamen is defined and property.naam.geslachtsnaam is defined %}
+                                                {{ property.naam.voornamen }} {{ property.naam.geslachtsnaam }}
+                                            {% elseif property.reference is defined %}
+                                                {{ property.reference }}
+                                            {% elseif property.name is defined %}
+                                                {{ property.name }}
+                                            {% endif #}
+                                    {% else %}
+                                        {% if 'http' in property.value and commonground_is_resource(property.value) %}
+                                            {% if 'enkelvoudiginformatieobjecten' in property.value %}
+                                                {% set file = commonground_resource(property.value) %}
+                                                <a href="{{ path('app_drc_download',{'resource':file.id}) }}">{{ file.bestandsnaam }}</a>
+                                            {% elseif commonground_resource(property.value)['@type'] is defined and commonground_resource(property.value)['@type'] == 'Cemetery' %}
+                                                {{ commonground_resource(property.value).reference }}<br>
+                                            {% elseif commonground_resource(property.value)['@type'] is defined and commonground_resource(property.value)['@type'] == 'Ingeschrevenpersoon' %}
+                                                {{ commonground_resource(property.value).naam.voornamen }} {{ commonground_resource(property.value).naam.geslachtsnaam }}
+                                                <br>
+                                            {% elseif commonground_resource(property.value)['@type'] is defined and commonground_resource(property.value)['@type'] == 'Adres' %}
+                                                {{ commonground_resource(property.value).straat|capitalize }} {{ commonground_resource(property.value).huisnummer }}
+                                            {% else %}
+                                                {{ commonground_resource(property.value).name|capitalize }}
+                                            {% endif %}
+                                        {% elseif property.format == 'calendar' %}
+                                            {% if property.value is not empty %}
+                                                {{ property.value|date('d-m-Y h:i','Europe/Paris') }}
+                                            {% endif %}
+                                        {% else %}
+                                            {{ property.value|capitalize }}
+                                        {% endif %}
+                                    {% endif %}
+                                    </p>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endif %}

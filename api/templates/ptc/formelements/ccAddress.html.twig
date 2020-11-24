@@ -1,0 +1,51 @@
+<div class="input input--horizontal">
+    <div>
+        <label class="input__label" for="{{ property.id }}" id="{{ property.id }}_label">
+            {% if property.icon is defined and property.icon is not empty %}
+                <i style="margin-right: 10px;" class="{{ property.icon }}"></i>
+            {% endif %}
+            {{ property.title }} {% if property.required is defined and property.required %}<span style="color: red;"><strong>*</strong></span>{% endif %}</label>
+    </div>
+    <div>
+        {% if property.configuration.name is defined and property.configuration.name %}
+            <label class="input__label" for="name">{{ 'name'|trans|capitalize }}</label>
+            <input class="input__control input__control--text" id="name" style="width: 100%" type="text"  name="request[properties][{{ property.name }}][name]">
+        {% endif %}
+        {% if property.configuration is empty or property.configuration.street is defined and property.configuration.street %}
+            <label class="input__label" for="street">{{ 'street'|trans|capitalize }}</label>
+            <input class="input__control input__control--text" id="street" style="width: 100%" type="text" name="request[properties][{{ property.name }}][street]">
+        {% endif %}
+        {% if property.configuration is empty or property.configuration.houseNumber is defined and property.configuration.houseNumber %}
+            <label class="input__label" for="houseNumber">{{ 'house number'|trans|capitalize }}<span style="color: red;"><strong>*</strong></span></label>
+            <input required class="input__control input__control--text" id="houseNumber" style="width: 100%" type="text" name="request[properties][{{ property.name }}][houseNumber]">
+        {% endif %}
+        {% if property.configuration is empty or property.configuration.houseNumberSuffix is defined and property.configuration.houseNumberSuffix %}
+            <label class="input__label" for="houseNumberSuffix">{{ 'house number suffix'|trans|capitalize }}</label>
+            <input class="input__control input__control--text" style="width: 100%" type="text"  name="request[properties][{{ property.name }}][houseNumberSuffix]">
+        {% endif %}
+        {% if property.configuration is empty or property.configuration.postalCode is defined and property.configuration.postalCode %}
+            <label class="input__label" for="postalCode">{{ 'postal code'|trans|capitalize }}<span style="color: red;"><strong>*</strong></span></label>
+            <input required class="input__control input__control--text" id="postalCode" style="width: 100%" type="text" name="request[properties][{{ property.name }}][postalCode]">
+        {% endif %}
+        {% if property.configuration is empty or property.configuration.locality is defined and property.configuration.locality %}
+            <label class="input__label" for="locality">{{ 'locality'|trans|capitalize }}</label>
+            <input class="input__control input__control--text" id="locality" style="width: 100%" type="text" name="request[properties][{{ property.name }}][locality]">
+        {% endif %}
+        {% if property.configuration.bagnummeraanduiding is defined and property.configuration.bagnummeraanduiding %}
+            <label class="input__label" for="bagnummeraanduiding">bagnummer aanduiding</label>
+            <input class="input__control input__control--text" id="bagnummeraanduiding" style="width: 100%" type="text"  name="request[properties][{{ property.name }}][bagnummeraanduiding]">
+        {% endif %}
+        {% if property.configuration.region is defined and property.configuration.region %}
+            <label class="input__label" for="region">{{ 'regio'|trans|capitalize }}</label>
+            <input class="input__control input__control--text" id="region" style="width: 100%" type="text"  name="request[properties][{{ property.name }}][region]">
+        {% endif %}
+        {% if property.configuration.country is defined and property.configuration.country %}
+            <label class="input__label" for="country">{{ 'country'|trans|capitalize }}</label>
+            <input class="input__control input__control--text" id="country" style="width: 100%" type="text"  name="request[properties][{{ property.name }}][country]">
+        {% endif %}
+        {% if property.configuration.postOfficeBoxNumber is defined and property.configuration.postOfficeBoxNumber %}
+            <label class="input__label" for="postOfficeBoxNumber">{{ 'post office number'|trans|capitalize }}</label>
+            <input class="input__control input__control--text" id="postOfficeBoxNumber" style="width: 100%" type="text"  name="request[properties][{{ property.name }}][postOfficeBoxNumber]">
+        {% endif %}
+    </div>
+</div>

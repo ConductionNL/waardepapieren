@@ -1,0 +1,82 @@
+
+<div class="input input--horizontal">
+    {% if property.uri is defined and property.uri is not empty and commonground_resource(property.uri)['@type'] == 'Template'%}
+        {% set template = commonground_resource(property.uri) %}
+        <label class="input__label" for="{{ property.id }}">{{ 'document template'|trans|capitalize }}</label>
+        <ul class="list list--files">
+            <li class="file">
+                <i class="file__icon icon icon-document"></i>
+                <div class="file__data">
+                    <div class="file__filename">
+                        <a href="{{ path('app_vrc_download',{'id': template.id, 'requestId': request.id}) }}">
+                            <strong class="file__title break-all">{{ template.name }}</strong>
+                        </a>
+                        <span class="meta">{{ template.type }}</span>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    {% endif %}
+    <div class="input input--horizontal {%if property.valid is defined and not property.valid %}input--invalid{% endif %}">
+    <label>
+    <div>
+        <label class="input__label" for="{{ property.id }}">
+            {% if property.icon is defined and property.icon is not empty %}
+                <i style="margin-right: 10px;" class="{{ property.icon }}"></i>
+            {% endif %}
+            {{ property.title }}</label>
+        {% if property.description is defined %}
+        <span class="input__hint" id="hint_name">{{ property.description }}</span>
+        {% endif %}
+    </div>
+    {% if not app.user %}
+
+        <aside class="hint" id="{{ property.id }}">
+            <h2 class="hint__title">{{ 'login required'|trans|capitalize}}</h2>
+            {{ 'you need to login before you can upload files'|trans|capitalize}}
+        </aside>
+    {% else %}
+            <input type="file" id="{{ property.id }}" class="input__control--file" name="request[properties][{{ property.name }}]" aria-describedby="input-upload-hint">
+            <span class="btn" role="button">Bestand uploaden</span> <span id="fileName"></span>
+        </label>
+    {% endif %}
+    </div>
+    {% if request['properties'][property.name] is defined and  request['properties'][property.name] is not empty %}
+        <label class="input__label" for="{{ property.id }}">{{ 'uploaded files'|trans|capitalize }}</label>
+        <ul class="list list--files">
+        {% if request['properties'][property.name] is iterable %}
+        {% else %}
+            {% set file = commonground_resource(request['properties'][property.name]) %}
+            <li class="file">
+                <i class="file__icon icon icon-document"></i>
+                <div class="file__data">
+                    <div class="file__filename">
+                        <a href="{{ path('app_drc_download',{'resource':file.id})}}">
+                            <strong class="file__title break-all">{{ file.bestandsnaam }}</strong>
+                        </a>
+                    </div>
+                </div>
+            </li>
+        {% endif %}
+        </ul>
+    {% endif %}
+</div>
+
+
+<script>
+
+    $("input#{{ property.id }}").change(function () {
+        let fullPath = document.getElementById('{{ property.id }}').value;
+        let fileOutput = document.getElementById('fileName');
+        if (fullPath) {
+            let startIndex = (fullPath.indexOf('\\') >= 0 ? fullPath.lastIndexOf('\\') : fullPath.lastIndexOf('/'));
+            let filename = fullPath.substring(startIndex);
+            if (filename.indexOf('\\') === 0 || filename.indexOf('/') === 0) {
+                filename = filename.substring(1);
+            }
+            fileOutput.innerText = filename;
+        }
+    });
+
+
+</script>

@@ -1,0 +1,20 @@
+<div class="input input--horizontal {%if property.valid is defined and not property.valid %}input--invalid{% endif %}">
+    <div>
+        <label class="input__label" for="{{ property.id }}" id="{{ property.id }}_label">
+            {% if property.icon is defined and property.icon is not empty %}
+                <i style="margin-right: 10px;" class="{{ property.icon }}"></i>
+            {% endif %}
+            {{ property.title }} {% if property.required is defined and property.required %}<span style="color: red;"><strong>*</strong></span>{% endif %}</label>
+    </div>
+    {%  if property.description %}<span class="input__hint" id="{{ property.id }}_name">{{ property.description }}</span>{% endif %}
+    <div id="organizationForm" class="col-sm-12">
+        <label class="input__label" for="name">Naam <span style="color: red">*</span></label>
+        <input class="input__control input__control--m input__control--text" id="name" name="request[properties][{{property.name}}][name]" type="text" required="">
+        <label class="input__label" for="description">Beschrijving <span style="color: red">*</span></label>
+        <input class="input__control input__control--xl input__control--text" id="description" name="request[properties][{{property.name}}][description]" type="text" required="">
+        <label class="input__label" for="chamberOfComerce">KVK nummer <span style="color: red">*</span></label>
+        <input class="input__control input__control--s input__control--text" id="chamberOfComerce" name="request[properties][{{property.name}}][chamberOfComerce]" type="text" required="">
+        <label class="input__label" for="rsin">Rsin <span style="color: red">*</span></label>
+        <input class="input__control input__control--s input__control--text" id="rsin" name="request[properties][{{property.name}}][rsin]" type="text" required="">
+    </div>
+</div>

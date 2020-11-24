@@ -1,0 +1,12 @@
+<div class="input input--horizontal">
+    <div>
+    </div>
+    {%  if property.description %}<span class="input__hint" id="{{ property.id }}_name">{{ property.description }}</span>{% endif %}
+    <fieldset class="input">
+        <div class="input__group input__group--checkbox">
+            <input name="request[properties][{{ property.name }}]" type="checkbox" id="{{ property.id }}" value="true" class="input__control input__control--checkbox"
+            {% if request['properties'][property.name] is defined and request['properties'][property.name] is not empty %} checked {% endif %} {% if property.required is defined and property.required %}required{% endif %}>
+            <label class="input__label input__label--checkbox" for="{{ property.id }}">{{ property.title|raw }} <span style="color: red;"><strong>*</strong></span></label>
+        </div>
+    </fieldset>
+</div>

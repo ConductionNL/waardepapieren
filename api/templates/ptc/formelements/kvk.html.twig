@@ -1,0 +1,102 @@
+<div class="input input--horizontal">
+    <div>
+        <label class="input__label" for="{{ property.id }}" id="{{ property.id }}_label">
+            {% if property.icon is defined and property.icon is not empty %}
+                <i style="margin-right: 10px;" class="{{ property.icon }}"></i>
+            {% endif %}
+            {{ property.title }} {% if property.required is defined and property.required %}<span style="color: red;"><strong>*</strong></span>{% endif %}</label>
+    </div>
+    <div class="row">
+    {#    <div class="col-md-4">#}
+    {#        <label class="input__label" for="{{ property.name }}">BAG ID (example: 0796200000306819)</label>#}
+    {#        <input class="input__control input__control--text" id="{{ property.slug }}" type="text" name="properties[{{ property.slug }}]" required>#}
+    {#    </div>#}
+        <div class="col-sm-12 col-lg-3">
+            <label class="input__label" for="houseNumber">KVK nummer</label>
+            <input class="input__control input__control--text" id="kvk" type="text">
+        </div>
+        <div class="col-sm-12 col-lg-2">
+            <br>
+            <button type="button" onclick="getBagKeys()" style="width: 100%; color: black; background-color: #f9e11e" class="btn btn-primary">Zoeken</button>
+        </div>
+    </div>
+
+    <hr style="margin-top: 20px;">
+
+    <div class="spinner">
+        <div aria-live="assertive" class="screenreader-only">Aan het laden</div>
+    </div>
+
+    <fieldset class="input" id="adresLijst" style="margin-top: 20px;">
+
+    </fieldset>
+</div>
+
+<script>
+    $('.spinner').hide();
+
+    function getBagKeys(){
+        $('.spinner').show();
+        let kvk = document.getElementById('kvk').value;
+
+
+
+        console.log(kvk);
+
+        let list = document.getElementById('adresLijst');
+        while(list.firstChild){
+            list.firstChild.remove();
+        }
+
+
+
+        $.ajax({
+            url: "https://api.kvk.nl/api/v2/testsearch/companies",
+            type: 'GET',
+            processData: true,
+            headers: {
+                Accept: 'application/ld+json'
+            },
+            data: {q:'test', kvkNumber:kvk },
+            statusCode: {
+                404: function() {
+                    console.log( "page not found" );
+                },
+                500: function() {
+                    console.log( "internal server error" );
+                },
+                200: function() {
+                    console.log( "worked" );
+                }
+            },
+            success: function(result) {
+                $('.spinner').hide();
+                if(result.data.items.length >= 1){
+                    for(let i = 0; i < result.data.items.length; i++){
+                        let name;
+                        if(result.data.items[i]['tradeNames']['currentTradeNames'][0] !== undefined){
+                            name = result.data.items[i]['tradeNames']['currentTradeNames'][0];
+                        }else if(result.data.items[i]['tradeNames']['shortBusinessName']){
+                            name = result.data.items[i]['tradeNames']['shortBusinessName'];
+                        }else if(result.data.items[i]['tradeNames']['businessName'] !== undefined){
+                            name = result.data.items[i]['tradeNames']['businessName'];
+                        }
+                        $('#adresLijst').append('<div class="input__group input__group--checkbox test">');
+                        $('#adresLijst').append('<input value="'+ result.data.items[i]['branchNumber'] +'" type="checkbox" name="request[properties][{{ property.name }}]['+i+']" id="'+i+'" class="input__control--checkbox">');
+                        $('#adresLijst').append('<label class="input__label input__label--checkbox" for="'+i+'"> '
+                            + result.data.items[i]['kvkNumber']
+                            + ' | '
+                            + name
+                            + ' </label>');
+                        $('#adresLijst').append('</div>');
+                    }
+                } else {
+                    $('#adresLijst').append('<p>Geen bedrijven gevonden op de meegegeven gegevens</p>');
+                }
+            },
+        });
+
+    }
+
+
+</script>

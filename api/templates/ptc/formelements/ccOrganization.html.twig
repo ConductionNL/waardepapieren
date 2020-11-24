@@ -1,0 +1,120 @@
+<div class="input input--horizontal">
+    <div>
+        <label class="input__label" for="{{ property.id }}" id="{{ property.id }}">
+            {% if property.icon is defined and property.icon is not empty %}
+                <i style="margin-right: 10px;" class="{{ property.icon }}"></i>
+            {% endif %}
+            {{ property.title }} {% if property.required is defined and property.required %}<span style="color: red;"><strong>*</strong></span>{% endif %}</label>
+    </div>
+    {%  if property.description %}<span class="input__hint" id="{{ property.id }}">{{ property.description }}</span>{% endif %}
+    <div>
+        {% if request.properties[property.name] is defined and request.properties[property.name] is not empty and request.properties[property.name] is not iterable %}
+            {% set organization = commonground_resource(request.properties[property.name]) %}
+        {% endif %}
+        <h3>{{ 'organization'|trans|capitalize }}</h3>
+        <div class="row" style="margin-bottom: 5px">
+            {% if property.configuration.name is not defined or property.configuration.name %}
+            <div class="col-md-4">
+                    <label class="input__label" for="name">{{ 'name'|trans|capitalize }}<span style="color: red">*</span></label>
+                    <input class="input__control input__control--xl input__control--text" id="name" name="request[properties][{{property.name}}][name]" type="text" required=""
+                        {% if organization.name is defined %} value="{{ organization.name }}" {% elseif request.properties[property.name]['name'] is defined %} value="{{ request.properties[property.name]['name'] }}" {% endif %}>
+            </div>
+            {% endif %}
+            {% if property.configuration.coc is not defined or property.configuration.coc %}
+            <div class="col-md-4">
+                    <label class="input__label" for="coc">{{ 'coc'|trans|upper }}<span style="color: red">*</span></label>
+                    <input required class="input__control input__control--xl input__control--text" id="coc" name="request[properties][{{property.name}}][coc]" type="text"
+                        {% if organization.coc is defined %} value="{{ organization.coc }}"{% elseif request.properties[property.name]['coc'] is defined %} value="{{ request.properties[property.name]['coc'] }}" {% endif %}>
+            </div>
+            {% endif %}
+            {% if property.configuration.vat is not defined or property.configuration.vat %}
+                <div class="col-md-4">
+                    <label class="input__label" for="vat">{{ 'vat'|trans|upper }}</label>
+                    <input class="input__control input__control--xl input__control--text" id="vat" name="request[properties][{{property.name}}][vat]" type="text"
+                        {% if organization.vat is defined %} value="{{ organization.vat }}"{% elseif request.properties[property.name]['vat'] is defined %} value="{{ request.properties[property.name]['vat'] }}" {% endif %}>
+                </div>
+            {% endif %}
+            {% if property.configuration.type is defined and property.configuration.type %}
+            <div class="col-md-4">
+                    <label class="input__label" for="type">{{ 'type'|trans|capitalize }}</label>
+                    <input class="input__control input__control--xl input__control--text" id="type" name="request[properties][{{property.name}}][type]" type="text"
+                        {% if organization.type is defined %} value="{{ organization.type }}"{% elseif request.properties[property.name]['type'] is defined %} value="{{ request.properties[property.name]['type'] }}" {% endif %}>
+            </div>
+            {% endif %}
+        </div>
+        {% if property.configuration.coc is not defined or property.configuration.coc %}
+            <span class="meta" style="text-transform: lowercase"><span style="text-transform: uppercase">U</span> kunt <a target="_blank" href="https://www.kvk.nl/zoeken/">hier</a> klikken om uw KVK nummer te vinden.</span>
+        {% endif %}
+        {% if property.configuration.address is defined and property.configuration.address %}
+            <h3>{{ 'address'|trans|capitalize }}</h3>
+            <div class="row" style="margin-bottom: 5px">
+                <div class="col-md-4">
+                    <label class="input__label" for="street">{{ 'streetname'|trans|capitalize }}</label>
+                    <input class="input__control input__control--text" id="street" style="width: 100%" type="text" name="request[properties][{{ property.name }}][adresses][0][street]"
+                        {% if organization.adresses.0.street is defined %} value="{{ organization.adresses.0.street }}"{% elseif request.properties[property.name]['adresses'][0]['street'] is defined %} value="{{ request.properties[property.name]['adresses'][0]['street'] }}" {% endif %}>
+                </div>
+                <div class="col-md-4">
+                    <label class="input__label" for="houseNumber">{{ 'house number'|trans|capitalize }}<span style="color: red;"><strong>*</strong></span></label>
+                    <input required class="input__control input__control--text" id="houseNumber" style="width: 100%" type="text" name="request[properties][{{ property.name }}][adresses][0][houseNumber]"
+                    {% if organization.adresses.0.houseNumber is defined %} value="{{ organization.adresses.0.houseNumber }}"{% elseif request.properties[property.name]['adresses'][0]['houseNumber'] is defined %} value="{{ request.properties[property.name]['adresses'][0]['houseNumber'] }}" {% endif %}>
+                </div>
+                <div class="col-md-4">
+                    <label class="input__label" for="houseNumberSuffix">{{ 'suffix'|trans|capitalize }}</label>
+                    <input class="input__control input__control--text" style="width: 100%" type="text"  name="request[properties][{{ property.name }}][adresses][0][houseNumberSuffix]"
+                        {% if organization.adresses.0.houseNumberSuffix is defined %} value="{{ organization.adresses.0.houseNumberSuffix }}"{% elseif request.properties[property.name]['adresses'][0]['houseNumberSuffix'] is defined %} value="{{ request.properties[property.name]['adresses'][0]['houseNumberSuffix'] }}" {% endif %}>
+                </div>
+            </div>
+            <div class="row" style="margin-bottom: 20px">
+                <div class="col-md-6">
+                    <label class="input__label" for="postalCode">{{ 'postal code'|trans|capitalize }}<span style="color: red;"><strong>*</strong></span></label>
+                    <input required class="input__control input__control--text" id="postalCode" style="width: 100%" type="text" name="request[properties][{{ property.name }}][adresses][0][postalCode]"
+                        {% if organization.adresses.0.postalCode is defined %} value="{{ organization.adresses.0.postalCode }}"{% elseif request.properties[property.name]['adresses'][0]['postalCode'] is defined %} value="{{ request.properties[property.name]['adresses'][0]['postalCode'] }}" {% endif %}>
+                </div>
+                <div class="col-md-6">
+                    <label class="input__label" for="locality">{{ 'locality'|trans|capitalize }}</label>
+                    <input class="input__control input__control--text" id="locality" style="width: 100%" type="text" name="request[properties][{{ property.name }}][adresses][0][locality]"
+                        {% if organization.adresses.0.locality is defined %} value="{{ organization.adresses.0.locality }}"{% elseif request.properties[property.name]['adresses'][0]['locality'] is defined %} value="{{ request.properties[property.name]['adresses'][0]['locality'] }}" {% endif %}>
+                </div>
+            </div>
+        {% endif %}
+        {% if property.configuration.person is defined and property.configuration.person and app.user.username is not defined %}
+            <h3>{{ 'contact'|trans|capitalize }}</h3>
+            <div class="row" style="margin-bottom: 20px">
+                    <div class="col-md-4">
+                        <label class="input__label" for="voornaam">{{ 'givenName'|trans|capitalize }}<span style="color: red;"><strong>*</strong></span></label>
+                        <input class="input__control input__control--text" style="width: 100%" type="text" name="request[properties][{{ property.name }}][persons][0][givenName]"
+                            {% if organization.people.0.givenName is defined %} value="{{ organization.people.0.givenName }}"{% elseif request.properties[property.name]['persons'][0]['givenName'] is defined %} value="{{ request.properties[property.name]['persons'][0]['givenName'] }}" {% endif %} required="">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="input__label" for="achternaam">{{ 'additionalName'|trans|capitalize }}</label>
+                        <input class="input__control input__control--text" style="width: 100%" type="text" name="request[properties][{{ property.name }}][persons][0][additionalName]"
+                            {% if organization.people.0.additionalName is defined %} value="{{ organization.people.0.additionalName }}"{% elseif request.properties[property.name]['persons'][0]['additionalName'] is defined %} value="{{ request.properties[property.name]['persons'][0]['additionalName'] }}" {% endif %}>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="input__label" for="achternaam">{{ 'familyName'|trans|capitalize }}<span style="color: red;"><strong>*</strong></span></label>
+                        <input class="input__control input__control--text" style="width: 100%" type="text" name="request[properties][{{ property.name }}][persons][0][familyName]"
+                            {% if organization.people.0.familyName is defined %} value="{{ organization.people.0.familyName }}"{% elseif request.properties[property.name]['persons'][0]['familyName'] is defined %} value="{{ request.properties[property.name]['persons'][0]['familyName'] }}" {% endif %} required="">
+                    </div>
+            </div>
+        {% endif %}
+        {% if app.user.username is not defined %}
+            <!-- <h3>{{ 'other'|trans|capitalize }}</h3> hotfix -->
+            <div class="row">
+                {% if property.configuration.email is not defined or property.configuration.email %}
+                    <div class="col-md-6">
+                        <label class="input__label" for="email">{{ 'eMail'|trans|capitalize }}<span style="color: red;"><strong>*</strong></span></label>
+                        <input class="input__control input__control--text" style="width: 100%" type="email" name="request[properties][{{ property.name }}][emails][0][email]"
+                            {% if organization.emails.0.email is defined %} value="{{ organization.emails.0.email }}"{% elseif request.properties[property.name]['emails'][0]['email'] is defined %} value="{{ request.properties[property.name]['emails'][0]['email'] }}" {% endif %} required="">
+                    </div>
+                {% endif %}
+                {% if property.configuration.telephone is not defined or property.configuration.telephone %}
+                    <div class="col-md-6">
+                        <label class="input__label" for="telephone">{{ 'telephone'|trans|capitalize }}<span style="color: red;"><strong>*</strong></span></label>
+                        <input class="input__control input__control--text" style="width: 100%" type="tel"  name="request[properties][{{ property.name }}][telephones][0][telephone]"
+                            {% if organization.telephones.0.telephone is defined %} value="{{ organization.telephones.0.telephone }}"{% elseif request.properties[property.name]['telephones'][0]['telephone'] is defined %} value="{{ request.properties[property.name]['telephones'][0]['telephone'] }}" {% endif %} required="">
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+</div>

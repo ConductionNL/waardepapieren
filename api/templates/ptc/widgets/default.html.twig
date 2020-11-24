@@ -1,0 +1,30 @@
+{% if app.user is defined and app.user is not empty %}
+<input type="hidden" name="request[submitters][0][brp]" value="{{ app.user.person }}">
+{% endif %}
+<input type="hidden" name="request[requestType]" value="{{ process.requestType }}">
+<input type="hidden" name="request[component]" value="vrc">
+<input type="hidden" name="request[type]" value="requests">
+{% if request.status is not defined or request.status is empty or request.status == 'incomplete' or request.status == 'complete' %}
+<input type="hidden" name="request[status]" value="incomplete">
+{% else %}
+<input type="hidden" name="request[status]" value="{{ request.status }}">
+
+{% endif %}
+
+{% if request.organization is not defined or request.organization is empty %}
+<input type="hidden" name="request[organization]" value="{% if application is not empty %}{{  application.organization['@id'] }}{% else %}{{ process.sourceOrganization }}{% endif %}">
+{% endif %}
+<input type="hidden" name="request[processType]" value="{{ process['@id'] }}">
+
+{% if stage.next is defined and stage.next is not empty %}
+    <input type="hidden" name="next" value="{{ stage.next['@id'] }}">
+{% endif %}
+{% if stage.next is defined and stage.next is not null and stage.next != false %}
+    <input type="hidden" name="request[currentStage]" value="{{ stage.next['@id'] }}">
+{% else %}
+    <input type="hidden" name="request[currentStage]" value="submit">
+{% endif %}
+
+{% if request['@id'] is defined and request['@id'] is not null %}
+    <input type="hidden" name="request[@id]" value="{{ request['@id'] }}">
+{% endif %}

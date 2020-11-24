@@ -1,0 +1,243 @@
+<br>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="row" id="getuigen-container">
+            <div id="0"></div>
+
+            {% if request.properties.getuigen is defined and request.properties.getuigen is not empty %}
+                {% set value = 1 %}
+                {% for getuige in request.properties.getuigen %}
+                    <div id="{{ value }}" class="col-sm-12 col-md-5"
+                         style="min-height: 131px; margin: 1%; width: 48%; border: 2px solid #19c3e6; text-align: center;">
+                        <h2 id="{{ value }}">{{ getuige.person.givenName }} {{ getuige.person.familyName }}</h2>
+                        <div id="{{ value }}" style="line-height: 15px">
+                            <p id="{{ value }}">Email: {{ getuige.email }}</p>
+                            <p id="{{ value }}">Telefoon: {{ getuige.telephone }}</p>
+                            <input type="hidden" id="{{ value }}" value="{{ getuige.email }}"
+                                   name="request[properties][{{ property.name }}][{{ value }}][email]">
+                            <input type="hidden" id="{{ value }}" value="{{ getuige.telephone }}"
+                                   name="request[properties][{{ property.name }}][{{ value }}][telephone]">
+                            <input type="hidden" id="{{ value }}" value="{{ getuige.person.givenName }}"
+                                   name="request[properties][{{ property.name }}][{{ value }}][person][givenName]">
+                            <input type="hidden" id="{{ value }}" value="{{ getuige.person.familyName }}"
+                                   name="request[properties][{{ property.name }}][{{ value }}][person][familyName]">
+                            <button class="btn btn-primary" id="{{ value }}"
+                                    onclick="storedDelete(this, '{{ property.maxItems }}')"
+                                    style="background-color:red; margin-bottom: 5px; width: 100%" type="button"><i
+                                    style="margin-right: 10px" class="fas fa-trash-alt"></i>Verwijderen
+                            </button>
+                        </div>
+                    </div>
+                    {% set value = value + 1 %}
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+
+    <div id="personForm" class="col-sm-12">
+        {% if property.defaultValue is defined and property.defaultValue is not empty %}
+            {% set assent = commonground_resource(include(template_from_string(property.defaultValue))) %}
+        {% endif %}
+        {% if request.properties[property.name] is defined and request.properties[property.name] is not empty %}
+            {% set person = commonground_resource(commonground_resource(request.properties[property.name]).contact) %}
+        {% endif %}
+        <div>
+            <label class="input__label" for="voornaam">Voornaam</label>
+            <input class="input__control input__control--text" style="width: 100%" id="getuigenVoornaam" type="text"
+                {% if assent is defined and assent is not empty %} value="{{ assent.naam.voornamen }}" readonly {% endif %}
+            {% if person.givenName is defined and person.givenName is not empty %} value="{{ person.givenName }}"{% endif %}>
+            <label class="input__label" for="achternaam">Achternaam</label>
+            <input class="input__control input__control--text" style="width: 100%" id="getuigenAchternaam" type="text"
+                {% if assent is defined and assent is not empty %} value="{{ assent.naam.geslachtsnaam }}" readonly {% endif %}
+                {% if person.familyName is defined and person.familyName is not empty %} value="{{ person.familyName }}"{% endif %}>
+            <label class="input__label" for="email">Email</label>
+            <input class="input__control input__control--text" style="width: 100%" id="getuigenEmail" type="email"
+                {% if person.emails.0.email is defined and person.emails.0.email is not empty %} value="{{ person.emails.0.email }}"{% endif %}>
+            <span id="inputResult"></span>
+            <label class="input__label" for="telefoon">Telefoonnummer</label>
+            <input class="input__control input__control--text" style="width: 100%" id="getuigenTelefoon" type="tel"
+                {% if person.telephones.0.telephone is defined and person.telephones.0.telephone is not empty %} value="{{ person.telephones.0.telephone }}"{% endif %}>
+            <button class="btn" id="toevoegen" onclick="addGetuigen('{{ property.name }}', '{{ property.maxItems }}')"
+                    type="button" style="margin-top: 5px; width: 100%">{% if request.properties[property.name] is defined and request.properties[property.name] is not empty %}Wijzigen{% else %}Toevoegen{% endif %}
+            </button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    let personForm = document.getElementById("personForm");
+
+    function addGetuigen(propertyName, items) {
+        $("#getuigenVoornaam").removeAttr("readonly");
+        $("#getuigenAchternaam").removeAttr("readonly");
+        let input = document.getElementById('getuigenEmail');
+        if (!input.checkValidity()) {
+            document.getElementById('inputResult').innerHTML = 'Zorg dat je een geldig e-mail adres invult';
+        } else {
+            document.getElementById('inputResult').innerHTML = '';
+            let container = document.getElementById("getuigen-container");
+            if (container.children.length === parseInt(items)) {
+                $('#toevoegen').prop('disabled', true);
+                personForm.setAttribute('style', 'display: none;');
+            }
+            let email = document.getElementById('getuigenEmail').value;
+            let telefoon = document.getElementById('getuigenTelefoon').value;
+            let voornaam = document.getElementById('getuigenVoornaam').value;
+            let achternaam = document.getElementById('getuigenAchternaam').value;
+            let nameCount = document.getElementById("getuigen-container").children[container.children.length - 1].id;
+            let hEmail = document.createElement('input');
+            let hTelefoon = document.createElement('input');
+            let hVoornaam = document.createElement('input');
+            let hAchternaam = document.createElement('input');
+            let hName = document.createElement('input');
+            let hDescription = document.createElement('input');
+            let hRequest = document.createElement('input');
+            let hRequester = document.createElement('input');
+            let counter;
+
+            if (nameCount !== undefined) {
+                counter = parseInt(nameCount) + 1;
+            } else {
+                counter = parent.children.length;
+            }
+
+            hEmail.id = counter.toString();
+            hTelefoon.id = counter.toString();
+            hVoornaam.id = counter.toString();
+            hAchternaam.id = counter.toString();
+
+
+            hEmail.type = 'hidden';
+            hTelefoon.type = 'hidden';
+            hVoornaam.type = 'hidden';
+            hAchternaam.type = 'hidden';
+            hName.type = 'hidden';
+            hDescription.type = 'hidden';
+            hRequest.type = 'hidden';
+            hRequester.type = 'hidden';
+
+            hEmail.value = email;
+            hTelefoon.value = telefoon;
+            hVoornaam.value = voornaam;
+            hAchternaam.value = achternaam;
+
+            hName.value = 'Instemmingsverzoek voor {{ process.name }}';
+            hDescription.value = 'U heeft een instemmingsverzoek ontvangen als {{ property.name }} voor een {{ process.name }} aangevraagd door {% if app.user.name is defined and app.user.name is not empty %}{{ app.user.name }}{% endif %}';
+
+            {% if request['@id'] is defined and request['@id'] is not empty %}
+            hRequest.value = '{{ request['@id'] }}';
+            {% endif %}
+
+            {% if request.organization is defined and request.organization is not null %}
+            hRequester.value = '{{ request.organization }}';
+            {% elseif application is not empty %}
+            hRequester.value = '{{ application.organization['@id'] }}';
+            {% else %}
+            hRequester.value = '{{ process.sourceOrganization }}';
+            {% endif %}
+
+
+
+            {% if property.type == 'array' %}
+            hEmail.name = 'request[properties][' + propertyName + '][' + counter.toString() + '][contact][emails][][email]';
+            hTelefoon.name = 'request[properties][' + propertyName + '][' + counter.toString() + '][contact][telephones][][telephone]';
+            hVoornaam.name = 'request[properties][' + propertyName + '][' + counter.toString() + '][contact][givenName]';
+            hAchternaam.name = 'request[properties][' + propertyName + '][' + counter.toString() + '][contact][familyName]';
+
+            hName.name = 'request[properties][' + propertyName + '][' + counter.toString() + '][name]';
+            hDescription.name = 'request[properties][' + propertyName + '][' + counter.toString() + '][description]';
+            hRequest.name = 'request[properties][' + propertyName + '][' + counter.toString() + '][request]';
+            hRequester.name = 'request[properties][' + propertyName + '][' + counter.toString() + '][requester]';
+            {% else %}
+            hEmail.name = 'request[properties][' + propertyName + '][contact][emails][][email]';
+            hTelefoon.name = 'request[properties][' + propertyName + '][contact][telephones][][telephone]';
+            hVoornaam.name = 'request[properties][' + propertyName + '][contact][givenName]';
+            hAchternaam.name = 'request[properties][' + propertyName + '][contact][familyName]';
+
+            hName.name = 'request[properties][' + propertyName + '][name]';
+            hDescription.name = 'request[properties][' + propertyName + '][description]';
+            hRequest.name = 'request[properties][' + propertyName + '][request]';
+            hRequester.name = 'request[properties][' + propertyName + '][requester]';
+            {% endif %}
+
+
+            let outerDiv = document.createElement('div');
+            outerDiv.className = "col-sm-12 col-md-6";
+            outerDiv.setAttribute('style', 'min-height: 131px; margin: 1%; width: 48%; border: 2px solid #19c3e6; text-align: center;');
+            outerDiv.id = counter.toString();
+            container.appendChild(outerDiv);
+
+            let h2 = document.createElement('h2');
+            h2.innerHTML = voornaam + " " + achternaam;
+            h2.id = counter.toString();
+            outerDiv.appendChild(h2);
+
+            let innerDiv = document.createElement('div');
+            innerDiv.setAttribute('style', 'line-height: 15px');
+            innerDiv.id = counter.toString();
+            outerDiv.appendChild(innerDiv);
+
+            let pEmail = document.createElement('p');
+            pEmail.innerHTML = 'Email: ' + email;
+            pEmail.id = counter.toString();
+            innerDiv.appendChild(pEmail);
+
+            let pTelefoon = document.createElement('p');
+            pTelefoon.innerHTML = 'Telefoon: ' + telefoon;
+            pTelefoon.setAttribute('style', 'margin-bottom: 5px;');
+            pTelefoon.id = counter.toString();
+            innerDiv.append(pTelefoon);
+
+            let button = document.createElement('button');
+            button.innerHTML = '<i style="margin-right: 10px" class="fas fa-trash-alt"></i> Verwijderen';
+            button.addEventListener('click', function () {
+                removeGetuigen(outerDiv, '{{ property.maxItems }}');
+            });
+            button.className = 'btn btn-primary';
+            button.setAttribute('style', 'background-color: red; margin-bottom: 5px; width:100%;')
+            button.type = 'button';
+            button.id = counter.toString();
+            innerDiv.appendChild(button);
+
+            innerDiv.appendChild(hEmail);
+            innerDiv.appendChild(hTelefoon);
+            innerDiv.appendChild(hVoornaam);
+            innerDiv.appendChild(hAchternaam);
+            innerDiv.appendChild(hName);
+            innerDiv.appendChild(hDescription);
+            innerDiv.appendChild(hRequest);
+            innerDiv.appendChild(hRequester);
+
+            document.getElementById('getuigenEmail').value = null;
+            document.getElementById('getuigenTelefoon').value = null;
+            document.getElementById('getuigenVoornaam').value = null;
+            document.getElementById('getuigenAchternaam').value = null;
+        }
+
+
+    }
+
+    function removeGetuigen(target, items) {
+        let container = document.getElementById("getuigen-container");
+        target.remove();
+        if (container.children.length < parseInt(items) + 1) {
+            $('#toevoegen').prop('disabled', false);
+            personForm.setAttribute('style', 'display: block;');
+        }
+    }
+
+    function storedDelete(given, items) {
+        let container = document.getElementById("getuigen-container");
+        let td = given.parentNode;
+        let tr = td.parentNode;
+        given.remove();
+        td.remove();
+        tr.remove();
+        if (container.children.length < parseInt(items) + 1) {
+            $('#toevoegen').prop('disabled', false);
+            personForm.setAttribute('style', 'display: block;');
+        }
+    }
+</script>

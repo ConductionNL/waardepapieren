@@ -1,0 +1,81 @@
+{% extends "content.html.twig" %}
+
+{% block content %}
+    <section class="row">
+        <div class="col-md-12">
+            <div class="content">
+
+                <header class="content__header">
+                    <a class="backlink" href="{{ path('app_default_index') }}">{{ 'home'|trans|capitalize }}</a>
+                    <header class="content__header">
+                        <h1 class="content__header-title">{{ 'processes'|trans|capitalize }}</h1>
+                    </header>
+                </header>
+            </div><!-- ./content -->
+        </div><!-- ./col -->
+    </section>
+
+    {% if not app.user %}
+            <div class="notification notification--info">
+                <div class="notification__content">
+                    <div class="notification__type">{{ 'attention'|trans|capitalize }}</div>
+                    <h2 class="notification__title">{{ 'you can not save or submit procceses if you are not loged in'|trans|capitalize }}</h2>
+                </div>
+            </div>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="content-background" >
+            	<div class="content">
+                    {% if processes is defined and processes is not empty %}
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th scope="col">{{ 'name'|trans|capitalize }}</th>
+                            <th scope="col">{{ 'description'|trans|capitalize }}</th>
+                            <th scope="col"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        {% for resource in processes %}
+                            {% if resource.audience is defined and resource.audience is not empty %}
+                                {% if app.user.type is defined and app.user is not empty and app.user.type in resource.audience %}
+                                    <tr>
+                                        <td style="width: fit-content">{{ resource.name|capitalize }}</td>
+                                        <td>{% if resource.dateCreated is defined and resource.dateCreated is not null %}{{ resource.description }}{% endif %}</td>
+                                        <td>
+                                            {% if resource.requireLogin is defined and resource.requireLogin == "true" and not app.user %}
+                                            <span class="label label--rood">{{ 'login required'|trans|capitalize }}</span>
+                                            {% else %}
+                                            <a style="background: #cfebfd; padding: 6px; border-radius: 6px" href="{{ path('app_ptc_process_stage', {id: resource.id, stage:'start'}) }}"><b>{{ 'start'|trans|capitalize }}</b></a>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            {% else %}
+                                <tr>
+                                    <td style="width: fit-content">{{ resource.name|capitalize }}</td>
+                                    <td>{% if resource.dateCreated is defined and resource.dateCreated is not null %}{{ resource.description }}{% endif %}</td>
+                                    <td>
+                                        {% if resource.requireLogin is defined and resource.requireLogin == "true" and not app.user %}
+                                            {{ 'login required'|trans|capitalize }}
+                                        {% else %}
+                                            <a style="background: #cfebfd; padding: 6px; border-radius: 6px" href="{{ path('app_ptc_process_stage', {id: resource.id, stage:'start'}) }}"><b>{{ 'start'|trans|capitalize }}</b></a></a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+
+                    {% else %}
+                    <h1>{{ 'no proccesses available'|trans|capitalize }}</h1>
+                    {% endif %}
+                </div><!-- /.content -->
+            </div><!-- /.content-background -->
+        </div><!-- /.col -->
+    </div>
+{% endblock %}

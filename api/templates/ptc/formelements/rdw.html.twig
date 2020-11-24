@@ -1,0 +1,148 @@
+<div class="input input--horizontal">
+    <div>
+        <label class="input__label" for="{{ property.id }}" id="{{ property.id }}_label">
+            {% if property.icon is defined and property.icon is not empty %}
+                <i style="margin-right: 10px;" class="{{ property.icon }}"></i>
+            {% endif %}
+            {{ property.title }} {% if property.required is defined and property.required %}<span style="color: red;"><strong>*</strong></span>{% endif %}</label>
+    </div>
+    <div class="row">
+    {#    <div class="col-md-4">#}
+    {#        <label class="input__label" for="{{ property.name }}">BAG ID (example: 0796200000306819)</label>#}
+    {#        <input class="input__control input__control--text" id="{{ property.slug }}" type="text" name="properties[{{ property.slug }}]" required>#}
+    {#    </div>#}
+        <div class="col-sm-12 col-lg-6">
+            <div class="input input--horizontal {%if property.valid is defined and not property.valid %}input--invalid{% endif %}">
+                <label class="input__label" for="postalCode">{{ property.title }} {% if property.required is defined and property.required %}<span style="color: red;"><strong>*</strong></span>{% endif %}</label>
+                {%  if property.description %}<span class="input__hint" id="{{ property.id }}_name">{{ property.description }}</span>{% endif %}
+                <input class="input__control input__control--text" id="kenteken"  type="text" {% if property.required is defined and property.required %}required{% endif %}
+                    {% if request['properties'][property.name] is defined and  request['properties'][property.name] %}
+                    value="{{  request['properties'][property.name] }}"
+                    {% endif %}>
+                <input type="hidden" name="request[properties][{{ property.name }}]" id="kentekenInput"
+                    {% if request['properties'][property.name] is defined and  request['properties'][property.name] %}
+                    value="{{  request['properties'][property.name] }}"
+                    {% endif %}>
+            </div>
+        </div>
+        <div class="col-sm-12 col-lg-2">
+            <br>
+            <div style="display: flex;">
+                <button type="button" id="searchButton" onclick="getBagKeys()" style="width: 100%; color: black; background-color: #f9e11e" class="btn btn-primary">Zoeken</button>
+            </div>
+        </div>
+    </div>
+
+    <hr style="margin-top: 20px;">
+
+    <div class="spinner">
+        <div aria-live="assertive" class="screenreader-only">Aan het laden</div>
+    </div>
+
+    <div class="input"  style="margin-top: 20px;">
+        <table class="table table--striped" id="autoInfo">
+
+        </table>
+
+    </div>
+</div>
+
+<script>
+    $('.spinner').hide();
+    $('#confirmButton').hide();
+    $('#changeButton').hide();
+
+    function getBagKeys(){
+        $('.spinner').show();
+        let kentekenInput = document.getElementById('kenteken');
+        let kenteken = document.getElementById('kenteken').value;
+        let input = document.getElementById('kentekenInput');
+        kenteken = kenteken.toUpperCase();
+        kenteken = kenteken.replace(/-|\s/g,"")
+        input.value = kenteken;
+        console.log(kenteken);
+
+
+        let list = document.getElementById('autoInfo');
+        while(list.firstChild){
+            list.firstChild.remove();
+        }
+
+
+
+        $.ajax({
+            url: "https://opendata.rdw.nl/resource/m9d7-ebf2.json",
+            type: 'GET',
+            processData: true,
+            headers: {
+                Accept: 'application/ld+json'
+            },
+            data: { kenteken:kenteken},
+            statusCode: {
+                404: function() {
+                    console.log( "page not found" );
+                },
+                500: function() {
+                    console.log( "internal server error" );
+                },
+                200: function() {
+                    console.log( "worked" );
+                }
+            },
+            success: function(result) {
+                $('.spinner').hide();
+                if(result.length > 0){
+                    $('#autoInfo').append('<thead><tr><td></td><th scope="col">Gegevens</th></tr></thead>');
+                    $('#autoInfo').append('<tbody id="tbody">');
+                    $('#tbody').append('<tr id="tr1">');
+                    $('#tr1').append('<th scope="row">Soort voertuig:</th> <td>'+ result[0]['voertuigsoort'] +'</td>');
+                    $('#tbody').append('</tr>');
+                    $('#tbody').append('<tr id="tr2">');
+                    $('#tr2').append('<th scope="row">Merk:</th> <td style="text-transform: lowercase">'+ result[0]['merk'] +'</td>');
+                    $('#tbody').append('</tr>');
+                    $('#tbody').append('<tr id="tr3">');
+                    $('#tr3').append('<th scope="row">Handelsbenaming:</th> <td style="text-transform: lowercase">'+ result[0]['handelsbenaming'] +'</td>');
+                    $('#tbody').append('</tr>');
+                    $('#tbody').append('<tr id="tr4">');
+                    $('#tr4').append('<th scope="row">Kleur:</th> <td style="text-transform: lowercase">'+ result[0]['eerste_kleur'] +'</td>');
+                    $('#tbody').append('</tr>');
+                    $('#autoInfo').append('</tbody>');
+                    $('#confirmButton').show();
+                }else{
+                    $('#autoInfo').append('<p>Er is geen auto gevonden aan de hand van het meegegeven kenteken.</p>');
+                    kentekenInput.value = '';
+                    input.value = '';
+                }
+
+
+            },
+        });
+
+    }
+
+    function confirmCar(){
+        let input = document.getElementById('kenteken');
+        let value = document.getElementById('kentekenInput');
+        let kenteken = input.value;
+        kenteken = kenteken.toUpperCase();
+        kenteken = kenteken.replace(/-|\s/g,"")
+        value.value = kenteken;
+        $('#searchButton').hide();
+        input.setAttribute('disabled', 'disabled');
+        $('#changeButton').show();
+        $('#confirmButton').hide();
+    }
+
+    function changeCar() {
+        let list = document.getElementById('autoInfo');
+        while(list.firstChild){
+            list.firstChild.remove();
+        }
+
+        let input = document.getElementById('kenteken');
+        input.removeAttribute('disabled')
+        $('#searchButton').show();
+        $('#changeButton').hide();
+    }
+
+</script>

@@ -1,0 +1,151 @@
+<nav class="top-nav" id="docs-nav">
+    <div class="container">
+        <div class="top-nav__block top-nav-autoresize">
+            <ul class="nav">
+
+                {% set currentPath = path(app.request.attributes.get('_route'),
+                    app.request.attributes.get('_route_params')) %}
+
+                {% if application.defaultConfiguration.configuration.mainMenu is defined %}
+                    {% set menu = commonground_resource(application.defaultConfiguration.configuration.mainMenu) %}
+
+                    {% for item in menu.menuItems|sort((a, b) => a.order <=> b.order) %}
+                        <li class="nav__item col-xs" >
+                            <a class="nav__link {% if item.href == currentPath %} nav__link--active {% endif %}"
+                               href="{{ item.href }}">
+                                <i class="{{ item.icon }}" role="presentation"></i> {{ item.name }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                {% endif %}
+
+                    {# onderstaande is nu bij wijze van hotfix, de ventigid het coole rechts zwevende menu item #}
+                    {% if not app.user %}
+                        <li class="nav__item">
+                            <a class="nav__link" data-toggle="modal" data-target="#myModal" onclick="openModal()"><i
+                                    style="margin-right: 10px" class="fas fa-lock"></i> {{ 'login'|trans|capitalize }}
+                            </a>
+                        </li>
+                    {% else %}
+                        {% if application.defaultConfiguration.configuration.userPage is defined %}
+                            <li class="nav__item">
+                                <a href="/{{ application.defaultConfiguration.configuration.userPage }}" title="Profile"
+                                   class="nav__link  ">
+                                    <i style="margin-right: 10px" class="fas fa-user"></i>
+                                    <span>{{ app.user.name }}</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                        <li class="nav__item">
+                            <a href="{{ path('app_user_logout') }}" title="Profile" class="nav__link  ">
+                                <i style="margin-right: 10px" class="fas fa-unlock"></i>
+                                <span>{{ 'logout'|trans|capitalize }}</span>
+                            </a>
+                        </li>
+                    {% endif %}
+
+                {#
+                <div class="top-nav__block top-nav__block--right">
+
+
+                </div>
+
+{#                <li class="nav__item nav__item--more nav__item--hidden" data-width="98">#}
+{#                    <a href="#" class="nav__link nav__link--more">Meer</a>#}
+{#                    <ul class="nav__more">#}
+
+{#                        {% if application.defaultConfiguration.configuration.mainMenu is defined %}#}
+{#                            {% set menu = commonground_resource(application.defaultConfiguration.configuration.mainMenu) %}#}
+
+{#                            {% for item in menu.menuItems|sort((a, b) => a.order <=> b.order) %}#}
+{#                                <li class="nav__item nav__item--clone nav__item--hidden"><a class="nav__link "#}
+{#                                                                                            href="{{ item.href }}"><i#}
+{#                                            class="{{ item.icon }}" role="presentation"></i> {{ item.name }}</a>#}
+{#                                </li>#}
+{#                            {% endfor %}#}
+{#                        {% endif %}#}
+{#                    </ul>#}
+{#                </li>#}
+            </ul>
+        </div>
+    </div>
+
+</nav>
+
+<script>
+    // Load collapse component
+    System.import('/uno/components/collapse/collapse.js').then(function (module) {
+        // Select all collapsible elements on the page
+        var collapses = document.querySelectorAll('[x-uno-collapse]');
+        // Initialize all collapses
+        for (var i = 0; i < collapses.length; i++) {
+            new module.Collapse(collapses.item(i));
+        }
+    });
+
+    System.import('/uno/components/navigation/navigation.js').then(function (module) {
+        var navs = document.querySelectorAll('.top-nav-autoresize');
+        // Initialize all navs
+        for (var i = 0; i < navs.length; i++) {
+            new module.AutoResizeNavigation(navs.item(i));
+        }
+    });
+
+    // Load nav component
+    System.import('/uno/components/navigation/navigation.js').then(function (module) {
+        var submenus = document.querySelectorAll('.nav--submenu');
+        // Initialize all submenus
+        for (var i = 0; i < submenus.length; i++) {
+            new module.SubMenuNavigation(submenus.item(i));
+        }
+    });
+
+
+    // Load collapse component
+    System['import']('../../uno/components/collapse/collapse.js').then(function (m) {
+
+        //gebruikt unieke id van de nav om te voorkomen dat example collapses ook automatisch geactiveerd worden.
+        new m.Collapse(document.querySelector('#search-trigger'));
+    });
+</script>
+
+{% if application['defaultConfiguration']['configuration']['stickyMenu'] is defined and application['defaultConfiguration']['configuration']['stickyMenu'] == true %}
+
+    <script>
+        // Code for combining anchors with sticky
+        var adjustAnchor = Boolean(false)
+
+        var anchors = document.getElementsByClassName('anchor');
+
+        function adjustAnchors() {
+
+            if (adjustAnchor === false) {
+                for (var i = 0; i < anchors.length; i++) {
+                    anchors[i].style.marginTop = '-182px';
+                }
+
+                adjustAnchor = true
+            } else {
+                for (var i = 0; i < anchors.length; i++) {
+                    anchors[i].style.marginTop = '-70px';
+                }
+                adjustAnchor = false
+            }
+        }
+
+        $(window).resize(function () {
+            if ($(window).width() > 544) {
+                for (var i = 0; i < anchors.length; i++) {
+                    anchors[i].style.marginTop = '-70px';
+                }
+            } else if (adjustAnchor === true) {
+                for (var i = 0; i < anchors.length; i++) {
+                    anchors[i].style.marginTop = '-182px';
+                }
+
+            }
+        });
+    </script>
+
+{% endif %}
+
