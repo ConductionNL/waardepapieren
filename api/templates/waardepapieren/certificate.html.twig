@@ -11,7 +11,7 @@
                             <h2>{{ 'download your certificate'|trans|capitalize }}</h2>
                             <br>
                             <button href="#" class="btn btn-block">{{ 'download jwt'|trans|capitalize }}</button>
-                            <a href="{{ certificate.image }}" class="btn btn-block">{{ 'download QR-code'|trans|capitalize }}</a>
+                            <a href="{{ path('app_waardepapieren_download') }}/{{ certificate.id }}.png" class="btn btn-block">{{ 'download QR-code'|trans|capitalize }}</a>
                             <button href="#" class="btn btn-block">{{ 'download PDF'|trans|capitalize }}</button>
                         {% else %}
                             <h2>{{ 'choose a certificate type'|trans|capitalize }}</h2>
