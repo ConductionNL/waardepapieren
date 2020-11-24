@@ -36,26 +36,4 @@ class DefaultController extends AbstractController
 
         return $variables;
     }
-
-    /**
-     * @Route("/login")
-     * @Template
-     */
-    public function loginAction(CommonGroundService $commonGroundService, Request $request)
-    {
-        $variables = [];
-
-        return $variables;
-    }
-
-    /**
-     * @Route("/register")
-     * @Template
-     */
-    public function registerAction(CommonGroundService $commonGroundService, Request $request)
-    {
-        $variables = [];
-
-        return $variables;
-    }
 }
