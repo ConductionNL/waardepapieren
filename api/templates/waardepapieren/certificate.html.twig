@@ -20,7 +20,7 @@
                                 <div class="input">
                                     <label class="input__label"
                                            for="type">{{ 'types'|trans|capitalize }}</label>
-                                    <select onchange="showCorrectForm(this)" id="type" name="type"
+                                    <select id="type" name="type"
                                             class="input__control input__control--l input__control--select" required>
                                         <option >geboorte akte</option>
                                         <option >verblijfs geschiedenis</option>
@@ -47,10 +47,4 @@
             </div><!-- /.content-background -->
         </div><!-- /.col -->
     </div>
-
-    <script>
-        function showCorrectForm(type) {
-
-        }
-    </script>
 {% endblock %}
