@@ -52,7 +52,7 @@ settings:
   archiveEnabled: false
 
 security:
-  commongroundId: "31a2ad29-ee03-4aa9-be81-abf1fda7bbcc"
+  commongroundId: "aae458e7-dd33-494c-a99c-383a7b1658a0"
   commongroundKey: "45c1a4b6-59d3-4a6e-86bf-88a872f35845"
   applicationKey: "45c1a4b6-59d3-4a6e-86bf-88a872f35845"
   userKey: "45c1a4b6-59d3-4a6e-86bf-88a872f35845"
