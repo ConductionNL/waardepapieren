@@ -1,0 +1,128 @@
+{% extends "content.html.twig" %}
+
+{% block content %}
+<section class="row">
+    <div class="col-md-12">
+        <div class="content">
+
+            <header class="content__header">
+                <a class="backlink" href="{{ path('app_ptc_index') }}">{{ 'processes'|trans|capitalize }}</a>
+                <header class="content__header">
+                    <h1 class="content__header-title">{{ process.name|capitalize }}</h1>
+                </header>
+            </header>
+        </div><!-- ./content -->
+    </div><!-- ./col -->
+</section>
+
+    {% if not app.user %}
+        <div class="notification notification--info">
+            <div class="notification__content">
+                <div class="notification__type">{{ 'attention'|trans|capitalize }}</div>
+                <h2 class="notification__title">{{ 'you can not save or submit procceses if you are not loged in'|trans|capitalize }}</h2>
+            </div>
+        </div>
+    {% endif %}
+
+<div class="row">
+    <div class="col-md-8  col-sm-12">
+        <form method="post" action="{{ path('app_ptc_slug',{id:process.id, slug:slug}) }}" class="form" enctype="multipart/form-data">
+            {% include 'ptc/default.html.twig' %}
+
+            {% if slug is not defined or slug == 'instruction' %}
+                {% include 'ptc/instruction.html.twig' %}
+                {% include 'ptc/documents.html.twig' %}
+            {% elseif slug == 'submit' %}
+                {% include 'ptc/submit.html.twig' %}
+            {% elseif slug == 'in-progress' %}
+                {% include 'ptc/in-progress.html.twig' %}
+            {% elseif slug == 'processed' %}
+                {% include 'ptc/processed.html.twig' %}
+            {% elseif stage.sections is defined and stage.sections is not null %}
+                {% include 'ptc/widgets/form.html.twig' %}
+            {% endif %}
+            <!-- Page Break -->
+            <div style="height: 20px;"></div>
+
+
+            {% if slug == 'instruction' %}
+                <div class="col-md-12 no-padding">
+                    {% if process.requireLogin is defined and process.requireLogin == 'true' and (app.user is not defined or app.user is null) %}
+                        <div class="col-md-6" style="padding-left: 0px;">
+                            {% if process.audience == 'person' %}
+                                {% if application is defined and application.id == "3f44c00e-d919-4f89-bd4c-b730c9b2620a" %}
+                                    <a class="btn btn--block" href="{{ commonground_cleanurl({"component":"digispoof-ui"}) }}?responceUrl={{ absolute_url(path('app_default_index')) }}digispoof&backUrl={{ absolute_url(path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params'))) }}">{{ 'login'|trans|capitalize }}</a>
+                                {% else %}
+                                    <a class="btn btn--block" href="{{ commonground_cleanurl({"component":"ds"}) }}?responceUrl={{ absolute_url(path('app_default_index')) }}digispoof&backUrl={{ absolute_url(path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params'))) }}">{{ 'login'|trans|capitalize }}</a>
+                                {% endif %}
+                            {% elseif process.audience == 'organization' %}
+                                <a class="btn btn--block" href="{{ commonground_cleanurl({"component":"eh"}) }}?responceUrl={{ absolute_url(path('app_default_index')) }}eherkenning&backUrl={{ absolute_url(path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params'))) }}">{{ 'login'|trans|capitalize }}</a>
+                            {% endif %}
+                        </div><!-- /.col -->
+                        <div class="col-md-6" style="padding-right: 0px;">
+                        <a class="btn btn--block btn--primary"
+                           href="{{ path('app_ptc_slug',{id: process.id, slug:  process.stages[0].slug }) }}">{{ 'continue without logging in'|trans|capitalize }}</a>
+                        </div><!-- /.col -->
+                    {% elseif resumeRequest is defined and resumeRequest == 'resume' %}
+                        {% if request.currentStage != 'submit' %}
+                            {% set nextStage = commonground_resource(request.currentStage) %}
+                            <a class="btn btn--block"
+                               href="{{ path('app_ptc_slug',{id: process.id, slug:  nextStage.slug}) }}">{{ 'resume'|trans|capitalize }}</a>
+                        {% else %}
+                            <a class="btn btn--block"
+                               href="{{ path('app_ptc_slug',{id: process.id, slug:  request.currentStage}) }}">{{ 'resume'|trans|capitalize }}</a>
+                        {% endif %}
+                    {% elseif resumeRequest is defined and resumeRequest == 'see' %}
+                        <a class="btn btn--block"
+                           href="{{ path('app_ptc_slug',{id: process.id, slug:  process.stages[0].slug }) }}">{{ 'see'|trans|capitalize }}</a>
+                    {% else %}
+                        <a class="btn btn--block"
+                           href="{{ path('app_ptc_slug',{id: process.id, slug:  process.stages[0].slug }) }}">{{ 'start'|trans|capitalize }}</a>
+                    {% endif %}
+                </div><!-- /.col -->
+            {% elseif slug != 'submit' %}
+                <div class="col-md-6" style="padding-left: 0px;">
+                    <button class="btn btn--block" name="submit">{{ 'save'|trans|capitalize }}</button>
+                </div><!-- /.col -->
+            {% endif %}
+
+            {% if stage.previous is defined and stage.previous is not null and stage.previous != false %}
+                <div class="col-md-6" style="padding-right: 0px;">
+                    <a class="btn btn--primary btn--block"
+                       href="{{ path('app_ptc_slug',{id: process.id, slug: stage.previous.slug}) }}">{{ 'previous'|trans|capitalize }}</a>
+                </div>
+            {% endif %}
+
+
+        </form>
+
+    </div><!-- /.col -->
+
+    <div class="col-md-4  col-sm-12">
+        {% if slug != 'instruction' %}
+            {% include 'ptc/widgets/progressbar.html.twig' %}
+
+            <!-- Page Break -->
+            <div style="height: 20px"></div>
+            {% include 'ptc/widgets/stages.html.twig' %}
+
+            <!-- Page Break -->
+            <div style="height: 20px"></div>
+            {% include 'ptc/widgets/checklist.html.twig' %}
+
+            <!-- Page Break -->
+            <div style="height: 20px"></div>
+            {% include 'ptc/widgets/properties.html.twig' %}
+
+            <!-- Page Break -->
+            <div style="height: 20px"></div>
+            {% include 'ptc/widgets/contact.html.twig' %}
+
+        {% else %}
+            {% if app.user is defined and app.user is not empty %}
+                {% include 'ptc/widgets/requests.html.twig' %}
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

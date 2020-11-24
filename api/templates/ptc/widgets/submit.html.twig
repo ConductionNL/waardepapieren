@@ -1,0 +1,280 @@
+<div class="content-background">
+    <div class="content">
+        {% if process.submitText is defined and process.submitText is not empty %}
+            {{ process.submitText|raw }}
+        {% endif %}
+
+        <h2>
+            {{ 'properties'|trans|capitalize }}
+        </h2>
+
+        {% if request is defined and request is not null %}
+            <ul class="definition-list">
+                <li class="definition-list__item definition-list__item--horizontal">
+                    <div class="definition-list__title" style="max-width: 100%">
+                        {{ 'process'|trans|capitalize }}
+                    </div>
+                    <div class="definition-list__description">
+                        <p>
+                            {{ process.name|capitalize }}
+                        </p>
+                    </div>
+                </li>
+                <li class="definition-list__item definition-list__item--horizontal">
+                    <div class="definition-list__title" style="max-width: 100%">
+                        {{ 'description'|trans|capitalize }}
+                    </div>
+                    <div class="definition-list__description">
+                        <p>
+                            {{ process.description }}
+                        </p>
+                    </div>
+                </li>
+                {% if resource.reference is defined and resource.reference is not empty %}
+                    <li class="definition-list__item definition-list__item--horizontal">
+                        <div class="definition-list__title" style="max-width: 100%">
+                            {{ 'reference'|trans|capitalize }}
+                        </div>
+                        <div class="definition-list__description">
+                            <p>
+                                {{ resource.reference }}
+                            </p>
+                        </div>
+                    </li>
+                {% endif %}
+                {% if resource.reference is defined and resource.reference is not empty %}
+                    <li class="definition-list__item definition-list__item--horizontal">
+                        <div class="definition-list__title" style="max-width: 100%">
+                            {{ 'status'|trans|capitalize }}
+                        </div>
+                        <div class="definition-list__description">
+                            <p>
+                                {{ resource['status']|trans|capitalize }}
+                            </p>
+                        </div>
+                    </li>
+                {% endif %}
+
+                {% for stage in process.stages %}
+                    {% for section in stage.sections %}
+                        {% for property in section.propertiesForms %}
+                            <li class="definition-list__item definition-list__item--horizontal">
+                                <div class="definition-list__title" style="max-width: 100%;">
+                                    <span>
+                                        {% if property.valid %}
+                                            <span style="color: green" class="icon icon-check" role="presentation" x-uno-tooltip="" title="{{ 'You have correctly filled out all required questions for this stage'|trans|capitalize }}"></span>
+                                        {% elseif not property.valid and property.required == 'true' %}
+                                            <i style="color: red" x-uno-tooltip="" {% if property.messages is defined and property.messages is not empty %} title="{% for message in property.messages %}{{ message|capitalize }} {% endfor %}" {% endif %} class="fas fa-times"></i>
+                                        {% endif %}
+                                        {{ property.title|capitalize }}
+                                    </span>
+                                </div>
+
+                                <div class="definition-list__description">
+                                    <p>
+                                        {% if property.value is iterable %}
+                                        {% for key, value in property.value %}
+                                        {% if value is iterable %}
+                                    <ul style="text-align: center;border: 2px solid #19c3e6; list-style: none; padding: 10px; width: 100%; margin-left: 0px;">
+                                        {% for item in value %}
+                                            {% if item is iterable %}
+                                                {% for subItem in item %}
+                                                    {% if 'http' in subItem and commonground_is_resource(subItem) %}
+                                                        <li>{{ commonground_resource(subItem).name|capitalize }}</li>
+                                                    {% else %}
+                                                        {% if subItem != '' %}
+                                                            {% if subItem is iterable %}
+                                                                {% for item in subItem %}
+                                                                    <li>{{ item|capitalize }}</li>
+                                                                {% endfor %}
+                                                            {% else %}
+                                                                <li>{{ subItem|capitalize }}</li>
+                                                            {% endif %}
+                                                        {% endif %}
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% else %}
+                                                {% if 'http' in item and commonground_is_resource(item) %}
+                                                    <li>{{ commonground_resource(item).name|capitalize }}</li>
+                                                {% else %}
+                                                    {% if item != '' %}
+                                                        <li>{{ item|capitalize }}</li>
+                                                    {% endif %}
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </ul>
+                                    {% else %}
+                                        {% if 'http' in value and commonground_is_resource(value) %}
+                                            {% if commonground_resource(value)['@type'] == 'Ingeschrevenpersoon' %}
+                                                {{ commonground_resource(value).naam.voornamen }} {{ commonground_resource(value).naam.geslachtsnaam }}
+                                                <br>
+                                            {% else %}
+                                                {{ commonground_resource(value).name }}<br>
+                                            {% endif %}
+                                        {% else %}
+                                            {{ value|capitalize }}<br>
+                                        {% endif %}
+                                    {% endif %}
+                                    {% endfor %}
+                                    {# non array properties #}
+                                    {# else %}
+                                        {% if commonground_is_resource(property) %}
+                                            {% set property = commonground_resource(property) %}
+                                            {% if property.naam.voornamen is defined and property.naam.geslachtsnaam is defined %}
+                                                {{ property.naam.voornamen }} {{ property.naam.geslachtsnaam }}
+                                            {% elseif property.reference is defined %}
+                                                {{ property.reference }}
+                                            {% elseif property.name is defined %}
+                                                {{ property.name }}
+                                            {% endif #}
+                                    {% else %}
+                                        {% if 'http' in property.value and commonground_is_resource(property.value) %}
+                                            {% if 'enkelvoudiginformatieobjecten' in property.value %}
+                                                {% set file = commonground_resource(property.value) %}
+                                                <a href="{{ path('app_drc_download',{'resource':file.id}) }}">{{ file.bestandsnaam }}</a>
+                                            {% elseif commonground_resource(property.value)['@type'] is defined and commonground_resource(property.value)['@type'] == 'Cemetery' %}
+                                                {{ commonground_resource(property.value).reference }}<br>
+                                            {% elseif commonground_resource(property.value)['@type'] is defined and commonground_resource(property.value)['@type'] == 'Ingeschrevenpersoon' %}
+                                                {{ commonground_resource(property.value).naam.voornamen }} {{ commonground_resource(property.value).naam.geslachtsnaam }}
+                                                <br>
+                                            {% elseif commonground_resource(property.value)['@type'] is defined and commonground_resource(property.value)['@type'] == 'Adres' %}
+                                                {{ commonground_resource(property.value).straat|capitalize }} {{ commonground_resource(property.value).huisnummer }}
+                                            {% else %}
+                                                {{ commonground_resource(property.value).name|capitalize }}
+                                            {% endif %}
+                                        {% else %}
+                                            {{ property.value|capitalize }}
+                                        {% endif %}
+                                    {% endif %}
+                                    </p>
+                                </div>
+                                {% if property.value is defined and property.value is not empty %}
+                                    <a class="definition-list__edit-button" href="{{ path('app_ptc_process_stage',{id:process.id, stage:stage.slug}) }}#{{ property.id }}">{{ 'edit'|trans|capitalize }}</a>
+                                {% else %}
+                                    <a class="definition-list__edit-button" href="{{ path('app_ptc_process_stage',{id:process.id, stage:stage.slug}) }}#{{ property.id }}">{{ 'add'|trans|capitalize }}</a>
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+    </div>
+</div>
+
+
+
+{% if app.user %}
+    {% set user = commonground_resource(app.user.person) %}
+    <div class="content-background" style="margin-top: 20px">
+        <div class="content">
+            <h2>{{ 'submitter'|trans|capitalize }}</h2>
+            <ul class="definition-list">
+                {% if user.naam.voornamen is defined and user.naam.voornamen is not empty %}
+                    <li class="definition-list__item definition-list__item--horizontal">
+                        <div class="definition-list__title">
+                            Voornamen
+                        </div>
+                        <div class="definition-list__description">
+                            <p>{{ user.naam.voornamen }}</p>
+                        </div>
+                    </li>
+                {% endif %}
+                {% if user.naam.geslachtsnaam is defined and user.naam.geslachtsnaam is not empty %}
+                    <li class="definition-list__item definition-list__item--horizontal">
+                        <div class="definition-list__title">
+                            Achternaam
+                        </div>
+                        <div class="definition-list__description">
+                            <p>{{ user.naam.geslachtsnaam }}</p>
+                        </div>
+                    </li>
+                {% endif %}
+                {% if user.naam.voorvoegsel is defined and user.naam.voorvoegsel is not empty%}
+                    <li class="definition-list__item definition-list__item--horizontal">
+                        <div class="definition-list__title">
+                            Voorvoegsel
+                        </div>
+                        <div class="definition-list__description">
+                            <p>{{ user.naam.voorvoegsel }}</p>
+                        </div>
+                    </li>
+                {% endif %}
+                {% if user.leeftijd is defined and user.leeftijd is not empty%}
+                    <li class="definition-list__item definition-list__item--horizontal">
+                        <div class="definition-list__title">
+                            Leeftijd
+                        </div>
+                        <div class="definition-list__description">
+                            <p>{{ user.leeftijd }}</p>
+                        </div>
+                    </li>
+                {% endif %}
+                {% if user.geslachtsaanduiding is defined and user.geslachtsaanduiding is not empty%}
+                    <li class="definition-list__item definition-list__item--horizontal">
+                        <div class="definition-list__title">
+                            Geslacht
+                        </div>
+                        <div class="definition-list__description">
+                            <p>{{ user.geslachtsaanduiding }}</p>
+                        </div>
+                    </li>
+                {% endif %}
+                <li class="definition-list__item definition-list__item--horizontal">
+                    <div class="definition-list__title">
+                        Adres
+                    </div>
+                    <div class="definition-list__description">
+                        <p>
+                            {% if user.verblijfplaats.straatnaam is defined and user.verblijfplaats.straatnaam is not empty %}{{ user.verblijfplaats.straatnaam }}{% endif %}
+                            {% if user.verblijfplaats.huisnummer is defined and user.verblijfplaats.huisnummer is not empty %}{{ user.verblijfplaats.huisnummer }}{% endif %}
+                            {% if user.verblijfplaats.huisletter is defined and user.verblijfplaats.huisletter is not empty %}{{ user.verblijfplaats.huisletter }}{% endif %}
+                            {% if user.verblijfplaats.huisnummertoevoeging is defined and user.verblijfplaats.huisnummertoevoeging is not empty %}{{ user.verblijfplaats.huisnummertoevoeging }}{% endif %}
+                            <br>
+                            {% if user.verblijfplaats.postcode is defined and user.verblijfplaats.postcode is not empty %}{{ user.verblijfplaats.postcode }}{% endif%}
+                            {% if user.verblijfplaats.woonplaatsnaam is defined and user.verblijfplaats.woonplaatsnaam is not empty %}{{ user.verblijfplaats.woonplaatsnaam }}{% endif %}
+                        </p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- Page Break -->
+
+
+    <div class="row">
+        <div class="col-xs-12 col-md-6">
+            <button name="request[status]" style="margin-top: 20px; background-color: red; color: white; width: 100%;" id="status_cancel" value="cancelled" class="btn btn--block btn--primary">{{ 'cancel'|trans|capitalize }}</button>
+        </div>
+        <div class="col-xs-12 col-md-6">
+            <button name="request[status]" style="margin-top: 20px; width: 100%;" id="status_submit" value="submitted" class="btn btn--block">{{ 'submit'|trans|capitalize }}</button>
+        </div>
+    </div>
+
+
+
+
+{% else %}
+
+    <!-- Page Break -->
+    <div style="height: 20px"></div>
+
+    <div class="notification notification--warning">
+        <div class="notification__content">
+            <div class="notification__type">{{ 'attention'|trans|capitalize }}</div>
+            <h2 class="notification__title">{{ 'you can not save or submit procceses if you are not loged in'|trans|capitalize }}</h2>
+        </div>
+    </div>
+
+    <div style="height: 20px"></div>
+
+
+    <div class="row" >
+        <div class="col-md-12" >
+            <a class="btn btn--block" data-toggle="modal" data-target="#myModal" onclick="openModal()"><i style="margin-right: 10px" class="fas fa-lock"></i> {{ 'login'|trans|capitalize }}</a>
+            {%  include 'login/widgets/login_modal.html.twig' %}
+        </div>
+    </div>
+{% endif %}

@@ -1,0 +1,75 @@
+<div class="modal modal--backdrop noFocus" role="dialog" id="myModal" tabindex="0" aria-describedby="modal-description3">
+    <section class="modal__content" role="document">
+        <form action="{{ path('app_chin_nodesorganization') }}" method="post">
+            <div class="modal__body noFocus" tabindex="0" lang="en-US">
+                <div class="row" style="margin-top: 20px;">
+                    <div class="col-xs-6">
+                        <h1>{{ 'node'|trans|capitalize }}</h1>
+                    </div>
+                    <div class="col-xs-6">
+                        <button style="float: right;" class="modal__close-button">
+                            <i class="icon icon-cross"></i>
+                            {{ 'close'|trans|capitalize }}
+                        </button>
+                    </div>
+                </div>
+                <div class="input input--horizontal">
+                    <div>
+                        <label class="input__label" for="name">{{ 'name'|trans|capitalize }} <span style="color: red;"><strong>*</strong></span></label>
+                    </div>
+                    <input required="" type="text" id="name" name="name" aria-describedby="hint_name" class="input__control input__control--text input__control--xl">
+                </div>
+                <div class="input input--horizontal">
+                    <div>
+                        <label class="input__label" for="description">{{ 'description'|trans|capitalize }} <span style="color: red;"><strong>*</strong></span></label>
+                    </div>
+                    <textarea required="" id="description" name="description" aria-describedby="hint_name" class="input__control input__control--text input__control--xl"></textarea>
+                </div>
+                <div class="input input--horizontal">
+                    <div>
+                        <label class="input__label" for="passthroughUrl">{{ 'passthrough Url'|trans|capitalize }}</label>
+                    </div>
+                    <input id="passthroughUrl" type="text" name="passthroughUrl" aria-describedby="hint_name" class="input__control input__control--text input__control--xl">
+                </div>
+                <div class="input input--horizontal">
+                    <div>
+                        <label class="input__label" for="place">{{ 'place'|trans|capitalize }} <span style="color: red;"><strong>*</strong></span></label>
+                    </div>
+                    <select id="place" name="place" class="input__control input__control--xl input__control--select">
+                        {% if places is defined and places is not empty %}
+                            {% for place in places %}
+                                <option value="{{ place['@id'] }}">{{ place.name }}</option>
+                            {% endfor %}
+                        {% endif %}
+                    </select>
+                </div>
+                <div class="input input--horizontal">
+                    <div>
+                        <label class="input__label" for="organization">{{ 'organization'|trans|capitalize }} <span style="color: red;"><strong>*</strong></span></label>
+                        <input disabled required="" type="text" id="organization" aria-describedby="hint_name" class="input__control input__control--text input__control--xl"
+                        value="{{ organizations.name }}">
+                        <input type="hidden" name="organization" value="{{ organizations['@id'] }}">
+                    </div>
+                </div>
+                <div class="input input--horizontal">
+                    <legend class="input__legend">{{ 'login methodes'|trans|capitalize }}:</legend>
+                    <div class="input__group input__group--checkbox">
+                        <input name="methods[idin]" value="true" type="checkbox" id="idin" class="input__control input__control--l input__control--checkbox">
+                        <label class="input__label input__label--checkbox" for="idin">Idin</label>
+                    </div>
+                    <div class="input__group input__group--checkbox">
+                        <input name="methods[facebook]" value="true" type="checkbox" id="facebook" class="input__control input__control--l input__control--checkbox">
+                        <label class="input__label input__label--checkbox" for="facebook">facebook</label>
+                    </div>
+                    <div class="input__group input__group--checkbox">
+                        <input name="methods[gmail]" value="true" type="checkbox" id="gmail" class="input__control input__control--l input__control--checkbox">
+                        <label class="input__label input__label--checkbox" for="gmail">gmail</label>
+                    </div>
+                </div>
+            </div>
+                <footer class="modal__footer" lang="en-US">
+                <button class="btn btn--primary">{{ 'create'|trans|capitalize }}</button>
+            </footer>
+        </form>
+    </section>
+</div>

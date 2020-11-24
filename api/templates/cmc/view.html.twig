@@ -1,0 +1,39 @@
+{% extends "content.html.twig" %}
+
+{% block content %}
+
+
+<section class="row">
+    <div class="col-md-12">
+        <div class="content">
+            <header class="content__header">
+                {% if resource.backlink is defined %}
+                <a class="backlink" href="{{ resource.backlink }}">{{ 'previous'|trans|capitalize }}</a>
+                {% endif %}
+                <header class="content__header">
+                    <h1 class="content__header-title">{{ 'message'|trans|capitalize }}</h1>
+                </header>
+            </header>
+        </div><!-- ./content -->
+    </div><!-- ./col -->
+</section>
+
+
+
+<form method="post" action="{{ path('app_cmc_send') }}" class="form">
+<div class="row">
+    <div class="col-md-8  col-sm-12">
+        <div class="content-background">
+            <div class="content">
+                Het inzien van berichten wordt nog niet ondersteund
+            </div><!-- /.content -->
+        </div><!-- /.content-background -->
+
+        <!-- Page Break -->
+        <div style="height: 20px"></div>
+    </div><!-- /.col -->
+
+
+</div>
+</form>
+{% endblock %}

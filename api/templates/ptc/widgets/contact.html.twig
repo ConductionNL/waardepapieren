@@ -1,0 +1,35 @@
+
+{% if resource.reference is  defined and resource.reference is not empty %}
+<!-- Page Break -->
+<div style="height: 20px"></div>
+
+<div class="content-background">
+    <div class="content">
+        <h2 id="contactdescription">{{ 'messages'|trans|capitalize }}</h2>
+
+        {% if contactMoments is not defined or contactMoments is empty %}
+            {{ 'there are currently no messages concerning this item'|trans|capitalize}}
+        {% else %}
+        <ul class="list list--links" aria-describedby="contactdescription">
+            {% for contactMoment  in contactMoments %}
+            <li><a href="{{ path('app_contact_view',{id:contactMoment.id,backlink:app.request.requesturi}) }}" tabindex="0">{{ contactMoment.subject }}</a></li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        {% if not app.user %}
+        <aside class="hint">
+            <h2 class="hint__title">{{ 'login required'|trans|capitalize}}</h2>
+            {{ 'you need to login before you can submit a question'|trans|capitalize}}
+        </aside>
+        {% elseif resource['@id'] is defined %}
+        <a href="{{ path('app_cmc_send',{resource:resource['@id'],backlink:app.request.requesturi,topic:resource.reference,receiver:resource.organization}) }}" class="btn btn--block">{{ 'ask a question'|trans|capitalize }}</a>
+        {% else %}
+        <aside class="hint">
+            <h2 class="hint__title">{{ 'save'|trans|capitalize}}</h2>
+            {{ 'you need to save before you can submit a question'|trans|capitalize}}
+        </aside>
+        {% endif %}
+    </div>
+</div>
+{% endif %}

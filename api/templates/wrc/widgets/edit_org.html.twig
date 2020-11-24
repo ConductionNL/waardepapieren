@@ -1,0 +1,203 @@
+{% if app.user is defined and app.user.organization is not empty and 'http' in app.user.organization %}
+    {% set org = commonground_resource(app.user.organization) %}
+    {% if org.contact is defined and 'http' in org.contact %}
+        {% set orgContact = commonground_resource(org.contact) %}
+    {% endif %}
+
+    <div class="content-background">
+        <div class="content">
+            <h2>{{ 'information'|trans|capitalize }}</h2>
+
+            <form action="{{ path('app_wrc_organization') }}" method="post">
+
+                <input name="@id" type="hidden" value="{{ org['@id'] }}">
+
+                {% if org.contact is defined and org.contact is not empty %}
+                    <input name="contact" type="hidden" value="{{ org['contact'] }}">
+                {% endif %}
+
+                <div class="input">
+                    <label class="input__label"
+                           for="name">{{ 'name'|trans|capitalize }}</label>
+                    <input required="" type="text" id="name" name="name" disabled
+                           class="input__control input__control--l input__control--text"
+                           {% if org.name is defined %}value="{{ org.name }}"{% endif %}>
+                </div>
+
+                <div class="input">
+                    <label class="input__label" for="description">{{ 'description'|trans|capitalize }}</label>
+                    <textarea id="description" name="description"
+                              class="input__control input__control--l input__control--text">{% if org.description is defined %}{{ org.description }}{% endif %}</textarea>
+                </div>
+
+                {% if orgContact.emails is defined and orgContact.emails is not empty %}
+                    {% if orgContact.emails|length > 1 %}
+                        {% set i = 0 %}
+                        {% for email in orgContact.emails %}
+                            {% set i = i + 1 %}
+
+                            <div class="input">
+                                <label class="input__label"
+                                       for="email">{{ 'e-mail'|trans|capitalize }}{% if i > 0 %} {{ i + 1 }}{% endif %}</label>
+                                <input required="" type="text" id="email" name="emails[]"
+                                       class="input__control input__control--l input__control--text"
+                                       {% if email.email is defined %}value="{{ email.email }}"{% endif %}>
+                            </div>
+
+                        {% endfor %}
+                    {% endif %}
+                {% else %}
+                    <div class="input">
+                        <label class="input__label"
+                               for="email">{{ 'e-mail'|trans|capitalize }}</label>
+                        <input required="" type="text" id="email" name="email"
+                               class="input__control input__control--l input__control--text"
+                               {% if orgContact.emails.0 is defined %}value="{{ orgContact.emails.0 }}"{% endif %}>
+                    </div>
+                {% endif %}
+
+                {% if orgContact.telephones is defined and orgContact.telephones is not empty %}
+                    {% if orgContact.telephones|length > 1 %}
+                        {% set i = 0 %}
+                        {% for tel in orgContact.telephones %}
+                            {% set i = i + 1 %}
+
+                            <div class="input">
+                                <label class="input__label"
+                                       for="telephone">{{ 'telephone number'|trans|capitalize }}{% if i > 0 %} {{ i + 1 }}{% endif %}</label>
+
+                                <input required="" type="text" id="telephone" name="telephones[]"
+                                       class="input__control input__control--l input__control--text"
+                                       {% if tel.telephone is defined %}value="{{ tel.telephone }}"{% endif %}>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% else %}
+                    <div class="input">
+                        <label class="input__label"
+                               for="telephone">{{ 'telephone number'|trans|capitalize }}</label>
+
+                        <input required="" type="text" id="telephone" name="telephone"
+                               class="input__control input__control--l input__control--text"
+                               {% if orgContact.telephones.0 is defined %}value="{{ orgContact.telephones.0 }}"{% endif %}>
+                    </div>
+                {% endif %}
+
+                {% if orgContact.socials is defined and orgContact.socials is not empty %}
+                    {% if orgContact.socials|length > 1 %}
+                        {% set i = 0 %}
+                        {% for social in orgContact.socials %}
+                            {% set i = i + 1 %}
+                            <p>Social {% if i > 0 %}{{ i + 1 }}{% endif %}</p>
+                            {% if social.wesbite is defined %}
+                                <div class="input">
+                                    <label class="input__label"
+                                           for="website">{{ 'website'|trans|capitalize }}</label>
+
+                                    <input required="" type="text" id="website" name="websites[{{ i }}]"
+                                           class="input__control input__control--l input__control--text"
+                                           {% if social.wesbite is defined %}value="{{ social.wesbite }}"{% endif %}>
+                                </div>
+                            {% endif %}
+                            {% if social.twitter is defined %}
+                                <div class="input">
+                                    <label class="input__label"
+                                           for="twitter">{{ 'twitter'|trans|capitalize }}</label>
+
+                                    <input required="" type="text" id="twitter" name="twitters[{{ i }}]"
+                                           class="input__control input__control--l input__control--text"
+                                           {% if social.twitter is defined %}value="{{ social.twitter }}"{% endif %}>
+                                </div>
+                            {% endif %}
+                            {% if social.facebook is defined %}
+                                <div class="input">
+                                    <label class="input__label"
+                                           for="facebook">{{ 'facebook'|trans|capitalize }}</label>
+
+                                    <input required="" type="text" id="facebook" name="facebooks[{{ i }}]"
+                                           class="input__control input__control--l input__control--text"
+                                           {% if social.facebook is defined %}value="{{ social.facebook }}"{% endif %}>
+                                </div>
+                            {% endif %}
+                            {% if social.linkedin is defined %}
+                                <div class="input">
+                                    <label class="input__label"
+                                           for="linkedin">{{ 'linkedin'|trans|capitalize }}</label>
+
+                                    <input required="" type="text" id="linkedin" name="linkedins[{{ i }}]"
+                                           class="input__control input__control--l input__control--text"
+                                           {% if social.linkedin is defined %}value="{{ social.linkedin }}"{% endif %}>
+                                </div>
+                            {% endif %}
+                            {% if social.instagram is defined %}
+                                <div class="input">
+                                    <label class="input__label"
+                                           for="instagram">{{ 'instagram'|trans|capitalize }}</label>
+
+                                    <input required="" type="text" id="instagram" name="instagrams[{{ i }}]"
+                                           class="input__control input__control--l input__control--text"
+                                           {% if social.instagram is defined %}value="{{ social.instagram }}"{% endif %}>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        {% set social = orgContact.socials.0 %}
+                        <div class="input">
+                            <label class="input__label"
+                                   for="website">{{ 'link to main website of this organization'|trans|capitalize }}</label>
+
+                            <input required="" type="text" id="website" name="website"
+                                   class="input__control input__control--l input__control--text"
+                                   {% if social.wesbite is defined %}value="{{ social.website }}"{% endif %}>
+                        </div>
+
+                        <div class="input">
+                            <label class="input__label"
+                                   for="twitter">{{ 'link to twitter page'|trans|capitalize }}</label>
+
+                            <input required="" type="text" id="twitter" name="twitter"
+                                   class="input__control input__control--l input__control--text"
+                                   {% if social.twitter is defined %}value="{{ social.twitter }}"{% endif %}>
+                        </div>
+
+                        <div class="input">
+                            <label class="input__label"
+                                   for="facebook">{{ 'link to facebook page'|trans|capitalize }}</label>
+
+                            <input required="" type="text" id="facebook" name="facebook"
+                                   class="input__control input__control--l input__control--text"
+                                   {% if social.facebook is defined %}value="{{ social.facebook }}"{% endif %}>
+                        </div>
+
+                        <div class="input">
+                            <label class="input__label"
+                                   for="linkedin">{{ 'link to linkedin page'|trans|capitalize }}</label>
+
+                            <input required="" type="text" id="linkedin" name="linkedin"
+                                   class="input__control input__control--l input__control--text"
+                                   {% if social.linkedin is defined %}value="{{ social.linkedin }}"{% endif %}>
+                        </div>
+
+                        <div class="input">
+                            <label class="input__label"
+                                   for="instagram">{{ 'link to instagram page'|trans|capitalize }}</label>
+
+                            <input required="" type="text" id="instagram" name="instagram"
+                                   class="input__control input__control--l input__control--text"
+                                   {% if social.instagram is defined %}value="{{ social.instagram }}"{% endif %}>
+                        </div>
+
+                        <div class="input">
+                            <button type="submit" class="btn btn--block">{{ 'save'|trans|capitalize }}</button>
+                        </div>
+
+
+                    {% endif %}
+
+                {% endif %}
+
+
+            </form>
+        </div><!-- /.content -->
+    </div><!-- /.content-background -->
+{% endif %}

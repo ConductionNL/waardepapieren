@@ -1,0 +1,11 @@
+<header class="header header--transparent" role="banner">
+    <div class="header-logo header-logo--bzk">
+            <a href="/" title="">
+                <span class="screenreader-only">{% if application is not empty %}
+                {% if slug is defined and slug is not empty %}
+                        {{ slug|capitalize }} |
+                    {% endif %}
+                {{ application['name'] }}{% else %} Commonground proto applicatie{% endif %}</span>
+            </a>
+    </div>
+</header>

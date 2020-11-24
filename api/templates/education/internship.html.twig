@@ -1,0 +1,99 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <header class="content__header">
+        <a class="backlink" href="/education/internships">Stages</a>
+    </header>
+    <div class="row">
+        <div class="col-sm-12 col-lg-8">
+            <div class="content-background">
+                <div class="content ">
+                    <div class="row">
+                        <div class="col-md-6">
+                            {% if internship.title is defined and internship.title is not empty %}
+                                <h1>{{ internship.title|capitalize }}</h1>
+                            {% else %}
+                                <h1>{{ internship.name|capitalize }}</h1>
+                            {% endif %}
+                            {% if internship.description is defined and internship.description is not empty %}
+                                <p>{{ internship.description }}</p>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <img src="https://picsum.photos/350/250" alt="tender" width="100%">
+                        </div>
+                    </div>
+
+                    <br>
+                    <div class="edit-section">
+                        <h2>Algemene informatie</h2>
+                    </div>
+                    <ul class="definition-list">
+                        <li class="definition-list__item definition-list__item--horizontal">
+                            <div class="definition-list__title">
+                                Naam
+                            </div>
+                            <div class="definition-list__description">
+                                <p>{{ internship.name }}</p>
+                            </div>
+                        </li>
+                        {% if internship.jobStartDate is defined and internship.jobStartDate is not empty %}
+                            <li class="definition-list__item definition-list__item--horizontal">
+                                <div class="definition-list__title">
+                                    Startdatum
+                                </div>
+                                <div class="definition-list__description">
+                                    <p>{{ internship.jobStartDate|date("d-m-Y", "Europe/Paris") }}</p>
+                                </div>
+                            </li>
+                        {% endif %}
+                        {% if internship.validThrough is defined and internship.validThrough is not empty %}
+                            <li class="definition-list__item definition-list__item--horizontal">
+                                <div class="definition-list__title">
+                                    <span>Sluitings datum</span>
+                                </div>
+                                <div class="definition-list__description">
+                                    <p>{{ internship.validThrough|date("d-m-Y", "Europe/Paris") }}</p>
+                                </div>
+                            </li>
+                        {% endif %}
+                        {% if internship.jobLocationType is defined and internship.jobLocationType is not empty %}
+                            <li class="definition-list__item definition-list__item--horizontal">
+                                <div class="definition-list__title">
+                                    Vorm
+                                </div>
+                                <div class="definition-list__description">
+                                    {% if internship.jobLocationType == 'TELECOMMUTE' %}
+                                        <p>online</p>
+                                    {% else %}
+                                        <p>{{ internship.jobLocationType}}</p>
+                                    {% endif %}
+                                </div>
+                            </li>
+                        {% endif %}
+                        {% if internship.employmentType is defined and internship.employmentType is not empty %}
+                            <li class="definition-list__item definition-list__item--horizontal">
+                                <div class="definition-list__title">
+                                    Dienstverband
+                                </div>
+                                <div class="definition-list__description">
+                                    <p>{{ internship.employmentType}}</p>
+                                </div>
+                            </li>
+                        {% endif %}
+                        {% if internship.standardHours is defined and internship.standardHours is not empty %}
+                            <li class="definition-list__item definition-list__item--horizontal">
+                                <div class="definition-list__title">
+                                    Uren per week
+                                </div>
+                                <div class="definition-list__description">
+                                    <p>{{ internship.standardHours}} uur</p>
+                                </div>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

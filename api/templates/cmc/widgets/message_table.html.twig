@@ -1,0 +1,37 @@
+
+            <div class="content-background" >
+            	<div class="content">
+                    <h2>{{ 'messages'|trans|capitalize }}</h2>
+                    {% if resources is defined and resources is not empty %}
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th scope="col">{{ 'date'|trans|capitalize }}</th>
+                            <th scope="col">{{ 'topic'|trans|capitalize }}</th>
+                            <th scope="col">{{ 'sender'|trans|capitalize }}</th>
+                            <th scope="col">{{ 'receiver'|trans|capitalize }}</th>
+                            <th scope="col"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for resource in resources %}
+                        <tr>
+                            <td>{{ resource.dateCreated|date("d-m-Y") }}</td>
+                            <td>{{ resource.topic|capitalize }}</td>
+                            <td>{{ commonground_resource(resource.sender).name|capitalize }}</td>
+                            <td>{{ commonground_resource(resource.receiver).name|capitalize }}</td>
+                            <td><a href="{{ path('app_cmc_view', {id: resource.id}) }}">{{ 'view'|trans|capitalize }}</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <a href="{{ path('app_cmc_index') }}">{{ 'view all'|trans|capitalize }}</a>
+
+                    {% else %}
+                        <aside class="hint">
+                            <h2 class="hint__title">{{ 'no messages available'|trans|capitalize }}</h2>
+                        </aside>
+                    {% endif %}
+                </div><!-- /.content -->
+            </div><!-- /.content-background -->

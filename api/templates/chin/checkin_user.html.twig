@@ -1,0 +1,48 @@
+{% extends "content.html.twig" %}
+
+
+{% block content %}
+
+    <section class="row">
+        <div class="col-md-12">
+            <div class="content">
+                <header class="content__header">
+                    <a class="backlink" href="
+                    {% if application.defaultConfiguration.configuration.userPage is defined %}/{{ application.defaultConfiguration.configuration.userPage }}{% else %}/{% endif %}">{{ 'back'|trans|capitalize }}</a>
+                    <header class="content__header">
+                        <h1 class="content__header-title">{{ 'personal'|trans|capitalize }}</h1>
+                    </header>
+                </header>
+            </div><!-- ./content -->
+        </div><!-- ./col -->
+    </section>
+
+    <div class="row">
+        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+        <aside class="col-md-4 col-sm-modal">
+            <nav class="sidenav">
+                {% include 'uc/widgets/menu.html.twig' %}
+            </nav>
+        </aside>
+
+        <div class="col-md-8">
+            {% include 'chin/widgets/checkin_table.html.twig' %}
+        </div>
+        {% else %}
+            <div class="col-md-12">
+                <div class="content-background" >
+                    <div class="content">
+                        <aside class="hint">
+                            <h2 class="hint__title">{{ 'login required'|trans|capitalize}}</h2>
+                            {{ 'you need to login before you can view this page'|trans|capitalize}}
+                        </aside>
+                        <a href="{{ path('app_user_login') }}?backUrl={{ absolute_url(path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params'))) }}" title="Login" class="btn btn--icon">
+                            <i style="margin-right: 10px"  class="icon fas fa-lock"></i>
+                            <span>{{ 'login'|trans|capitalize }}</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

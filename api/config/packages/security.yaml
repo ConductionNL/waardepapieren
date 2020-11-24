@@ -1,0 +1,48 @@
+security:
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    providers:
+        commongroundApplicationProvider:
+            id: Conduction\CommonGroundBundle\Security\User\CommongroundApplicationProvider
+        commongroundProvider:
+            id: Conduction\CommonGroundBundle\Security\User\CommongroundProvider
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js|docs)/
+            security: false
+        # The mollie webhook does not have our API key
+        webhook:
+            anonymous: true
+            pattern: ^/payments/mollie_webhook
+            methods: [POST]
+        main:
+            anonymous: ~
+            pattern: ^/
+            form_login:
+                login_path: app_user_login
+                check_path: app_user_login
+            logout:
+                path: app_user_logout
+                target: app_default_index
+            stateless: false
+            provider: commongroundProvider
+            guard:
+                authenticators:
+                    - Conduction\CommonGroundBundle\Security\CommongroundApplicationAuthenticator
+                    - Conduction\CommonGroundBundle\Security\CommongroundEherkenningAuthenticator
+                    - Conduction\CommonGroundBundle\Security\CommongroundUserAuthenticator
+                    - Conduction\CommonGroundBundle\Security\CommongroundDigispoofAuthenticator
+                    - Conduction\CommonGroundBundle\Security\CommongroundIdinAuthenticator
+                    - Conduction\CommonGroundBundle\Security\CommongroundFacebookAuthenticator
+                    - Conduction\CommonGroundBundle\Security\CommongroundGmailAuthenticator
+                entry_point: Conduction\CommonGroundBundle\Security\CommongroundApplicationAuthenticator
+
+            # activate different ways to authenticate
+            # https://symfony.com/doc/current/security.html#firewalls-authentication
+
+            # https://symfony.com/doc/current/security/impersonating_user.html
+            # switch_user: true
+
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
+    access_control:
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }

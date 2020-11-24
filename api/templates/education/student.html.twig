@@ -1,0 +1,150 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <header class="content__header">
+        <a class="backlink" href="/education/students">Studenten</a>
+    </header>
+    <div class="row">
+        {% if app.user is defined and app.user is not null %}
+        {% set person = commonground_resource(resource.person) %}
+        <div class="col-sm-12 col-lg-8">
+            <div class="content-background">
+                <div class="content ">
+                    <div class="row">
+                        <div class="col-md-6">
+                            {% if person['@type'] == 'Ingeschrevenpersoon' %}
+                                <h1>{{ person.naam.voornamen|capitalize }} {{ person.naam.geslachtsnaam|capitalize }}</h1>
+                                <p>{{ person.naam.aanschrijfwijze|capitalize }}</p>
+                            {% elseif person['@type'] == 'Person' %}
+                                <h1>{{ person.name|capitalize }}</h1>
+                                <p>{{ person.formalName|capitalize }}</p>
+                                <b>Family Name: </b>{{ person.familyName|capitalize }}
+                            {% else %}
+                                <h1>{{ person.name|capitalize }}</h1>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <img src="https://picsum.photos/350/250" alt="tender" width="100%">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <br>
+                            <div class="collapse" role="status">
+                                <div x-uno-collapse="" class="collapse__header">
+                                    <i class="collapse__indicator">
+                                            <span class="screenreader-only" data-contracted-i18n="ingeklapt"
+                                                  data-expanded-i18n="uitgeklapt"></span>
+                                    </i>
+                                    <span class="collapse__title">Programma's</span>
+                                </div>
+                                <div class="collapse__details collapse__details--closed">
+                                    {% if resource.programs is defined and resource.programs is not empty %}
+                                        <ul class="list list--card list--card-small">
+                                            {% for program in resource.programs %}
+                                                <li class="card card--small">
+                                                    <div class="card__content">
+                                                        <div class="card__body">
+                                                            <div class="row" style=" height: 100%; width: 100%;">
+                                                                <div class="col-sm-12" style="padding-right: 0px;">
+                                                                    <span class="card__title">{{ program.name }}</span><br>
+                                                                    {% if program.description is defined and program.description is not empty %}
+                                                                        <span>{{ program.description }}</span>
+                                                                    {% endif %}
+                                                                    <br><br>
+                                                                    <div class="col-sm-12 col-md-6">
+                                                                        <div style="display: flex; flex-direction: column; justify-items: center;">
+                                                                            <a href="{{ path('app_education_program', {id: program.id}) }}"
+                                                                               rel="noopener" class="btn btn--primary"
+                                                                               target="_blank">
+                                                                                Bekijk dit programma
+                                                                                <span class="btn__icon icon icon-arr-forward" title="" role=""></span>
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% else %}
+                                        <p style="color:lightgray">Deze student is niet ingeschreven voor een program.</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <br>
+                            <div class="collapse" role="status">
+                                <div x-uno-collapse="" class="collapse__header">
+                                    <i class="collapse__indicator">
+                                            <span class="screenreader-only" data-contracted-i18n="ingeklapt"
+                                                  data-expanded-i18n="uitgeklapt"></span>
+                                    </i>
+                                    <span class="collapse__title">Tutorials</span>
+                                </div>
+                                <div class="collapse__details collapse__details--closed">
+                                    {% if resource.courses is defined and resource.courses is not empty %}
+                                        <ul class="list list--card list--card-small">
+                                            {% for course in resource.courses %}
+                                                <li class="card card--small">
+                                                    <div class="card__content">
+                                                        <div class="card__body">
+                                                            <div class="row" style=" height: 100%; width: 100%;">
+                                                                <div class="col-sm-12" style="padding-right: 0px;">
+                                                                    <span class="card__title">{{ course.name }}</span><br>
+                                                                    {% if course.description is defined and course.description is not empty %}
+                                                                        <span>{{ course.description }}</span>
+                                                                    {% endif %}
+                                                                    <br><br>
+                                                                    <div class="col-sm-12 col-md-6">
+                                                                        <div style="display: flex; flex-direction: column; justify-items: center;">
+                                                                            <a href="{{ path('app_education_program', {id: course.id}) }}"
+                                                                               rel="noopener" class="btn btn--primary"
+                                                                               target="_blank">
+                                                                                Bekijk deze tutorial
+                                                                                <span class="btn__icon icon icon-arr-forward" title="" role=""></span>
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% else %}
+                                        <p style="color:lightgray">Deze student is niet ingeschreven voor een course.</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+        <h2>U moet eerst inloggen voordat u deze pagina kunt bekijken!</h2>
+        Klik <a href="{{ commonground_cleanurl({"component":"ds"}) }}?responceUrl={{ absolute_url(path('app_default_index')) }}digispoof&backUrl={{ absolute_url(path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params'))) }}">hier</a> om te kunnen inloggen.
+    {% endif %}
+    </div>
+
+    <script>
+        // Load collapse component
+        System.import('/uno/components/collapse/collapse.js').then(function (module) {
+            // Select all collapsible elements on the page
+            var collapses = document.querySelectorAll('[x-uno-collapse]');
+            // Initialize all collapses
+            for (var i = 0; i < collapses.length; i++) {
+                new module.Collapse(collapses.item(i));
+            }
+        });
+    </script>
+
+{% endblock %}

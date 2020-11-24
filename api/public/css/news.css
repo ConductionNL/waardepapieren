@@ -1,0 +1,41 @@
+.newsCard {
+    margin: 10px auto;
+    width: 240px;
+    background-color: white;
+    padding: 15px;
+    height:400px;
+}
+
+#news-1, #news-2, #news-3, #news-4 {
+    display: none;
+}
+
+@media only screen and (min-width: 600px){
+
+    .newsImage {
+        display: block;
+        margin-top: 50px;
+        padding: 25px;
+        margin-bottom: -50px;
+        background: none;
+        background-size: cover !important;
+        background-position: center !important;
+    }
+
+    #news-1, #news-2 {
+        display: block;
+    }
+}
+
+@media only screen and (min-width: 900px){
+    #news-3 {
+        display: block;
+    }
+}
+
+@media only screen and (min-width: 1200px){
+    #news-4 {
+        display: block;
+    }
+}
+

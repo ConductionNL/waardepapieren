@@ -1,0 +1,22 @@
+{% extends "content.html.twig" %}
+
+{% block content %}
+
+    <section class="row">
+        <header class="content__header">
+            <h1 class="content__header-title">{{ 'messages'|trans|capitalize }}</h1>
+        </header>
+    </section>
+
+    <div class="row">
+        <aside class="col-xl-3 col-lg-4 col-md-3 col-sm-modal">
+            <nav class="sidenav">
+                {# include 'uc/widgets/menu.html.twig' #}
+            </nav>
+        </aside>
+
+        <div class="col-xl-9 col-lg-8 col-md-9">
+            {% include 'cmc/widgets/message_table.html.twig' %}
+        </div>
+    </div>
+{% endblock %}

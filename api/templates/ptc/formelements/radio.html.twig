@@ -1,0 +1,36 @@
+<label class="input__label" for="{{ property.id }}">
+    {% if property.icon is defined and property.icon is not empty %}
+        <i style="margin-right: 10px;" class="{{ property.icon }}"></i>
+    {% endif %}
+    {{ property.title }} {% if property.required is defined and property.required %}<span style="color: red;"><strong>*</strong></span>{% endif %}</label>
+{%  if property.description %}<span class="input__hint" id="{{ property.id }}_name">{{ property.description }}</span>{% endif %}
+<fieldset class="input">
+
+    {% if property.enum is defined and property.enum is not empty and property.type == 'string'%}
+        {% for option in property.enum %}
+            {% if request.properties[property.name] is defined and request.properties[property.name] == option %}
+                <div class="input__group input__group--radio">
+                    <input class="input__control input__control--radio" checked="checked" type="radio" id="{{ option }}" name="request[properties][{{ property.name }}]" value="{{ option }}">
+                    <label class="input__label input__label--radio" for="{{ option }}">{{ option }}</label><br>
+                </div>
+            {% else %}
+    <div class="input__group input__group--radio">
+        <input class="input__control input__control--radio" type="radio" id="{{ option }}" name="request[properties][{{ property.name }}]" value="{{ option }}">
+        <label class="input__label input__label--radio" for="{{ option }}">{{ option|capitalize }}</label><br>
+    </div>
+            {% endif %}
+        {% endfor %}
+    {% elseif property.type == "boolean" %}
+    <div class="input__group input__group--radio">
+        <input class="input__control input__control--radio" type="radio" id="yes" name="request[properties][{{ property.name }}]" value="ja"
+                {% if request.properties[property.name] is defined and request.properties[property.name] == 'ja' %}checked="checked"{% endif %}>
+        <label class="input__label input__label--radio" for="yes">{{ 'yes'|trans|capitalize }}</label><br>
+    </div>
+    <div class="input__group input__group--radio">
+        <input class="input__control input__control--radio" type="radio" id="no" name="request[properties][{{ property.name }}]" value="nee"
+               {% if request.properties[property.name] is defined and request.properties[property.name] == 'nee' %}checked="checked"{% endif %}>
+        <label class="input__label input__label--radio" for="no">{{ 'no'|trans|capitalize }}</label><br>
+    </div>
+    {% endif %}
+</fieldset>
+

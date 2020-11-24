@@ -1,0 +1,99 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <section class="row">
+        <div class="col-sm-8">
+            <div class="content">
+                <header class="content__header">
+                    <h1>Studenten</h1>
+                </header>
+            </div>
+        </div>
+    </section>
+
+    <article>
+        <div class="row">
+            <div class="col-sm-8">
+                <div class="content-background">
+                    <div class="content">
+                        <h2>Over Studenten</h2>
+                        <p>Hier komt een introductie over de studenten.</p>
+
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.
+                            Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+                            Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.
+                            Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut,
+                            imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt.
+                            Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula,
+                            porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis,
+                            feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet.
+                            Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <div class="row">
+        <div class="col-sm-8">
+            {% if app.user is defined and app.user is not null %}
+                {% if resources is not empty %}
+                    <ul class="list list--card list--card-small">
+                    {% for student in resources %}
+                        {% if student.person is defined and student.person is not empty and commonground_is_resource(student.person) %}
+                            {% set person = commonground_resource(student.person) %}
+                            <li class="card card--small">
+                                <div class="card__content">
+                                    <div class="card__thumb" style="background-image: url('https://picsum.photos/200')"></div>
+                                    <div class="card__body">
+                                        <div class="row" style=" height: 100%; width: 100%;">
+                                            <div class="col-sm-8" style="padding-right: 0px;">
+                                                {% if person['@type'] == 'Ingeschrevenpersoon' %}
+                                                    <span class="card__title">{{ person.naam.voornamen }} {{ person.naam.geslachtsnaam }}</span><br>
+                                                    <span>{{ person.naam.aanschrijfwijze }}</span>
+                                                {% elseif person['@type'] == 'Person' %}
+                                                    <span class="card__title">{{ person.name }}</span><br>
+                                                    <span>{{ person.formalName }}</span>
+                                                {% else %}
+                                                    <span class="card__title">{{ person.name }}</span><br>
+                                                {% endif %}
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div style="float: right;">
+                                                    <div style="display: flex; flex-direction: column; justify-items: center;">
+                                                        <a href="{{ path('app_education_student', {id: student.id}) }}">lees meer</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        {% else %}
+                            <li class="card card--small">
+                                <div class="card__content">
+                                    <div class="card__thumb" style="background-image: url('https://picsum.photos/200')"></div>
+                                    <div class="card__body">
+                                        <div class="row" style=" height: 100%; width: 100%;">
+                                            <div class="col-sm-8" style="padding-right: 0px;">
+                                                <span class="card__title">Voor deze student zijn geen gegevens beschikbaar</span><br>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    <p>Er zijn op dit moment geen studenten.</p>
+                {% endif %}
+                </ul>
+            {% else %}
+                <h2>U moet eerst inloggen voordat u deze pagina kunt bekijken!</h2>
+                Klik <a href="{{ commonground_cleanurl({"component":"ds"}) }}?responceUrl={{ absolute_url(path('app_default_index')) }}digispoof&backUrl={{ absolute_url(path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params'))) }}">hier</a> om te kunnen inloggen.
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

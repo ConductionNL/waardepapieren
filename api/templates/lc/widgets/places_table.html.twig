@@ -1,0 +1,39 @@
+<div class="content-background">
+    <div class="content">
+        <div class="row">
+            <div class="col-xs-6">
+                <h2>{{ 'places'|trans|capitalize }}</h2>
+            </div>
+            <div class="col-xs-6">
+                <button class="btn" style="float: right" data-toggle="modal" data-target="#myModal" onclick="openModal()">{{ 'new'|trans|capitalize }}</button>
+            </div>
+        </div>
+        {% if places is defined and places is not empty %}
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th scope="col">{{ 'name'|trans|capitalize }}</th>
+                <th scope="col">{{ 'description'|trans|capitalize }}</th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for place in places %}
+            <tr>
+                <td>{{ place.name }}</td>
+                {% if place.description is defined and place.description is not empty %}<td>{{ place.description }}</td>{% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+            <aside class="hint">
+                <h2 class="hint__title">{{ 'no places'|trans|capitalize }}</h2>
+            </aside>
+        {% endif %}
+    </div><!-- /.content -->
+</div><!-- /.content-background -->
+
+
+{% include 'lc/modals/place_modal.html.twig' %}

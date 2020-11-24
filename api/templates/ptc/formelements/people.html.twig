@@ -1,0 +1,305 @@
+<div class="input input--horizontal">
+    <div>
+        <label class="input__label" for="{{ property.id }}" id="{{ property.id }}_label">
+            {% if property.icon is defined and property.icon is not empty %}
+                <i style="margin-right: 10px;" class="{{ property.icon }}"></i>
+            {% endif %}
+            {{ property.title }} {% if property.required is defined and property.required %}<span
+                style="color: red;"><strong>*</strong></span>{% endif %}</label>
+    </div>
+
+    {% if property.type == 'array' %}
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="row" id="getuigen-container">
+                    <div id="0"></div>
+                    {% if request.properties[property.name] is defined and request.properties[property.name] is not empty %}
+                        {% set value = 1 %}
+                        {% for getuige in request.properties[property.name] %}
+                            <div id="{{ value }}" class="col-sm-12 col-md-5"
+                                 style="min-height: 131px; margin: 1%; width: 48%; border: 2px solid #19c3e6; text-align: center;">
+                                <h2 id="{{ value }}">{{ getuige.givenName }} {{ getuige.familyName }}</h2>
+                                <div id="{{ value }}" style="line-height: 15px">
+                                    <p id="{{ value }}">Email: {{ getuige.email }}</p>
+                                    <p id="{{ value }}">Telefoon: {{ getuige.telephone }}</p>
+                                    <input type="hidden" id="{{ value }}" value="{{ getuige.email }}" name="request[properties][{{ property.name }}][{{ value }}][emails][][email]">
+                                    <input type="hidden" id="{{ value }}" value="{{ getuige.telephone }}" name="request[properties][{{ property.name }}][{{ value }}][telephones][][telephone]">
+                                    <input type="hidden" id="{{ value }}" value="{{ getuige.givenName }}" name="request[properties][{{ property.name }}][{{ value }}][givenName]">
+                                    <input type="hidden" id="{{ value }}" value="{{ getuige.familyName }}" name="request[properties][{{ property.name }}][{{ value }}][familyName]">
+                                    <button class="btn btn-primary" id="{{ value }}" onclick="storedDelete(this, '{{ property.maxItems }}')" style="background-color:red; margin-bottom: 5px; width: 100%" type="button"><i style="margin-right: 10px" class="fas fa-trash-alt"></i>Verwijderen</button>
+                                </div>
+                            </div>
+                            {% set value = value + 1 %}
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+            <div id="personForm" class="col-sm-12">
+                {% if property.defaultValue is defined and property.defaultValue is not empty %}
+                    {% set assent = commonground_resource(include(template_from_string(property.defaultValue))) %}
+                {% endif %}
+                <div>
+                    {% if property.configuration is not defined or property.configuration.givenName is defined and property.configuration.givenName %}
+                        <label class="input__label" for="voornaam">Voornaam</label>
+                        <input class="input__control input__control--text" style="width: 100%" id="getuigenVoornaam"
+                               type="text" {% if assent is defined and assent is not empty %} value="{{ assent.naam.voornamen }}" {% endif %}>
+                    {% endif %}
+                    {% if property.configuration is not defined or property.configuration.familyName is defined and property.configuration.familyName %}
+                        <label class="input__label" for="achternaam">Achternaam</label>
+                        <input class="input__control input__control--text" style="width: 100%" id="getuigenAchternaam"
+                               type="text" {% if assent is defined and assent is not empty %} value="{{ assent.naam.geslachtsnaam }}" {% endif %}>
+                    {% endif %}
+                    {% if property.configuration is not defined or property.configuration.email is defined and property.configuration.email %}
+                        <label class="input__label" for="email">Email</label>
+                        <input class="input__control input__control--text" style="width: 100%" id="getuigenEmail"
+                               type="email">
+                    {% endif %}
+                    <span id="inputResult"></span>
+                    {% if property.configuration is not defined or property.configuration.telephone and property.configuration.telephone %}
+                        <label class="input__label" for="telephone">Telefoonnummer</label>
+                        <input class="input__control input__control--text" style="width: 100%" id="getuigenTelefoon"
+                               type="tel">
+                    {% endif %}
+                    {% if property.configuration.placeOfBirth is defined and property.configuration.placeOfBirth %}
+                        <label class="input__label" for="placeOfBirth">Geboorteplaats</label>
+                        <input class="input__control input__control--text" style="width: 100%" id="placeOfBirth"
+                               type="text">
+                    {% endif %}
+                    {% if property.configuration.birthday is defined and property.configuration.birthday %}
+                        <label class="input__label" for="birthday">Geboortedatum</label>
+                        <input class="input__control input__control--text" style="width: 100%" id="birthday"
+                               type="date">
+                    {% endif %}
+                    <button class="btn" id="toevoegen"
+                            onclick="addGetuigen('{{ property.name }}', '{{ property.maxItems }}')" type="button"
+                            style="margin-top: 5px; width: 100%">Toevoegen
+                    </button>
+                </div>
+            </div>
+        </div>
+    {% elseif property.type == 'string' %}
+        <div id="personForm">
+            {% if request.properties[property.name] is defined and request.properties[property.name] is not empty %}
+                {% set person = commonground_resource(request.properties[property.name]) %}
+            {% endif %}
+            <span>Persoon</span>
+            <div class="row" style="margin-bottom: 40px">
+                {% if property.configuration.givenName is not defined or property.configuration.givenName %}
+                    <div class="col-md-4">
+                        <label class="input__label" for="voornaam">Voornaam</label>
+                        <input class="input__control input__control--text" style="width: 100%" type="text" name="request[properties][{{ property.name }}][givenName]"
+                            {% if person.givenName is defined %} value="{{ person.givenName }}"{% endif %}>
+                    </div>
+                {% endif %}
+
+                {% if property.configuration.additionalName is not defined or property.configuration.additionalName %}
+                    <div class="col-md-4">
+                        <label class="input__label" for="achternaam">Tussenvoegels</label>
+                        <input class="input__control input__control--text" style="width: 100%" type="text" name="request[properties][{{ property.name }}][additionalName]"
+                            {% if person.additionalName is defined %} value="{{ person.additionalName }}"{% endif %}>
+                    </div>
+                {% endif %}
+                {% if property.configuration.familyName is not defined or property.configuration.familyName %}
+                    <div class="col-md-4">
+                        <label class="input__label" for="achternaam">Achternaam</label>
+                        <input class="input__control input__control--text" style="width: 100%" type="text" name="request[properties][{{ property.name }}][familyName]"
+                            {% if person.familyName is defined %} value="{{ person.familyName }}"{% endif %}>
+                    </div>
+                {% endif %}
+            </div>
+            {% if property.configuration.address is defined and property.configuration.address %}
+                <span>Adres</span>
+
+                <div class="row" style="margin-bottom: 5px">
+                    <div class="col-md-4">
+                        <label class="input__label" for="street">{{ 'streetname'|trans|capitalize }}</label>
+                        <input class="input__control input__control--text" id="street" style="width: 100%" type="text" name="request[properties][{{ property.name }}][adresses][0][street]"
+                            {% if person.adresses.0.street is defined %} value="{{ person.adresses.0.street }}"{% endif %}>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="input__label" for="houseNumber">{{ 'house number'|trans|capitalize }}<span style="color: red;"><strong>*</strong></span></label>
+                        <input required class="input__control input__control--text" id="houseNumber" style="width: 100%" type="text" name="request[properties][{{ property.name }}][adresses][0][houseNumber]"
+                            {% if person.adresses.0.houseNumber is defined %} value="{{ person.adresses.0.houseNumber }}"{% endif %}>
+
+                    </div>
+                    <div class="col-md-4">
+                        <label class="input__label" for="houseNumberSuffix">Toevoeging</label>
+                        <input class="input__control input__control--text" style="width: 100%" type="text"  name="request[properties][{{ property.name }}][adresses][0][houseNumberSuffix]"
+                            {% if person.adresses.0.houseNumberSuffix is defined %} value="{{ person.adresses.0.houseNumberSuffix }}"{% endif %}>
+                    </div>
+                </div>
+                <div class="row" style="margin-bottom: 40px">
+                    <div class="col-md-6">
+                        <label class="input__label" for="postalCode">{{ 'postal code'|trans|capitalize }}<span style="color: red;"><strong>*</strong></span></label>
+                        <input required class="input__control input__control--text" id="postalCode" style="width: 100%" type="text" name="request[properties][{{ property.name }}][adresses][0][postalCode]"
+                            {% if person.adresses.0.postalCode is defined %} value="{{ person.adresses.0.postalCode }}"{% endif %}>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="input__label" for="locality">{{ 'locality'|trans|capitalize }}</label>
+                        <input class="input__control input__control--text" id="locality" style="width: 100%" type="text" name="request[properties][{{ property.name }}][adresses][0][locality]"
+                            {% if person.adresses.0.locality is defined %} value="{{ person.adresses.0.locality }}"{% endif %}>
+                    </div>
+                </div>
+            {% endif %}
+            <span>Overig</span>
+            <div class="row" style="margin-bottom: 5px">
+                {% if property.configuration.email is not defined or property.configuration.email %}
+                    <div class="col-md-6">
+                        <label class="input__label" for="email">Email</label>
+                        <input class="input__control input__control--text" style="width: 100%" type="email" name="request[properties][{{ property.name }}][emails][0][email]"
+                            {% if person.emails.0.email is defined %} value="{{ person.emails.0.email }}"{% endif %}>
+                    </div>
+                {% endif %}
+                {% if property.configuration.telephone is not defined or property.configuration.telephone %}
+                    <div class="col-md-6">
+                        <label class="input__label" for="telephone">Telefoonnummer</label>
+                        <input class="input__control input__control--text" style="width: 100%" type="tel"  name="request[properties][{{ property.name }}][telephones][0][telephone]"
+                            {% if person.telephones.0.telephone is defined %} value="{{ person.telephones.0.telephone }}"{% endif %}>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="row" style="margin-bottom: 5px">
+                {% if property.configuration.birthplace is defined and property.configuration.birthplace %}
+                    <div class="col-md-6">
+                        <label class="input__label" for="placeOfBirth">Geboorteplaats</label>
+                        <input class="input__control input__control--text" style="width: 100%" type="text"  name="request[properties][{{ property.name }}][birthplace]"
+                            {% if person.birthplace is defined %} value="{{ person.birthplace }}"{% endif %}>
+                    </div>
+                {% endif %}
+                {% if property.configuration.birthday is defined and property.configuration.birthday %}
+                    <div class="col-md-6">
+                        <label class="input__label" for="birthday">Geboortedatum</label>
+                        <input class="input__control input__control--text" style="width: 100%" type="date"  name="request[properties][{{ property.name }}][birthday]"
+                            {% if person.birthday is defined %} value="{{ person.birthday }}"{% endif %}>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+</div>
+<script>
+    let personForm = document.getElementById("personForm");
+
+    function addGetuigen(propertyName, items) {
+        let input = document.getElementById('getuigenEmail');
+        if (!input.checkValidity()) {
+            document.getElementById('inputResult').innerHTML = 'Zorg dat je een geldig e-mail adres invult';
+        } else {
+            document.getElementById('inputResult').innerHTML = '';
+            let container = document.getElementById("getuigen-container");
+            if (container.children.length === parseInt(items)) {
+                $('#toevoegen').prop('disabled', true);
+                personForm.setAttribute('style', 'display: none;');
+            }
+            let email = document.getElementById('getuigenEmail').value;
+            let telefoon = document.getElementById('getuigenTelefoon').value;
+            let voornaam = document.getElementById('getuigenVoornaam').value;
+            let achternaam = document.getElementById('getuigenAchternaam').value;
+            let nameCount = document.getElementById("getuigen-container").children[container.children.length - 1].id;
+            let hEmail = document.createElement('input');
+            let hTelefoon = document.createElement('input');
+            let hVoornaam = document.createElement('input');
+            let hAchternaam = document.createElement('input');
+            let counter;
+
+            if (nameCount !== undefined) {
+                counter = parseInt(nameCount) + 1;
+            } else {
+                counter = parent.children.length;
+            }
+
+            hEmail.id = counter.toString();
+            hTelefoon.id = counter.toString();
+            hVoornaam.id = counter.toString();
+            hAchternaam.id = counter.toString();
+
+
+            hEmail.type = 'hidden';
+            hTelefoon.type = 'hidden';
+            hVoornaam.type = 'hidden';
+            hAchternaam.type = 'hidden';
+
+            hEmail.value = email;
+            hTelefoon.value = telefoon;
+            hVoornaam.value = voornaam;
+            hAchternaam.value = achternaam;
+
+            hEmail.name = 'request[properties]['+ propertyName +']['+ counter.toString() +'][emails][][email]';
+            hTelefoon.name = 'request[properties]['+ propertyName +']['+ counter.toString() +'][telephones][][telephone]';
+            hVoornaam.name = 'request[properties]['+ propertyName +']['+ counter.toString() +'][givenName]';
+            hAchternaam.name = 'request[properties]['+ propertyName +']['+ counter.toString() +'][familyName]';
+
+
+            let outerDiv = document.createElement('div');
+            outerDiv.className = "col-sm-12 col-md-6";
+            outerDiv.setAttribute('style', 'min-height: 131px; margin: 1%; width: 48%; border: 2px solid #19c3e6; text-align: center;');
+            outerDiv.id = counter.toString();
+            container.appendChild(outerDiv);
+
+            let h2 = document.createElement('h2');
+            h2.innerHTML = voornaam + " " + achternaam;
+            h2.id = counter.toString();
+            outerDiv.appendChild(h2);
+
+            let innerDiv = document.createElement('div');
+            innerDiv.setAttribute('style', 'line-height: 15px');
+            innerDiv.id = counter.toString();
+            outerDiv.appendChild(innerDiv);
+
+            let pEmail = document.createElement('p');
+            pEmail.innerHTML = 'Email: ' + email;
+            pEmail.id = counter.toString();
+            innerDiv.appendChild(pEmail);
+
+            let pTelefoon = document.createElement('p');
+            pTelefoon.innerHTML = 'Telefoon: ' + telefoon;
+            pTelefoon.setAttribute('style', 'margin-bottom: 5px;');
+            pTelefoon.id = counter.toString();
+            innerDiv.append(pTelefoon);
+
+            let button = document.createElement('button');
+            button.innerHTML = '<i style="margin-right: 10px" class="fas fa-trash-alt"></i> Verwijderen';
+            button.addEventListener('click', function () {
+                removeGetuigen(outerDiv, '{{ property.maxItems }}');
+            });
+            button.className = 'btn btn-primary';
+            button.setAttribute('style', 'background-color: red; margin-bottom: 5px; width:100%;')
+            button.type = 'button';
+            button.id = counter.toString();
+            innerDiv.appendChild(button);
+
+            innerDiv.appendChild(hEmail);
+            innerDiv.appendChild(hTelefoon);
+            innerDiv.appendChild(hVoornaam);
+            innerDiv.appendChild(hAchternaam);
+
+            document.getElementById('getuigenEmail').value = null;
+            document.getElementById('getuigenTelefoon').value = null;
+            document.getElementById('getuigenVoornaam').value = null;
+            document.getElementById('getuigenAchternaam').value = null;
+        }
+
+    }
+
+    function removeGetuigen(target, items) {
+        let container = document.getElementById("getuigen-container");
+        target.remove();
+        if (container.children.length < parseInt(items) + 1) {
+            $('#toevoegen').prop('disabled', false);
+            personForm.setAttribute('style', 'display: block;');
+        }
+    }
+
+    function storedDelete(given, items) {
+        let container = document.getElementById("getuigen-container");
+        let td = given.parentNode;
+        let tr = td.parentNode;
+        given.remove();
+        td.remove();
+        tr.remove();
+        if (container.children.length < parseInt(items) + 1) {
+            $('#toevoegen').prop('disabled', false);
+            personForm.setAttribute('style', 'display: block;');
+        }
+    }
+</script>

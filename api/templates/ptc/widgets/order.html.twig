@@ -1,0 +1,72 @@
+{% if resource is defined and resource is not empty and resource.order is defined and resource.order is not empty %}
+{% set order =  commonground_resource(resource.order) %}
+<!-- Page Break -->
+<div style="height: 20px"></div>
+
+<div class="content-background">
+    <div class="content">
+        <h2>{{ 'financial'|trans|capitalize }}</h2>
+        <ul class="definition-list">
+            <li class="definition-list__item definition-list__item--horizontal">
+                <div class="definition-list__title" style="max-width: 100%">
+                    {{ 'order'|trans|capitalize }}
+                </div>
+                <div class="definition-list__description">
+                    <p>
+                        {{ order.reference }}
+                    </p>
+                </div>
+            </li>
+            {% if order.items is defined and order.items is not empty %}
+            <li class="definition-list__item definition-list__item--horizontal">
+                <div class="definition-list__title" style="max-width: 100%">
+                    {{ 'items'|trans|capitalize }}
+                </div>
+                <div class="definition-list__description">
+                    {% for item in order.items %}
+                     <p><b>{{ item.name }}</b><br />{{ item.price }}{{ item.priceCurrency }}</p>
+                    {% endfor %}
+                </div>
+            </li>
+            {% endif %}
+            <li class="definition-list__item definition-list__item--horizontal">
+                <div class="definition-list__title" style="max-width: 100%">
+                    {{ 'amount'|trans|capitalize }}
+                </div>
+                <div class="definition-list__description">
+                    <p>
+                    {{ order.price }} {{ order.priceCurrency }}
+                    </p>
+                </div>
+            </li>
+            {% if order is defined  %}
+            {% set invoices = commonground_resource_list({"component":"bc","type":"invoices"},{"order":order["@id"]})['hydra:member'] %}
+            {% for invoice in invoices %}
+            <li class="definition-list__item definition-list__item--horizontal">
+                <div class="definition-list__title" style="max-width: 100%">
+                    {{ 'invoice'|trans|capitalize }}
+                </div>
+                <div class="definition-list__description">
+                    <p><b>
+                        {% if invoice.reference is defined and invoice.reference %}
+                        {{ invoice.reference }}
+                        {% elseif invoice.name is defined  and invoice.name %}
+                        {{ invoice.name }}
+                        {% else %}
+                        {{ 'n.a.'|trans|capitalize }}
+                        {% endif %}</b>
+                        <br />{{ invoice.price }}{{ invoice.priceCurrency }}
+                        {% if invoice.paid is defined and invoice.paid %}
+                            <span class="label label--groen">{{ 'paid'|trans|capitalize }}</span>
+                        {% elseif invoice.paymentUrl is defined and invoice.paymentUrl  %}
+                            <br /><a class="btn btn--icon btn--block" title="{{ 'pay'|trans|capitalize }}" href="{{ invoice.paymentUrl }}"><i class="icon icon-magnifier"></i> {{ 'pay'|trans|capitalize }}</a>
+                        {% endif %}
+                    </p>
+                </div>
+            </li>
+            {% endfor %}
+            {% endif %}
+        </ul>
+    </div>
+</div>
+{% endif %}

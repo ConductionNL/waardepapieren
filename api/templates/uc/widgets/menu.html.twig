@@ -1,0 +1,84 @@
+<div class="content-background">
+    <div class="content">
+        {% include 'uc/widgets/data.html.twig' %}
+    </div>
+</div>
+
+<!-- Page Break -->
+<div style="height: 20px"></div>
+
+<nav class="sidenav">
+    <ul>
+        {% if app.user.roles is defined and app.user.roles is not empty %}
+            {% if application.defaultConfiguration.configuration.userPage is defined %}
+                <li class="sidenav__item">
+                    <a href="/{{ application.defaultConfiguration.configuration.userPage }}">{{ 'personal'|trans|capitalize }}</a>
+                </li>
+            {% endif %}
+
+            {% if commonground_component_health("cmc") and 'scope.cmc.messages.read' in app.user.roles %}
+                <li class="sidenav__item {% if app.request.attributes.get('_route') == 'app_cmc_user' %}sidenav__item--active{% endif %}">
+                    <a href="{{ path('app_cmc_user') }}">{{ 'messages'|trans|capitalize }}</a>
+                </li>
+            {% endif %}
+            {% if commonground_component_health("vrc") and 'scope.vrc.requests.read' in app.user.roles %}
+                <li class="sidenav__item {% if app.request.attributes.get('_route') == 'app_vrc_user' or app.request.attributes.get('_route') == 'app_ptc_user' %}sidenav__item--active{% endif %}">
+                    <a href="{{ path('app_vrc_user') }}">{{ 'requests'|trans|capitalize }}</a>
+                </li>
+            {% endif %}
+            {#        {% if commonground_component_health("ptc") %}#}
+            {#        <li class="sidenav__item {% if app.request.attributes.get('_route') == 'app_ptc_user' %}sidenav__item--active{% endif %}">#}
+            {#            <a href="{{ path('app_ptc_user') }}">{{ 'start request'|trans|capitalize }}</a>#}
+            {#        </li>#}
+            {#        {% endif %}#}
+            {% if commonground_component_health("orc") and 'scope.orc.orders.read' in app.user.roles %}
+                <li class="sidenav__item {% if app.request.attributes.get('_route') == 'app_orc_user' %}sidenav__item--active{% endif %}">
+                    <a href="{{ path('app_orc_user') }}">{{ 'orders'|trans|capitalize }}</a>
+                </li>
+            {% endif %}
+            {% if commonground_component_health("bc") and 'scope.bc.invoices.read' in app.user.roles %}
+                <li class="sidenav__item {% if app.request.attributes.get('_route') == 'app_bc_user' %}sidenav__item--active{% endif %}">
+                    <a href="{{ path('app_bc_user') }}">{{ 'invoices'|trans|capitalize }}</a>
+                </li>
+            {% endif %}
+            {% if commonground_component_health("irc") and 'scope.irc.assents.read' in app.user.roles %}
+                <li class="sidenav__item {% if app.request.attributes.get('_route') == 'app_irc_user' %}sidenav__item--active{% endif %}">
+                    <a href="{{ path('app_irc_user') }}">{{ 'assents'|trans|capitalize }}</a>
+                </li>
+            {% endif %}
+            {% if commonground_component_health("arc") and 'scope.arc.events.read' in app.user.roles %}
+                <li class="sidenav__item {% if app.request.attributes.get('_route') == 'app_arc_user' %}sidenav__item--active{% endif %}">
+                    <a href="{{ path('app_arc_user') }}">{{ 'events'|trans|capitalize }}</a>
+                </li>
+            {% endif %}
+            {% if commonground_component_health("chin") and 'scope.chin.checkins.read' in app.user.roles %}
+                <li class="sidenav__item {% if app.request.attributes.get('_route') == 'app_chin_checkinuser' %}sidenav__item--active{% endif %}">
+                    <a href="{{ path('app_chin_checkinuser') }}">{{ 'check-ins'|trans|capitalize }}</a>
+                </li>
+            {% endif %}
+            {% if commonground_component_health("chin") and 'scope.chin.node.write' in app.user.roles %}
+                <li class="sidenav__item {% if app.request.attributes.get('_route') == 'app_chin_nodes' %}sidenav__item--active{% endif %}">
+                    <a href="{{ path('app_chin_nodes') }}">{{ 'codes'|trans|capitalize }}</a>
+                </li>
+            {% endif %}
+            {% if commonground_component_health("chin") and 'scope.lc.place.write' in app.user.roles %}
+                <li class="sidenav__item {% if app.request.attributes.get('_route') == 'app_lc_places' %}sidenav__item--active{% endif %}">
+                    <a href="{{ path('app_lc_places') }}">{{ 'places'|trans|capitalize }}</a>
+                </li>
+            {% endif %}
+            {% if commonground_component_health("chin") and 'scope.wrc.organization.write' in app.user.roles %}
+                <li class="sidenav__item {% if app.request.attributes.get('_route') == 'app_wrc_organization' %}sidenav__item--active{% endif %}">
+                    <a href="{{ path('app_wrc_organization') }}">{{ 'organization'|trans|capitalize }}</a>
+                </li>
+            {% endif %}
+        {% endif %}
+    </ul>
+</nav>
+
+<!-- Page Break -->
+<div style="height: 20px"></div>
+
+<a href="{{ path('app_user_logout') }}" class="btn btn--block">{{ 'logout'|trans|capitalize }}</a>
+
+<!-- Page Break -->
+<div style="height: 20px"></div>

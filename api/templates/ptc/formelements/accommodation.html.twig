@@ -1,0 +1,10 @@
+<div class="row">
+    <div id="accommodationForm" class="col-sm-12">
+        <label class="input__label" for="name">Naam <span style="color: red">*</span></label>
+        <input class="input__control input__control--m input__control--text" id="name" name="request[properties][{{property.name}}][name]" type="text" required="">
+        <label class="input__label" for="description">Beschrijving</label>
+        <input class="input__control input__control--xl input__control--text" id="description" name="request[properties][{{property.name}}][description]" type="text">
+        <label class="input__label" for="maximumAttendeeCapacity">Maximum aantal bezoekers</label>
+        <input class="input__control input__control--s input__control--text" id="maximumAttendeeCapacity" name="request[properties][{{property.name}}][maximumAttendeeCapacity]" type="number">
+    </div>
+</div>

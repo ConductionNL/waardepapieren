@@ -1,0 +1,186 @@
+{# templates/home/index.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% if resource.organization is defined and resource.organization is not empty %}
+    {% set org = commonground_resource(resource.organization) %}
+{% endif %}
+
+{% block style %}
+    <style>
+
+        @media (max-width: 555px) {
+            body {
+                position: fixed;
+                width: 100%;
+            }
+        }
+
+        .checkinFont {
+            color: #01689b;
+        }
+
+        .background {
+            background-color: white;
+        }
+
+        {% if org.style.css is defined and org.style.css is not empty %}
+            {{ org.style.css|raw }}
+        {% endif %}
+    </style>
+{% endblock %}
+
+{% block container %}
+    {% if app.user.person is defined and app.user.person is not empty %}
+    {% set person = commonground_resource(app.user.person) %}
+    {% endif %}
+    <form method="post" action="{{ path('app_chin_checkin', {"code":code}) }}" class="form">
+        <div class="container background" style="background-size: 300px; width: 100%; max-width: 100%;" >
+            <div class="row">
+                <div class="col-md-12 col-sm-12 " style="padding: 0;">
+                    <div class="" style="height: calc(100vh - 56px); text-align: center; display: flex; flex-direction: column; justify-content: space-evenly">
+                        <div class="row">
+                            {% if org.style.favicon.base64 is defined and org.style.favicon.base64 is not empty %}
+                                <div class="col-xs-12">
+                                    <img style="width: 30rem;" src="{{ org.style.favicon.base64 }}" alt="">
+                                </div>
+                            {% else %}
+                                <div class="col-xs-12">
+                                    <span style="font-size: 20rem; color: #39870c;" class="icon icon-check"></span>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-1"></div>
+                            <div class="col-xs-10" style="margin-bottom: 15px;">
+                                <div style="width: 100%; background-color: white; border-radius: 20px; padding-top: 20px; padding-bottom: 5px;">
+                                    <div class="definition-list__description">
+                                        {% if resource.place is defined and resource.place is not empty %}
+                                            {% set place = commonground_resource(resource.place) %}
+                                            {% if place.bagId is defined and place.bagId is not empty %}
+                                                {% set adres = commonground_resource({'component':'as', 'type': 'adressen', 'id': place.bagId}) %}
+                                            {% endif %}
+                                            <p style="margin-bottom: 0;"><h2 style="color: black; margin-top: 0;">-{{ place.name }}-</h2></p>
+                                            <p style="color: #000000; margin-bottom: 30px;">
+                                                {% if adres is defined and adres is not empty %}
+                                                    <i style="margin-right: 10px;" class="fas fa-map-marker-alt"></i>{{ adres.straat }} {{ adres.huisnummer }}, {{ adres.postcode }} <br>
+                                                    {{ adres.woonplaats }}
+                                                {% endif %}</p>
+                                        {% endif %}
+                                    </div>
+                                    <div class="input" style="margin-top: 5px; margin-bottom: 5px; padding: 0 10px;">
+                                        <input style="height: 35px" type="text" id="additionalName" name="name" placeholder="Naam"
+                                               class="noFocus input__control input__control--text"
+                                        {% if person.name is defined and person.name is not empty %}value="{{ person.name }}"{% endif %}>
+                                    </div>
+                                    <div class="input" style="margin-top: 5px; margin-bottom: 5px; padding: 0 10px;">
+                                        <input style="height: 35px" type="text" id="additionalName" name="email" placeholder="Email"
+                                               class="noFocus input__control input__control--text"
+                                        {% if person.emails[0].email is defined and person.emails[0].email is not empty %}value="{{ person.emails[0].email }}"{% endif %}>
+                                    </div>
+                                    <div class="input" style="margin-top: 5px; margin-bottom: 5px; padding: 0 10px;">
+                                        <input style="height: 35px" type="text" id="additionalName" name="telephone" placeholder="Telefoon"
+                                               class="noFocus input__control input__control--text"
+                                            {% if person.telephones[0].telephone is defined and person.telephones[0].telephone is not empty %}value="{{ person.telephones[0].telephone }}"{% endif %}>
+                                    </div>
+                                    <div class="input" style="margin-top: 5px; margin-bottom: 5px; padding: 0 10px;">
+                                        <div class="input__group input__group--checkbox" style="margin-bottom: 5px;">
+                                            <input name="hobbies[]" type="checkbox" id="chkbx1"
+                                                   class="input__control input__control--m input__control--checkbox" checked=""
+                                                   required="">
+                                            <label style="line-height: 14px" class="input__label input__label--checkbox" for="chkbx1">Ik voldoe aan de <a
+                                                    href="#"
+                                                    data-toggle="modal"
+                                                    data-target="#questionModal"
+                                                    onclick="openQuestionModal()">vragen</a>
+                                                van de corona vragenlijst horeca</label>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="node" value="{{ resource['@id'] }}">
+                                    <div style="margin-top: 10px; margin-bottom: 10px; padding: 0 10px;">
+                                        <button style=" width: 100%; background-color: #01689B; border: 0; color: white; border-radius: 20px;"><h2 style="margin-top: 4px;">Inchecken</h2></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-1"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.container -->
+    </form>
+
+    <script>
+        var questionModal;
+        // Load modal component
+        System.import('/uno/components/modal/modal.js').then(function (module) {
+            questionModal = new module.Modal(document.getElementById('questionModal'));
+        });
+
+        // Called when the user clicks the button
+        function openQuestionModal() {
+            questionModal.open();
+        }
+
+        function closeQuestionModal() {
+            questionModal.close();
+        }
+    </script>
+
+    <div class="modal modal--backdrop" role="dialog" id="questionModal" tabindex="-1"
+         aria-describedby="modal-description3">
+        <section class="modal__content" role="document">
+            <div id="modal-description3" class="screenreader-only">
+                Vanwege de maatregelen rondom het coronavirus, zijn we verplicht je bij ontvangst de volgende vragen te
+                stellen.
+            </div>
+            <header class="modal__title">
+                <h1>Check</h1>
+            </header>
+
+            <div class="modal__body" tabindex="0">
+                <p>Vanwege de maatregelen rondom het coronavirus,
+                    zijn we verplicht je bij ontvangst de volgende vragen te stellen</p>
+                <ol class="list list--decimal-circled">
+                    <li>Heb je een of meerdere van deze klachten(Hoesten, Neusverkoudheid, Koorts vanaf 38 graden,
+                        Benauwdheidsklachten) gehad in de afgelopen 24 uur?
+                    </li>
+                    <li>Heb je op dit moment een huisgenoot met koorts en/of
+                        benauwdheidsklachten?
+                    </li>
+                    <li>Heb je het nieuwe coronavirus gehad en is dit de afgelopen 7 dagen
+                        vastgesteld (in een lab)?
+                    </li>
+                    <li>Heb je een huisgenoot/gezinslid met het nieuwe coronavirus en heb je
+                        in de afgelopen 14 dagen contact met hem/haar gehad terwijl hij/zij nog
+                        klachten had?
+                    </li>
+                    <li>Ben je in quarantaine omdat je direct contact hebt gehad met iemand
+                        waarbij het nieuwe coronavirus is vastgesteld?
+                    </li>
+                </ol>
+            </div>
+
+            <footer class="modal__footer">
+                <p>Wanneer je een van bovenstaande vragen met ‘ja’ beantwoordt, kunnen
+                    we je helaas niet toelaten in ons bedrijf of op ons terras.</p>
+                <button class="modal__close-button btn btn--primary">Bevestig</button>
+            </footer>
+        </section>
+    </div>
+{% endblock %}
+
+{% block script %}
+
+    <script>
+        function onScanSuccess(qrCodeMessage) {
+            // handle on success condition with the decoded message
+        }
+
+        $(document).ready(function(){
+            var html5QrcodeScanner = new Html5QrcodeScanner(
+                "reader", { fps: 10, qrbox: 250 });
+            html5QrcodeScanner.render(onScanSuccess);
+        });
+    </script>
+{% endblock %}

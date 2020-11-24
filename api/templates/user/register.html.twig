@@ -1,0 +1,156 @@
+{# templates/home/index.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block container %}
+
+
+<div class="row">
+    <div class="container">
+        <div class="col-md-12">
+            <div class="content">
+                <a class="backlink" href="/">{{ 'back'|trans|capitalize }}</a>
+                <header class="content__header">
+                    <h1 class="content__header-title">{{ 'register'|trans|capitalize }}</h1>
+                </header>
+            </div><!-- ./content -->
+        </div><!-- ./col -->
+    </div><!-- .container -->
+</div><!-- .row -->
+
+
+<div class="row">
+    <div class="container">
+        <div class="col-xl-9 col-lg-8 col-md-9">
+            <div class="content-background">
+                <div class="skiplink-target content" id="main-content">
+                    {% if app.user is defined and app.user is not null %}
+                    <div class="notification notification--warning">
+                        <div class="notification__content">
+                            <h2 class="notification__title">U bent al geregistreerd als een gebruiker</h2>
+                            <span>U kan niet registreren als u al ingelogd bent.</span><br>
+                        </div>
+                    </div>
+                    {% else %}
+                        <form method="post" action="{{ path('app_user_register') }}" name="thisForm">
+                            <div class="input">
+                                <label class="input__label">Naam</label>
+
+                                <div class="input__control-group">
+                                    <div class="input">
+                                        <label class="input__hint" for="voornaam">Voornaam </label>
+                                        <input type="text" id="voornaam" name="voornaam" class="input__control input__control--s input__control--text">
+                                    </div>
+                                    <div class="input">
+                                        <label class="input__hint" for="tussenvoegsel">Tussenvoegsel </label>
+                                        <input type="text" id="tussenvoegsel" name="tussenvoegsel" class="input__control input__control--s input__control--text">
+                                    </div>
+                                    <div class="input">
+                                        <label class="input__hint" for="achternaam">Achternaam </label>
+                                        <input type="text" id="achternaam" name="achternaam" class="input__control input__control--m input__control--text">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="input">
+                                <label class="input__label" for="email">E-mailadres <span style="color: red">*</span></label>
+                                <input required="" type="email" id="email" name="email" class="input__control input__control--l input__control--text">
+                            </div>
+
+                            <div style="height:20px;"></div>
+
+                            <div class="input" id="wachtwoordDiv">
+                                <label class="input__label" for="wachtwoord">Wachtwoord <span style="color: red">*</span></label>
+                                <div class="input__error" id="wachtwoordError">Error Bericht Komt Hier</div>
+
+                                <div class="input__control-group">
+                                    <div class="input">
+                                        <label class="input__hint" for="wachtwoord">Wachtwoord</label>
+                                        <input required="" type="password" id="wachtwoord" name="wachtwoord" minlength="8" maxlength="20" class="input__control input__control--s input__control--text">
+                                    </div>
+
+                                    <div class="input">
+                                        <label class="input__hint" for="wachtwoordBevestigen">Wachtwoord bevestigen</label>
+                                        <input required="" type="password" id="wachtwoordBevestigen" name="wachtwoordBevestigen" minlength="8" maxlength="20" class="input__control input__control--s input__control--text">
+                                    </div>
+                                </div>
+                            </div>
+
+                            {% if userGroups is defined and userGroups is not empty %}
+                                <fieldset class="input" id="checkboxGroupDiv">
+                                    <legend class="input__legend">Ik ben een... <span style="color: red">*</span></legend>
+                                    <div class="input__error" id="checkboxError">Error Bericht Komt Hier</div>
+                                    <div class="input__group input__group--checkbox">
+                                        {% for userGroup in userGroups %}
+                                            {% if userGroup.canBeRegisteredFor == true %}
+                                                <input name="userGroups[]" type="checkbox" value="{{ userGroup['@id'] }}" id="{{ userGroup.name }}" class="input__control input__control--checkbox">
+                                                <label class="input__label input__control--m input__label--checkbox" for="{{ userGroup.name }}">
+                                                    {% if userGroup.title is defined and userGroup.title is not empty %}
+                                                        {{ userGroup.title }}
+                                                    {% else %}
+                                                        {{ userGroup.name }}
+                                                    {% endif %}
+                                                </label>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </fieldset>
+                            {% endif %}
+
+                            <div class="input">
+                                <button onclick="checkPassword()" type="button" id="registreren" class="btn">registreren <i class="icon icon-arr-forward"></i></button>
+                            </div>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div><!-- ./col -->
+    </div><!-- .container -->
+</div><!-- .row -->
+
+    <script>
+        function checkPassword() {
+            var wachtwoord = document.getElementById('wachtwoord').value;
+            var wachtwoordBevestigen = document.getElementById('wachtwoordBevestigen').value;
+            var wachtwoordDiv = document.getElementById('wachtwoordDiv');
+            var wachtwoordError = document.getElementById('wachtwoordError');
+            var submitButton = document.getElementById('registreren');
+
+            if (wachtwoord == wachtwoordBevestigen && wachtwoord.length > 7 && wachtwoord.length <= 20) {
+                wachtwoordDiv.classList.remove('input--invalid');
+                var form = document.thisForm;
+                var checkboxGroupDiv = document.getElementById('checkboxGroupDiv');
+                var checkboxError = document.getElementById('checkboxError');
+                var checked = false;
+                for (var i = 0; i < form.elements.length; i++) {
+                    if (form.elements[i].type == 'checkbox') {
+                        if (form.elements[i].checked == true) {
+                            checked = true;
+                        }
+                    }
+                }
+                if (checked == true) {
+                    checkboxGroupDiv.classList.remove('input--invalid');
+                    submitButton.type = 'submit';
+                }
+                else {
+                    checkboxGroupDiv.classList.add('input--invalid');
+                    submitButton.type = 'button';
+                    checkboxError.innerHTML = 'Selecteer wat voor een gebruiker u bent.';
+                }
+            } else {
+                submitButton.type = 'button';
+                wachtwoordDiv.classList.add('input--invalid');
+                if (wachtwoord != wachtwoordBevestigen){
+                    wachtwoordError.innerHTML = 'De wachtwoorden zijn niet hetzelfde.';
+                }
+                else if (wachtwoord.length < 8) {
+                    wachtwoordError.innerHTML = 'Wachtwoord is ongeldig. Het moet uit minimaal 8 karakters bestaan.';
+                }
+                else if (wachtwoord.length > 20) {
+                    wachtwoordError.innerHTML = 'Wachtwoord is ongeldig. Het moet uit maximaal 20 karakters bestaan.';
+                }
+            }
+        }
+    </script>
+{% endblock %}

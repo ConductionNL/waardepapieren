@@ -1,0 +1,65 @@
+{# templates/home/index.html.twig #}
+
+{% extends 'content.html.twig' %}
+
+{% block content %}
+    <h1>{{ 'search'|trans|capitalize }}</h1>
+    <div class="row">
+        <div class="col-sm-12 col-md-9">
+            {% if resources is defined and resources|length > 0 %}
+        <ul class="list list--card list--card-small">
+            {% for resource in resources %}
+                {% if resource.slugs is defined and resource.slugs|length > 0 %}
+                <li class="card card--small">
+                    <div class="card__content">
+                        <div class="card__thumb challenge-card-picture" style="background-image: url('https://picsum.photos/200')"></div>
+                        <div class="card__body">
+                            <div class="row" style=" height: 100%; width: 100%;">
+                                <div class="col-sm-8" style="padding-right: 0px;">
+                                    <span class="card__title">{{ resource.title }}</span><br>
+                                    <span>{{ resource.description|slice(0, 110)|raw ~ '...' }}</span>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div style="">
+                                        <div style="display: flex; flex-direction: column; justify-items: center;">
+                                            <p style="margin: 0; color: grey;">gemaakt: {{ resource.dateModified|date("d-m-Y H:i", "Europe/Paris") }}</i></p>
+                                            <p style="margin: 0; color: grey;">bijgewerkt: {{ resource.dateCreated|date("d-m-Y H:i", "Europe/Paris") }}</p>
+                                            <a href="/{{ resource.slugs[0].slug }}">lees meer</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+            {% else %}
+            <div class="content-background" >
+                <div class="content">
+                <aside class="hint">
+                    <h2 class="hint__title">{{ 'no items found'|trans|capitalize}}</h2>
+                    {{ 'your search did not yield any results, try again '|trans|capitalize}}
+                </aside>
+                </div>
+            </div>
+            {% endif %}
+        </div><!-- ./ col -->
+
+        <div class="col-sm-12 col-md-3">
+            <div class="content-background" >
+                <div class="content">
+                    <form action="{{ path('app_search_index') }}" method="get">
+                        <h2>{{ 'filters'|trans|capitalize }}</h2>
+                        <div class="input__group input__group--text input__group--compact">
+                            <label class="input__label input__label--text" for="search" >{{ 'key word'|trans|capitalize }}</label>
+                            <input type="text" name="search" id="search" class="input__control input__control--text" {% if query.search is defined %}value="{{ query.search }}"{% endif %}>
+                        </div>
+                        <button class="btn btn-primary btn--block" type="submit">{{ 'search'|trans|capitalize }}</button>
+                    </form>
+                </div>
+            </div>
+        </div><!-- ./ col -->
+    </div><!-- ./ row -->
+{% endblock %}

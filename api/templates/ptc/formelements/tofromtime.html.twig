@@ -1,0 +1,33 @@
+<label class="input__label" for="{{ property.id }}">{{ property.title }} {% if property.required is defined and property.required %}<span style="color: red;"><strong>*</strong></span>{% endif %}</label>
+{%  if property.description %}<span class="input__hint" id="{{ property.id }}_name">{{ property.description }}</span>{% endif %}
+<div class="row">
+    <div class="col-sm-6">
+        <label for="">{{ 'from'|trans|capitalize }}</label>
+        <input id="from" type="time" class="input__control input__control--text">
+    </div>
+    <div class="col-sm-6">
+        <label for="">{{ 'to'|trans|capitalize }}</label>
+        <input id="to" type="time" class="input__control input__control--text">
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-2">
+        <button class="btn btn-primary" type="button" onclick="getTimes()" style="margin-top: 15px;">bevestigen</button>
+        <input  type="hidden" id="inputToFromTime">
+    </div>
+    <div class="col-sm-6" style="top: 15px; left: 5px;">
+        <div id="result"></div>
+    </div>
+</div>
+
+<script>
+    function getTimes(){
+        let from = document.getElementById('from');
+        let to = document.getElementById('to');
+        let input = document.getElementById('inputToFromTime');
+        let result = document.getElementById('result');
+        input.value =  from.value + " en " + to.value;
+        result.innerHTML = 'Uw gekozen tijdvak is tussen ' + from.value + " en " + to.value;
+        console.log(input.value);
+    }
+</script>

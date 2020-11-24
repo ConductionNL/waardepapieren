@@ -1,0 +1,46 @@
+<div class="content-background">
+    <div style="text-align: center; padding: 20px">
+        <h2>{{ 'progress'|trans|capitalize }}</h2>
+        {% set counter = 0 %}
+        {% for stage in process.stages %}
+            {% for section in stage.sections %}
+                {% for property in section.properties %}
+                    {% set counter = counter + 1 %}
+                {% endfor %}
+            {% endfor %}
+        {% endfor %}
+        {%  if request.properties is defined and request.properties is not empty and request.properties|length != 0 %}
+            {% set value = request.properties|length / counter * 100 %}
+        {% else %}
+            {% set value = 0 %}
+        {% endif %}
+        <div class="progressbar">
+            <p>{{ value|round(0, 'ceil') }}%</p>
+            <div style="width: {{ value }}%;"></div>
+        </div>
+    </div>
+</div>
+<style>
+    .progressbar {
+        background-color: grey;
+        padding: 3px;
+        position: relative;
+        text-align: center;
+    }
+
+    .progressbar>div {
+        background-color: #148839;
+        width: 0%;
+        height: 20px;
+    }
+
+    .progressbar>p {
+        position: absolute;
+        left: 0;
+        right: 0;
+        margin-left: auto;
+        margin-right: auto;
+        width: 100%;
+        color: white;
+    }
+</style>

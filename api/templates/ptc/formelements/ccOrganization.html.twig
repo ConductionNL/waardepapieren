@@ -1,0 +1,115 @@
+<div class="input input--horizontal">
+    <div>
+        <label class="input__label" for="{{ property.id }}" id="{{ property.id }}">
+            {% if property.icon is defined and property.icon is not empty %}
+                <i style="margin-right: 10px;" class="{{ property.icon }}"></i>
+            {% endif %}
+            {{ property.title }} {% if property.required is defined and property.required %}<span style="color: red;"><strong>*</strong></span>{% endif %}</label>
+    </div>
+    {%  if property.description %}<span class="input__hint" id="{{ property.id }}">{{ property.description }}</span>{% endif %}
+    <div>
+        {% if request.properties[property.name] is defined and request.properties[property.name] is not empty %}
+            {% set organization = commonground_resource(request.properties[property.name]) %}
+        {% endif %}
+        <span>Organisatie</span>
+        <div class="row" style="margin-bottom: 5px">
+            <div class="col-md-4">
+                {% if property.configuration.name is not defined or property.configuration.name %}
+                    <label class="input__label" for="name">Naam<span style="color: red">*</span></label>
+                    <input class="input__control input__control--xl input__control--text" id="name" name="request[properties][{{property.name}}][name]" type="text" required="">
+                {% endif %}
+            </div>
+            <div class="col-md-4">
+                {% if property.configuration.kvk is not defined or property.configuration.kvk %}
+                    <label class="input__label" for="kvk">kvk</label>
+                    <input class="input__control input__control--xl input__control--text" id="kvk" name="request[properties][{{property.name}}][kvk]" type="text"
+                        {% if organization.kvk is defined %} value="{{ organization.kvk }}"{% endif %}>
+                {% endif %}
+            </div>
+            <div class="col-md-4">
+                {% if property.configuration.type is defined and property.configuration.type %}
+                    <label class="input__label" for="type">type</label>
+                    <input class="input__control input__control--xl input__control--text" id="type" name="request[properties][{{property.name}}][type]" type="text"
+                        {% if organization.type is defined %} value="{{ organization.type }}"{% endif %}>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row" style="margin-bottom: 20px">
+            <div class="col-md-12">
+                {% if property.configuration.description is not defined or property.configuration.description %}
+                    <label class="input__label" for="description">Beschrijving <span style="color: red">*</span></label>
+                    <textarea style="width: 100%" required name="request[properties][{{property.name}}][description]" id="description" cols="30" rows="10">{% if organization.description is defined %}{{ organization.description }}{% endif %}</textarea>
+                {% endif %}
+            </div>
+        </div>
+        {% if property.configuration.address is defined and property.configuration.address %}
+            <span>Adres</span>
+            <div class="row" style="margin-bottom: 5px">
+                <div class="col-md-4">
+                    <label class="input__label" for="street">{{ 'streetname'|trans|capitalize }}</label>
+                    <input class="input__control input__control--text" id="street" style="width: 100%" type="text" name="request[properties][{{ property.name }}][adresses][0][street]"
+                        {% if organization.adresses.0.street is defined %} value="{{ organization.adresses.0.street }}"{% endif %}>
+                </div>
+                <div class="col-md-4">
+                    <label class="input__label" for="houseNumber">{{ 'house number'|trans|capitalize }}<span style="color: red;"><strong>*</strong></span></label>
+                    <input required class="input__control input__control--text" id="houseNumber" style="width: 100%" type="text" name="request[properties][{{ property.name }}][adresses][0][houseNumber]">
+                    {% if organization.adresses.0.houseNumber is defined %} value="{{ organization.adresses.0.houseNumber }}"{% endif %}
+                </div>
+                <div class="col-md-4">
+                    <label class="input__label" for="houseNumberSuffix">Toevoeging</label>
+                    <input class="input__control input__control--text" style="width: 100%" type="text"  name="request[properties][{{ property.name }}][adresses][0][houseNumberSuffix]"
+                        {% if organization.adresses.0.houseNumberSuffix is defined %} value="{{ organization.adresses.0.houseNumberSuffix }}"{% endif %}>
+                </div>
+            </div>
+            <div class="row" style="margin-bottom: 20px">
+                <div class="col-md-6">
+                    <label class="input__label" for="postalCode">{{ 'postal code'|trans|capitalize }}<span style="color: red;"><strong>*</strong></span></label>
+                    <input required class="input__control input__control--text" id="postalCode" style="width: 100%" type="text" name="request[properties][{{ property.name }}][adresses][0][postalCode]"
+                        {% if organization.adresses.0.postalCode is defined %} value="{{ organization.adresses.0.postalCode }}"{% endif %}>
+                </div>
+                <div class="col-md-6">
+                    <label class="input__label" for="locality">{{ 'locality'|trans|capitalize }}</label>
+                    <input class="input__control input__control--text" id="locality" style="width: 100%" type="text" name="request[properties][{{ property.name }}][adresses][0][locality]"
+                        {% if organization.adresses.0.locality is defined %} value="{{ organization.adresses.0.locality }}"{% endif %}>
+                </div>
+            </div>
+        {% endif %}
+        {% if property.configuration.person is defined and property.configuration.person %}
+            <span>Contactpersoon</span>
+            <div class="row" style="margin-bottom: 20px">
+                    <div class="col-md-4">
+                        <label class="input__label" for="voornaam">Voornaam</label>
+                        <input class="input__control input__control--text" style="width: 100%" type="text" name="request[properties][{{ property.name }}][persons][0][givenName]"
+                            {% if organization.people.0.givenName is defined %} value="{{ organization.people.0.givenName }}"{% endif %}>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="input__label" for="achternaam">Tussenvoegels</label>
+                        <input class="input__control input__control--text" style="width: 100%" type="text" name="request[properties][{{ property.name }}][persons][0][additionalName]"
+                            {% if organization.people.0.additionalName is defined %} value="{{ organization.people.0.additionalName }}"{% endif %}>
+                    </div>
+                    <div class="col-md-4"persons
+                        <label class="input__label" for="achternaam">Achternaam</label>
+                        <input class="input__control input__control--text" style="width: 100%" type="text" name="request[properties][{{ property.name }}][persons][0][familyName]"
+                            {% if organization.people.0.familyName is defined %} value="{{ organization.people.0.familyName }}"{% endif %}>
+                    </div>
+            </div>
+        {% endif %}
+        <span>Overig</span>
+        <div class="row">
+            {% if property.configuration.email is not defined or property.configuration.email %}
+                <div class="col-md-6">
+                    <label class="input__label" for="email">Email</label>
+                    <input class="input__control input__control--text" style="width: 100%" type="email" name="request[properties][{{ property.name }}][emails][0][email]"
+                        {% if organization.emails.0.email is defined %} value="{{ organization.emails.0.email }}"{% endif %}>
+                </div>
+            {% endif %}
+            {% if property.configuration.telephone is not defined or property.configuration.telephone %}
+                <div class="col-md-6">
+                    <label class="input__label" for="telephone">Telefoonnummer</label>
+                    <input class="input__control input__control--text" style="width: 100%" type="tel"  name="request[properties][{{ property.name }}][telephones][0][telephone]"
+                        {% if organization.telephones.0.telephone is defined %} value="{{ organization.telephones.0.telephone }}"{% endif %}>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>

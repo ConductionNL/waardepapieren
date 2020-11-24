@@ -1,0 +1,52 @@
+<div class="modal modal--backdrop noFocus" role="dialog" id="myModal" tabindex="-1" aria-describedby="modal-description3">
+    <section class="modal__content" role="document">
+        <form action="{{ path('app_wrc_organization') }}" id="organizationForm" method="post">
+            <div class="modal__body noFocus" tabindex="0" lang="en-US">
+                <div class="row" style="margin-top: 20px;">
+                    <div class="col-xs-6">
+                        <h1>{{ 'organization'|trans|capitalize }}</h1>
+                    </div>
+                    <div class="col-xs-6">
+                        <button style="float: right;" class="modal__close-button">
+                            <i class="icon icon-cross"></i>
+                            {{ 'close'|trans|capitalize }}
+                        </button>
+                    </div>
+                </div>
+                <div class="input input--horizontal">
+                    <div>
+                        <label class="input__label" for="name">{{ 'name'|trans|capitalize }} <span style="color: red;"><strong>*</strong></span></label>
+                    </div>
+                    <input required="" type="text" id="name" name="name" aria-describedby="hint_name" class="input__control input__control--text input__control--l">
+                </div>
+                <div class="input input--horizontal">
+                    <div>
+                        <label class="input__label" for="description">{{ 'description'|trans|capitalize }} <span style="color: red;"><strong>*</strong></span></label>
+                    </div>
+                    <textarea required="" id="description" name="description" aria-describedby="hint_name" class="input__control input__control--text input__control--l"></textarea>
+                </div>
+                <div class="input input--horizontal">
+                    <div>
+                        <label class="input__label" for="rsin">{{ 'rsin'|trans|capitalize }} <span style="color: red;"><strong>*</strong></span></label>
+                    </div>
+                    <input required="" type="text" id="rsin" name="rsin" aria-describedby="hint_name" class="input__control input__control--text input__control--l">
+                </div>
+                <div class="input input--horizontal">
+                    <div>
+                        <label class="input__label" for="chamberOfComerce">{{ 'kvk'|trans|capitalize }} <span style="color: red;"><strong>*</strong></span></label>
+                    </div>
+                    <span class="input__hint" id="hint_name">Kvk nummer zoeken? klik <a target="_blank" href="https://www.kvk.nl/zoeken/">hier</a></span>
+                    <div class="input__error">U heeft geen geldig kvk nummer ingevoerd</div>
+                    <input required type="text" id="chamberOfComerce" name="chamberOfComerce" aria-describedby="hint_name" class="input__control input__control--text input__control--l">
+                </div>
+            </div>
+                <footer class="modal__footer" lang="en-US">
+                <button class="btn btn--primary">{{ 'create'|trans|capitalize }}</button>
+            </footer>
+        </form>
+    </section>
+</div>
+
+<script>
+
+</script>

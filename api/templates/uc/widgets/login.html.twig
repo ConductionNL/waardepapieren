@@ -1,0 +1,60 @@
+<h2>Login</h2>
+
+{% if application['defaultConfiguration']['configuration']['login']['digid'] is defined and application['defaultConfiguration']['configuration']['login']['digid'] %}
+
+    <h2 id="inloggen-verzuimloket">{{ 'for citizen'|trans|capitalize }}</h2>
+    <p>
+        <a href="{{ commonground_cleanurl({"component":"ds"}) }}?responceUrl={{ absolute_url(path('app_default_index')) }}digispoof&backUrl={{ backUrl }}"
+           class="btn btn--digid btn-block">{{ 'digid'|trans|capitalize }}</a></p>
+
+{% elseif application['defaultConfiguration']['configuration']['login']['eherkening'] is defined and application['defaultConfiguration']['configuration']['login']['eherkening'] %}
+
+    <h2 id="inloggen-verzuimloket">{{ 'for businesses'|trans|capitalize }}</h2>
+    <p>
+        <a href="{{ commonground_cleanurl({"component":"eh"}) }}?responceUrl={{ absolute_url(path('app_default_index')) }}eherkenning&backUrl={{ backUrl }}"
+           class="btn btn-block">{{ 'e-herkening'|trans|capitalize }}</a></p>
+
+{% elseif application['defaultConfiguration']['configuration']['login']['user'] is defined and application['defaultConfiguration']['configuration']['login']['user'] %}
+
+{#    <h2 id="inloggen-verzuimloket">{{ 'for employees'|trans|capitalize }}</h2>#}
+
+    <form method="post" {# action="{{ path('app_user_login') }}?forewardUrl={{ forewardUrl }}" #}
+          name="thisForm">
+
+        <div class="input">
+            <label class="input__label" for="username">{{ 'username'|trans|capitalize }}<span
+                    style="color: red">*</span></label>
+            <input required="" type="text" id="username" name="username"
+                   class="input__control input__control--l input__control--text">
+        </div>
+
+        <div class="input">
+            <label class="input__label" for="password">{{ 'password'|trans|capitalize }}<span
+                    style="color: red">*</span></label>
+            <input required="" type="password" id="password" name="password"
+                   class="input__control input__control--l input__control--text">
+            <i class="fas fa-eye-slash" onmouseover="mouseoverPass()" onmouseout="mouseoutPass()" role="presentation"></i>
+        </div>
+
+        <script>
+            function mouseoverPass(obj) {
+                var obj = document.getElementById('password');
+                obj.type = "text";
+            }
+            function mouseoutPass(obj) {
+                var obj = document.getElementById('password');
+                obj.type = "password";
+            }
+        </script>
+
+        <div class="input">
+            <button type="submit" id="registreren" class="btn">{{ 'login'|trans|capitalize }} <i
+                    class="icon icon-arr-forward"></i></button>
+        </div>
+
+        <p><a href="{{ path('app_user_register') }}}"
+              class="btn btn-block">{{ 'register'|trans|capitalize }}</a></p>
+
+    </form>
+
+{% endif %}

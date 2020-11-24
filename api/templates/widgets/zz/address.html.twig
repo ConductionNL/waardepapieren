@@ -1,0 +1,21 @@
+{{ section.description }}
+
+
+<div class="row">
+{#    <div class="col-md-4">#}
+{#        <label class="input__label" for="{{ property.name }}">BAG ID (example: 0796200000306819)</label>#}
+{#        <input class="input__control input__control--text" id="{{ property.slug }}" type="text" name="properties[{{ property.slug }}]" required>#}
+{#    </div>#}
+    <div class="col-md-4">
+        <label class="input__label" for="postalCode">Postcode</label>
+        <input class="input__control input__control--text" id="properties[{{ property.name }}][postalCode]" type="text" name="properties[{{ property.name }}][postalCode]" required>
+    </div>
+    <div class="col-md-4">
+        <label class="input__label" for="houseNumber">Huisnummer</label>
+        <input class="input__control input__control--text" id="properties[{{ property.name }}][houseNumber]" type="text" name="properties[{{ property.name }}][houseNumber]" required>
+    </div>
+    <div class="col-md-3">
+        <label class="i4put__label" for="houseNumberSuffix">Huisnummertoevoeging</label>
+        <input class="input__control input__control--text" id="properties[{{ property.name }}][houseNumberSuffix]" type="text" name="properties[{{ property.name }}][houseNumberSuffix]">
+    </div>
+</div>

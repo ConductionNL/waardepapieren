@@ -1,0 +1,31 @@
+<!-- Page Break -->
+<div style="height: 20px"></div>
+
+<div class="content-background">
+    <div class="content">
+        <h2>{{ 'stages'|trans|capitalize }}</h2>
+        <ul class="list list--timeline list--timeline-compact">
+            <li class="list__item" {% if request.status is not defined or request.status is empty or stage.slug is not defined %}list__item--active{% endif %}>{% if request.status == 'incomplete' or request.status == 'complete' %}
+                    <a
+                    href="{{ path('app_ptc_process',{id:process.id}) }}">{{ 'instruction'|trans|capitalize }}</a>{% else %}{{ 'instruction'|trans|capitalize }}{% endif %}
+            </li>
+            {% for iteratedStage in process.stages %}
+                {% if iteratedStage.show %}
+                <li class="list__item {% if stage.slug is defined and stage.slug == iteratedStage.slug %}list__item--active{% endif %} {% if request.status != 'incomplete' and request.status != 'complete' %}list__item--disabled{% endif %}">{% if request.status == 'incomplete' or request.status == 'complete' %}
+                    <a href="{{ path('app_ptc_process_stage',{id:process.id,stage:iteratedStage.slug}) }}">{{ iteratedStage.name|capitalize }}{% else %}{{ iteratedStage.name|capitalize }}{% endif %}
+                        {% if iteratedStage.valid %}<span class="icon icon-check" role="presentation" x-uno-tooltip="" title="{{ 'You have correctly filled out all required questions for this stage'|trans|capitalize }}"></span>{% endif %}</a>
+                </li>
+                {% endif %}
+            {% endfor %}
+            <li class="list__item {% if stage.slug is defined and stage.slug == 'submit' or request.status == 'submitted' %}list__item--active{% endif %}">
+                <a href="{{ path('app_ptc_process_stage',{id:process.id,submit:'true'}) }}">{{ 'submit'|trans|capitalize }}</a>
+            </li>
+            <li class="list__item {% if request.status == 'in progress' %}list__item--active{% else %}list__item--disabled{% endif %}">
+                {{ 'in progress'|trans|capitalize }}
+            </li>
+            <li class="list__item {% if request.status == 'processed' %}list__item--active{% else %}list__item--disabled{% endif %}">
+                {{ 'processed'|trans|capitalize }}
+            </li>
+        </ul>
+    </div>
+</div>

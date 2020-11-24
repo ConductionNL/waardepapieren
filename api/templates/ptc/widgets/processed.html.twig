@@ -1,0 +1,14 @@
+<div class="content-background">
+    <div class="content">
+        <h2>
+            {{ 'this request is currently'|trans|capitalize }}: {{ request.status|trans|capitalize }}
+        </h2>
+    </div>
+</div>
+
+
+{% if application['defaultConfiguration']['configuration']['objectionRequest'] is defined%}
+    <!-- Page Break -->
+    <div style="height: 20px"></div>
+    <a style="margin-top: 20px; background-color: red; color: white;" id="status_change" value="change" class="btn btn--block btn--primary" href="{{ path('app_ptc_process_stage', {id:application['defaultConfiguration']['configuration']['objectionRequest'],  resources[]: request['@id'], parent: request['@id'], stage:'start'}) }}">{{ 'change'|trans|capitalize }}</a>
+{% endif %}

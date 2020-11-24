@@ -1,0 +1,162 @@
+{% extends "base.html.twig" %}
+
+{% block content %}
+
+    {% if app.user is defined and app.user is not null %}
+        {% if user is defined and user is not null %}
+            {% set userContact = user['@id'] %}
+        {% elseif app.user.username is defined and app.user.username is not null %}
+            {% set users = commonground_resource_list({'component': 'uc', 'type': 'users'},{'username' : app.user.username})['hydra:member'] %}
+            {% if users|length > 0 %}
+                {% set userContact = users[0].person %}
+            {% endif %}
+        {% endif %}
+        {% set participants = commonground_resource_list({'component': 'edu', 'type': 'participants'},{'person' : userContact})['hydra:member'] %}
+        {% if participants|length > 0 %}
+            {% set participant = participants[0] %}
+        {% endif %}
+    {% endif %}
+
+    <!-- the alert box -->
+
+    <div class="container">
+        <section class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-xs-12">
+                <div class="content">
+                    {% if test.activity is defined and test.activity is not empty %}
+                        <a class="backlink" href="{{ path('app_education_activity', {id: test.activity.id}) }}">{{ test.activity.name|capitalize }}</a>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+
+        <article>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12">
+                    <div class="content-background">
+                        <div class="content">
+                            <div class="edit-section">
+                                <h1>{{ test.name|capitalize }}</h1>
+                            </div>
+                            {% if test.description is defined and test.description is not empty %}
+                                <p>{{ test.description }}</p>
+                            {% endif %}
+
+                            {% if app.user is defined and app.user is not null %}
+                                {% set registeredForActivityCourse = false %}
+                                {% if test.activity is defined and test.activity is not empty %}
+                                    {% if participant.courses is defined and participant.courses is not null %}
+                                        {% for course in participant.courses %}
+                                            {% if course.id == test.activity.course.id %}
+                                                {% set registeredForActivityCourse = true %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                {% endif %}
+
+                                {% set resultSubmitted = false %}
+                                {% if participant.testResults is defined and participant.testResults is not null %}
+                                    {% for result in participant.testResults %}
+                                        {% if result.test.id == test.id %}
+                                            {% set resultSubmitted = true %}
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+
+                                {% if registeredForActivityCourse == true %}
+                                    {% if resultSubmitted == false %}
+                                        {% if test.stages is defined and test.stages is not empty %}
+                                            <div style="height:20px;"></div>
+
+                                            <form method="post" action="{{ path('app_education_test', {id: test.id}) }}">
+                                                {% for stage in test.stages %}
+
+                                                    <div class="collapse" role="status">
+                                                        <div x-uno-collapse="" class="collapse__header">
+                                                            <i class="collapse__indicator">
+                                                                <span class="screenreader-only" data-contracted-i18n="ingeklapt" data-expanded-i18n="uitgeklapt"></span>
+                                                            </i>
+                                                            <span class="collapse__title">{{ stage.name }}</span>
+                                                        </div>
+                                                        <div class="collapse__details collapse__details--closed">
+                                                            {% if stage.description is defined and stage.description is not empty %}
+                                                                <h2>{{ stage.description }}</h2>
+                                                            {% endif %}
+
+                                                            {% if stage.questions is defined and stage.questions is not empty %}
+                                                                {% for question in stage.questions %}
+                                                                    <div class="input">
+                                                                        <h3>{{ question.name }}</h3>
+                                                                        <label class="input__label">{{ question.description }}</label>
+                                                                        {% if question.answerOptions is defined and question.answerOptions is not empty %}
+                                                                            <fieldset class="input">
+                                                                                {% for answerOption in question.answerOptions %}
+                                                                                    <div class="input__group input__group--radio">
+                                                                                        <input type="radio" value="{{ answerOption }}" name="{{ question.name }}" id="{{ question.name }}_{{ answerOption }}" class="input__control input__control--radio">
+                                                                                        <label class="input__label input__label--radio input__control--l" for="{{ question.name }}_{{ answerOption }}">{{ answerOption }}</label>
+                                                                                    </div>
+                                                                                {% endfor %}
+                                                                            </fieldset>
+                                                                        {% else %}
+                                                                            <input id="{{ question.name }}" type="text" class="input__control input__control--l input__control--search">
+                                                                        {% endif %}
+                                                                    </div>
+                                                                {% endfor %}
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+                                                <div class="input">
+                                                    <button type="submit" class="btn">Verzenden <i class="icon icon-arr-forward"></i></button>
+                                                </div>
+                                            </form>
+                                        {% endif %}
+                                    {% else %}
+                                        <div class="notification notification--warning">
+                                            <div class="notification__content">
+                                                <h2 class="notification__title">Al ingediend</h2>
+                                                <span>U heeft al een resultaat ingediend voor deze test.</span><br>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% else %}
+                                    {% if test.activity is defined and test.activity is not empty %}
+                                        <div class="notification notification--warning">
+                                            <div class="notification__content">
+                                                <h2 class="notification__title">Niet ingeschreven</h2>
+                                                <span>U bent nog niet ingeschreven voor de tutorial die hoort bij de activiteit van deze test.</span><br>
+                                                <span>Klik <a
+                                                        href="{{ path('app_education_course', {id: test.activity.course.id}) }}">hier</a> om deze tutorial te bekijken.</span>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
+                            {% else %}
+                                <div class="notification notification--warning">
+                                    <div class="notification__content">
+                                        <h2 class="notification__title">U bent niet ingelogd</h2>
+                                        <span>U dient ingelogd te zijn om deze test te kunnen doen.</span><br>
+                                        <span>Klik <a href="{{ commonground_cleanurl({"component":"ds"}) }}?responceUrl={{ absolute_url(path('app_default_index')) }}digispoof&backUrl={{ absolute_url(path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params'))) }}">hier</a> om te kunnen inloggen.</span>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </div>
+
+    <script>
+        // Load collapse component
+        System.import('/uno/components/collapse/collapse.js').then(function (module) {
+            // Select all collapsible elements on the page
+            var collapses = document.querySelectorAll('[x-uno-collapse]');
+            // Initialize all collapses
+            for (var i = 0; i < collapses.length; i++) {
+                new module.Collapse(collapses.item(i));
+            }
+        });
+    </script>
+
+{% endblock %}

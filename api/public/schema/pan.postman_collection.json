@@ -1,0 +1,101 @@
+{
+	"info": {
+		"_postman_id": "2dd7bc98-b3c0-4ddd-9db9-19bd6ddc74cf",
+		"name": "Proto Application Commonground",
+		"description": "    API Details\n    - Component: Proto Applicatie NL Design\n    - Reference: pan\n    - Enviroment: dev\n    - Version: V.0.1\n    - Repository: [online](https://github.com/ConductionNL/pan) / [zip](https://github.com/ConductionNL/pan/archive/master.zip)\n    - Docker Image: [online](https://hub.docker.com/repository/docker/conduction/pc-php) \n    - Datamodel: [postman](/schema/pan.postman_collection.json) / [oas](/schema/openapi.yaml) / [pdf](/schema/datamodel.pdf) / [modelio (zip)](/schema/Datamodel_Modelio.zip) \n    \n    'Naast deze JSON rest API is er ook een [graphql](/graphql) interface beschikbaar.' ",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Health",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a2284865-349d-424b-b62d-34406c55c66d",
+						"exec": [
+							"// // example using pm.response.to.have\r",
+							"// pm.test(\"response is ok\", function () {\r",
+							"//     pm.response.to.have.status(200);\r",
+							"// });\r",
+							"\r",
+							"// // example using response assertions\r",
+							"// pm.test(\"response should be okay to process\", function () {\r",
+							"//     pm.response.to.not.be.error;\r",
+							"//     pm.response.to.not.have.jsonBody(\"error\");\r",
+							"// });"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/health+json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}",
+					"host": [
+						"{{baseUrl}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "{{authorization}}",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "Authorization",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "9b4d4a6c-1f34-4e3c-9f0b-479e959d3d80",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "45d61c79-71e5-42b1-a3be-ea2bc21bb5eb",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "4a323f68-551b-4ff1-9d07-1a41a57f56a0",
+			"key": "baseUrl",
+			"value": "localhost"
+		},
+		{
+			"id": "16ba40d4-669e-4b92-9ecb-51d8e7aeb0fc",
+			"key": "authorization",
+			"value": "45c1a4b6-59d3-4a6e-86bf-88a872f35845"
+		}
+	],
+	"protocolProfileBehavior": {}
+}

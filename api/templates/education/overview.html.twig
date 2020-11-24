@@ -1,0 +1,164 @@
+{# templates/home/index.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <header class="content__header">
+        <h1 class="content__header-title">Mijn Overzicht</h1>
+    </header>
+    {% if app.user is defined and app.user is not null %}
+        {% if user is defined and user is not null %}
+            {% set userContact = user['@id'] %}
+        {% elseif app.user.username is defined and app.user.username is not null %}
+            {% set users = commonground_resource_list({'component': 'uc', 'type': 'users'},{'username' : app.user.username})['hydra:member'] %}
+            {% if users|length > 0 %}
+                {% set userContact = users[0].person %}
+            {% endif %}
+        {% endif %}
+        {% set participants = commonground_resource_list({'component': 'edu', 'type': 'participants'},{'person' : userContact})['hydra:member'] %}
+        {% if participants|length > 0 %}
+            {% set participant = participants[0] %}
+            <div class="row">
+                <div class="col-sm-8">
+                    <div class="edit-section">
+                        <h1>Ingeschreven programma's</h1>
+                    </div>
+                    {% if participant.programs is defined and participant.programs is not empty %}
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <ul class="list list--card list--card-small">
+                                    {% for program in participant.programs %}
+                                        <li class="card card--small">
+                                            <div class="card__content">
+                                                <div class="card__thumb" style="background-image: url('https://picsum.photos/200')"></div>
+                                                <div class="card__body">
+                                                    <div class="row" style=" height: 100%; width: 100%;">
+                                                        <div class="col-sm-8" style="padding-right: 0px;">
+                                                            <span class="card__title">{{ program.name }}</span><br>
+                                                            {% if program.description is defined and program.description is not empty %}
+                                                                <span>{{ program.description }}</span>
+                                                            {% endif %}
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <div style="float: right;">
+                                                                <div style="display: flex; flex-direction: column; justify-items: center;">
+                                                                    <a href="{{ path('app_education_program', {id: program.id}) }}"
+                                                                       rel="noopener" class="btn btn--primary"
+                                                                       target="_blank">
+                                                                        Lees meer
+                                                                        <span class="btn__icon icon icon-arr-forward" title="" role=""></span>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="notification notification--warning">
+                            <div class="notification__content">
+                                <span class="notification__title">U bent nog niet ingeschreven voor een programma.</span>
+                                <span>Klik <a
+                                        href="/education/programs">hier</a> om programma's te bekijken.</span>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div style="height:20px;"></div>
+
+            <div class="row">
+                <div class="col-sm-8">
+                    <div class="edit-section">
+                        <h1>Ingeschreven tutorials</h1>
+                    </div>
+                    {% if participant.courses is defined and participant.courses is not empty %}
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <ul class="list list--card list--card-small">
+                                    {% for course in participant.courses %}
+                                        <li class="card card--small">
+                                            <div class="card__content">
+                                                <div class="card__thumb" style="background-image: url('https://picsum.photos/200')"></div>
+                                                <div class="card__body">
+                                                    <div class="row" style=" height: 100%; width: 100%;">
+                                                        <div class="col-sm-8" style="padding-right: 0px;">
+                                                            <span class="card__title">{{ course.name }}</span><br>
+                                                            {% if course.description is defined and course.description is not empty %}
+                                                                <span>{{ course.description }}</span>
+                                                            {% endif %}
+                                                            {% if course.programs is defined and course.programs is not empty %}
+                                                                <br><br>
+                                                                {% for program in course.programs %}
+                                                                    <p>Programma: {{ program.name }}</p>
+                                                                {% endfor %}
+                                                            {% endif %}
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <div style="float: right;">
+                                                                <div style="display: flex; flex-direction: column; justify-items: center;">
+                                                                    <a href="{{ path('app_education_course', {id: course.id}) }}"
+                                                                       rel="noopener" class="btn btn--primary"
+                                                                       target="_blank">
+                                                                        Lees meer
+                                                                        <span class="btn__icon icon icon-arr-forward" title="" role=""></span>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="notification notification--warning">
+                            <div class="notification__content">
+                                <span class="notification__title">U bent nog niet ingeschreven voor een tutorial.</span>
+                                <span>Klik <a
+                                        href="/education/courses">hier</a> om tutorials te bekijken.</span>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        {% else %}
+            <div class="notification notification--warning">
+                <div class="notification__content">
+                    <span class="notification__title">U bent nog nergens voor ingeschreven.</span>
+                    <span>Klik <a
+                            href="/education/programs">hier</a> om programma's te bekijken.</span>
+                </div>
+            </div>
+        {% endif %}
+    {% else %}
+        <div class="notification notification--warning">
+            <div class="notification__content">
+                <h2 class="notification__title">U bent niet ingelogd</h2>
+                <span>U dient ingelogd te zijn om uw overzicht te kunnen bekijken.</span><br>
+                <span>Klik <a href="{{ commonground_cleanurl({"component":"ds"}) }}?responceUrl={{ absolute_url(path('app_default_index')) }}digispoof&backUrl={{ absolute_url(path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params'))) }}">hier</a> om te kunnen inloggen.</span>
+            </div>
+        </div>
+    {% endif %}
+
+    <script>
+        // Load collapse component
+        System.import('/uno/components/collapse/collapse.js').then(function (module) {
+            // Select all collapsible elements on the page
+            var collapses = document.querySelectorAll('[x-uno-collapse]');
+            // Initialize all collapses
+            for (var i = 0; i < collapses.length; i++) {
+                new module.Collapse(collapses.item(i));
+            }
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,194 @@
+{% extends "base.html.twig" %}
+
+{% block content %}
+
+    {% if app.user is defined and app.user is not null %}
+        {% if user is defined and user is not null %}
+            {% set userContact = user['@id'] %}
+        {% elseif app.user.username is defined and app.user.username is not null %}
+            {% set users = commonground_resource_list({'component': 'uc', 'type': 'users'},{'username' : app.user.username})['hydra:member'] %}
+            {% if users|length > 0 %}
+                {% set userContact = users[0].person %}
+            {% endif %}
+        {% endif %}
+        {% set participants = commonground_resource_list({'component': 'edu', 'type': 'participants'},{'person' : userContact})['hydra:member'] %}
+        {% if participants|length > 0 %}
+            {% set participant = participants[0] %}
+        {% endif %}
+    {% endif %}
+
+    {% set registeredForCourse = false %}
+    {% if participant.courses is defined and participant.courses is not null %}
+        {% for course in participant.courses %}
+            {% if course.id == activity.course.id %}
+                {% set registeredForCourse = true %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+    {% set resultSubmitted = false %}
+    {% if participant.results is defined and participant.results is not null %}
+        {% for result in participant.results %}
+            {% if result.activity.id == activity.id %}
+                {% set resultSubmitted = true %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+    <!-- the alert box -->
+
+    <div class="container">
+        <section class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-xs-12">
+                <div class="content">
+                    <a class="backlink" href="{{ path('app_education_course', {id: activity.course.id}) }}">{{ activity.course.name|capitalize }}</a>
+                    <header class="content__header">
+                        <h1 class="content__header-title">{{ activity.name|capitalize }}</h1>
+                    </header>
+                </div>
+            </div>
+        </section>
+
+        <article>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12">
+
+                    {% if app.user is defined and app.user is not null%}
+                        {% if registeredForCourse == false %}
+                            <div class="notification notification--warning">
+                                <div class="notification__content">
+                                    <div class="notification__type">LET OP</div>
+                                    <h2 class="notification__title">U bent nog niet ingeschreven voor de tutorial van deze activiteit</h2>
+                                </div>
+                            </div>
+                        {% elseif resultSubmitted == false %}
+                            <div class="notification notification--warning">
+                                <div class="notification__content">
+                                    <div class="notification__type">LET OP</div>
+                                    <h2 class="notification__title">U moet voor deze activiteit nog een resultaat indienen</h2>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+
+                    <div class="content-background">
+                        <div class="content">
+                            <div class="edit-section">
+                                <h2>Algemene gegevens</h2>
+                            </div>
+                            <ul class="definition-list">
+                                {% if activity.educationalUse is defined and activity.educationalUse is not empty %}
+                                    <li class="definition-list__item definition-list__item--horizontal">
+                                        <div class="definition-list__title">
+                                            Soort activiteit
+                                        </div>
+                                        <div class="definition-list__description">
+                                            <p>{{ activity.educationalUse }}</p>
+                                        </div>
+                                    </li>
+                                {% endif %}
+                                {% if activity.description is defined and activity.description is not empty %}
+                                    <li class="definition-list__item ">
+                                        <div class="definition-list__title">
+                                            {{ 'beschrijving'|capitalize }}
+                                        </div>
+                                        <div class="definition-list__description">
+                                            <p>{{ activity.description }}</p>
+                                        </div>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div style="height:20px;"></div>
+
+                    {% if activity.tests is defined and activity.tests is not empty %}
+                        <div class="content-background">
+                            <div class="content">
+                                <h2>{{ 'testen'|capitalize }}</h2>
+                                <ul class="list list--subjects columns">
+                                    {% for test in activity.tests %}
+                                        <li>
+                                            <a href="{{ path('app_education_test', {id: test.id}) }}" class="list__link">
+                                                {{ test.name|capitalize }}
+                                            </a>
+                                            {% if test.description is defined and test.description is not empty %}
+                                                <p> {{ test.description}}</p>
+                                            {% endif %}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <div style="height:20px;"></div>
+
+                    <div class="collapse" role="status">
+                        <div x-uno-collapse="" class="collapse__header">
+                            <i class="collapse__indicator">
+                                <span class="screenreader-only" data-contracted-i18n="ingeklapt" data-expanded-i18n="uitgeklapt"></span>
+                            </i>
+                            <span class="collapse__title">Resultaat indienen</span>
+                        </div>
+                        <div class="collapse__details collapse__details--open">
+                            {% if app.user is defined and app.user is not null %}
+                                {% if registeredForCourse == true %}
+                                    {% if resultSubmitted == false %}
+                                        <h2>Uw resultaat</h2>
+
+                                        <form method="post" action="{{ path('app_education_activity', {id: activity.id}) }}">
+                                            <div class="input">
+                                                <label class="input__label" for="description">Toelichting</label>
+                                                <textarea class="input__control input__control--text" id="description" name="description"></textarea>
+                                            </div>
+
+                                            <div class="input">
+                                                <label class="input__label" for="file">Voeg hier uw resultaat toe:</label>
+                                                <input type="file" class="input__control input__control--m input__control--file" id="file" name="file">
+                                            </div>
+
+                                            <div class="input">
+                                                <button type="submit" class="btn">Verzenden <i class="icon icon-arr-forward"></i></button>
+                                            </div>
+                                        </form>
+                                    {% else %}
+                                        <aside class="hint">
+                                            <span class="hint__title">Ingedient</span>
+                                            <p>U heeft al een resultaat ingedient voor deze activiteit.</p>
+                                        </aside>
+                                    {% endif %}
+                                {% else %}
+                                    <aside class="hint">
+                                        <span class="hint__title">Tutorial</span>
+                                        <p>U bent nog niet ingeschreven voor <a href="{{ path('app_education_course', {id: activity.course.id}) }}">de tutorial van deze activiteit</a>.</p>
+                                    </aside>
+                                {% endif %}
+                            {% else%}
+                                <aside class="hint">
+                                    <span class="hint__title">Inloggen</span>
+                                    <p>U dient eerst in te loggen voordat u een resultaat kunt indienen.<br>
+                                        Klik <a href="{{ commonground_cleanurl({"component":"ds"}) }}?responceUrl={{ absolute_url(path('app_default_index')) }}digispoof&backUrl={{ absolute_url(path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params'))) }}">hier</a> om te kunnen inloggen.</p>
+                                </aside>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </div>
+
+    <script>
+        // Load collapse component
+        System.import('/uno/components/collapse/collapse.js').then(function (module) {
+            // Select all collapsible elements on the page
+            var collapses = document.querySelectorAll('[x-uno-collapse]');
+            // Initialize all collapses
+            for (var i = 0; i < collapses.length; i++) {
+                new module.Collapse(collapses.item(i));
+            }
+        });
+    </script>
+
+{% endblock %}

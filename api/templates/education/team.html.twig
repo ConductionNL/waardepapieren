@@ -1,0 +1,201 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <header class="content__header">
+        <a class="backlink" href="/education/teams">Teams</a>
+    </header>
+    <div class="row">
+        <div class="col-sm-12 col-lg-8">
+            <div class="content-background">
+                <div class="content ">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h1>{{ team.name|capitalize }}</h1>
+                            {% if team.description is defined and team.description is not empty %}
+                                <p>{{ team.description }}</p>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <img src="https://picsum.photos/350/250" alt="tender" width="100%">
+                        </div>
+                    </div>
+
+                    <br>
+                    <div class="edit-section">
+                        <h2>Algemene informatie</h2>
+                    </div>
+                    <ul class="definition-list">
+                        <li class="definition-list__item definition-list__item--horizontal">
+                            <div class="definition-list__title">
+                                Naam
+                            </div>
+                            <div class="definition-list__description">
+                                <p>{{ team.name }}</p>
+                            </div>
+                        </li>
+                        {% if team.parentOrganization is defined and team.parentOrganization is not empty %}
+                            {% if commonground_is_resource(team.parentOrganization['@id']) %}
+                                {% set parent = commonground_resource(team.parentOrganization['@id']) %}
+                                <li class="definition-list__item definition-list__item--horizontal">
+                                    <div class="definition-list__title">
+                                        {% if parent.type is defined and parent.type is not empty %}
+                                            Bovenliggend Team ({{ parent.type }})
+                                        {% else %}
+                                            Bovenliggend Team
+                                        {% endif %}
+                                    </div>
+                                    <div class="definition-list__description">
+                                        <div class="row">
+                                            {% if parent is defined and parent is not empty %}
+                                                <div class="col-sm-6">
+                                                    <p>Naam: {{ parent.name }}</p>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div style="float: right;">
+                                                        <div style="display: flex; flex-direction: column; justify-items: center;">
+                                                            <a href="{{ path('app_education_team', {id: parent.id}) }}">Lees meer over {{ parent.name }}</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                {% if parent.description is defined and parent.description is not empty %}
+                                                    <div class="col-sm-12">
+                                                        <p>Omschrijving: {{ parent.description }}</p>
+                                                    </div>
+                                                {% endif %}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </li>
+                            {% endif %}
+                        {% endif %}
+                    </ul>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <br>
+                            <div class="collapse" role="status">
+                                <div x-uno-collapse="" class="collapse__header">
+                                    <i class="collapse__indicator">
+                                            <span class="screenreader-only" data-contracted-i18n="ingeklapt"
+                                                  data-expanded-i18n="uitgeklapt"></span>
+                                    </i>
+                                    <span class="collapse__title">Onderliggende Teams</span>
+                                </div>
+                                <div class="collapse__details collapse__details--closed">
+                                    {% if team.subOrganizations is defined and team.subOrganizations is not empty %}
+                                        <ul class="list list--card list--card-small">
+                                            {% for subTeam in team.subOrganizations %}
+                                                <li class="card card--small">
+                                                    <div class="card__content">
+                                                        <div class="card__body">
+                                                            <div class="row" style=" height: 100%; width: 100%;">
+                                                                <div class="col-sm-12" style="padding-right: 0px;">
+                                                                    <div class="col-sm-8">
+                                                                        <span class="card__title">{{ subTeam.name }}</span><br>
+                                                                        {% if subTeam.description is defined and subTeam.description is not empty %}
+                                                                            <span>{{ subTeam.description }}</span>
+                                                                        {% endif %}
+                                                                    </div>
+                                                                    <div class="col-sm-4">
+                                                                        <div style="display: flex; flex-direction: column; justify-items: center;">
+                                                                            <a href="{{ path('app_education_team', {id: subTeam.id}) }}"
+                                                                               rel="noopener" class="btn btn--primary"
+                                                                               target="_blank">
+                                                                                Bekijk dit team
+                                                                                <span class="btn__icon icon icon-arr-forward" title="" role=""></span>
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% else %}
+                                        <p style="color:lightgray">Er zijn geen onderliggende teams.</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <br>
+                            <div class="collapse" role="status">
+                                <div x-uno-collapse="" class="collapse__header">
+                                    <i class="collapse__indicator">
+                                            <span class="screenreader-only" data-contracted-i18n="ingeklapt"
+                                                  data-expanded-i18n="uitgeklapt"></span>
+                                    </i>
+                                    <span class="collapse__title">Deelnemers</span>
+                                </div>
+                                <div class="collapse__details collapse__details--closed">
+                                    {% if app.user is defined and app.user is not null %}
+                                        {% if team.persons is defined and team.persons is not empty %}
+                                            <ul class="list list--card list--card-small">
+                                                {% for person in team.persons %}
+                                                    {% set participants = commonground_resource_list({'component': 'edu', 'type': 'participants'},{'person' : person['@id']})['hydra:member'] %}
+                                                    {% if participants|length > 0 %}
+                                                        {% set participant = participants[0] %}
+                                                        <li class="card card--small">
+                                                            <div class="card__content">
+                                                                <div class="card__body">
+                                                                    <div class="row" style=" height: 100%; width: 100%;">
+                                                                        <div class="col-sm-12" style="padding-right: 0px;">
+                                                                            <div class="col-sm-7">
+                                                                                <span class="card__title">{{ person.name }}</span><br>
+                                                                                <span>{{ person.formalName }}</span>
+                                                                            </div>
+                                                                            <div class="col-sm-5">
+                                                                                <div style="display: flex; flex-direction: column; justify-items: center;">
+                                                                                    <a href="{{ path('app_education_student', {id: participant.id}) }}"
+                                                                                       rel="noopener" class="btn btn--primary"
+                                                                                       target="_blank">
+                                                                                        Bekijk deze student
+                                                                                        <span class="btn__icon icon icon-arr-forward" title="" role=""></span>
+                                                                                    </a>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </ul>
+                                        {% else %}
+                                            <p style="color:lightgray">Er zijn geen deelnemers.</p>
+                                        {% endif %}
+                                    {% else %}
+                                        <aside class="hint">
+                                            <span class="hint__title">Inloggen</span>
+                                            <p>U dient eerst in te loggen voordat u de deelnemers kunt bekijken.<br>
+                                                Klik <a href="{{ commonground_cleanurl({"component":"ds"}) }}?responceUrl={{ absolute_url(path('app_default_index')) }}digispoof&backUrl={{ absolute_url(path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params'))) }}">hier</a> om te kunnen inloggen.</p>
+                                        </aside>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load collapse component
+        System.import('/uno/components/collapse/collapse.js').then(function (module) {
+            // Select all collapsible elements on the page
+            var collapses = document.querySelectorAll('[x-uno-collapse]');
+            // Initialize all collapses
+            for (var i = 0; i < collapses.length; i++) {
+                new module.Collapse(collapses.item(i));
+            }
+        });
+    </script>
+
+{% endblock %}

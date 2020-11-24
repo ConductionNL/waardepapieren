@@ -1,0 +1,136 @@
+{% if request.properties[property.name] is defined and request.properties[property.name] is not empty %}
+    {% set person = commonground_resource(request.properties[property.name]) %}
+{% endif %}
+
+<div class="row">
+    <div class="col-sm-12 col-lg-3">
+        <label class="input__label" for="bsn">{{ 'social service number'|trans|capitalize }}</label>
+        <input class="input__control input__control--text" id="bsn" type="text"
+            {% if person.burgerservicenummer is defined %} value="{{ person.burgerservicenummer }}"{% endif %}>
+    </div>
+</div>
+<b>of</b>
+<div class="row">
+    <div class="col-sm-12 col-lg-3">
+        <label class="input__label" for="givenNames">{{ 'given names'|trans|capitalize }}</label>
+        <input class="input__control input__control--text" id="givenNames" type="text"
+            {% if person.naam.voornamen is defined %} value="{{ person.naam.voornamen }}"{% endif %}>
+    </div>
+    <div class="col-sm-12 col-lg-3">
+        <label class="input__label" for="familyName">{{ 'family name'|trans|capitalize }}</label>
+        <input class="input__control input__control--text" id="familyName" type="text"
+            {% if person.naam.geslachtsnaam is defined %} value="{{ person.naam.geslachtsnaam }}"{% endif %}>
+    </div>
+    <div class="col-sm-12 col-lg-3">
+        <label class="input__label" for="familyName">{{ 'date of birth'|trans|capitalize }}</label>
+        <input class="input__control input__control--text" id="dateOfBirth" type="date">
+    </div>
+    <div class="col-sm-12 col-lg-3">
+        <label class="input__label" for="familyName">{{ 'place of birth'|trans|capitalize }}</label>
+        <input class="input__control input__control--text" id="placeOfBirth" type="text">
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12 col-lg-2">
+        <br>
+        <button type="button" onclick="getPeople()" style="width: 100%; color: black; background-color: #f9e11e"
+                class="btn btn-primary">Zoeken
+        </button>
+    </div>
+</div>
+
+<hr style="margin-top: 20px;">
+
+<div class="spinner">
+    <div aria-live="assertive" class="screenreader-only">Aan het laden</div>
+</div>
+
+<fieldset class="input" id="persoonsLijst" style="margin-top: 20px;">
+
+</fieldset>
+
+
+<script>
+    $('.spinner').hide();
+
+    function getPeople() {
+        $('.spinner').show();
+        let bsn = document.getElementById('bsn').value;
+        let voornamen = document.getElementById('givenNames').value;
+        let geslachtsnaam = document.getElementById('familyName').value;
+
+        let list = document.getElementById('persoonsLijst');
+
+        while (list.firstChild) {
+            list.firstChild.remove();
+        }
+
+        if ((geslachtsnaam === "" || voornamen === "") && bsn === "") {
+            let response = "De volgende velden zijn niet ingevoerd:<ul>";
+            $('.spinner').hide();
+            if (geslachtsnaam === "") {
+                response = response + '<li> {{ 'family name'|trans|capitalize }} </li>';
+            }
+            if (voornamen === "") {
+                response = response + '<li> {{ 'given names'|trans|capitalize }} </li>';
+            }
+            if (bsn === "") {
+                response = response + '<li>{{ 'social service number'|trans|capitalize }}</li>';
+            }
+            $('#persoonsLijst').append('<p>' + response + '</p>');
+            return;
+        }
+
+        let data = {
+            'naam.geslachtsnaam': geslachtsnaam,
+            'naam.voornamen': voornamen,
+        }
+
+        if(bsn !== ""){
+            data.burgerservicenummer = bsn;
+        }
+
+        $.ajax({
+            url: "/api/brp/ingeschrevenpersonen",
+            type: 'GET',
+            processData: true,
+            headers: {
+                Accept: 'application/ld+json'
+            },
+            data: data,
+            statusCode: {
+                404: function () {
+                    console.log("page not found");
+                },
+                500: function () {
+                    console.log("internal server error");
+                },
+                200: function () {
+                    console.log("worked");
+                }
+            },
+            success: function (result) {
+                $('.spinner').hide();
+                if (result["hydra:member"].length >= 1) {
+                    $('#persoonsLijst').append('<legend class="input__legend">Persoon:</legend>')
+                    for (let i = 0; i < result['hydra:member'].length; i++) {
+
+                        $('#persoonsLijst').append('<div class="input__group input__group--radio test">');
+                        $('#persoonsLijst').append('<input value="' + result["hydra:member"][i]['@id'] + '" type="radio" name="request[properties][{{ property.name }}]" id="' + i + '" class="input__control--radio">');
+                        $('#persoonsLijst').append('<label class="input__label input__label--radio" for="' + i + '"> '
+                            + result["hydra:member"][i]["naam"]["voornamen"]
+                            + ' '
+                            + result["hydra:member"][i]["naam"]["geslachtsnaam"]
+                            + ' </label>');
+                        $('#persoonsLijst').append('</div>');
+                    }
+                } else {
+                    $('#persoonsLijst').append('<p>Geen persoon gevonden op ingevulde combinatie van naam en BSN</p>');
+                }
+            },
+        });
+
+    }
+
+
+</script>

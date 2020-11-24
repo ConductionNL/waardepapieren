@@ -1,0 +1,238 @@
+<div class="modal modal--backdrop" role="dialog" id="myModal" tabindex="-1" aria-describedby="modal-description3">
+    <section class="modal__content" role="document">
+        <form action="{{ path('app_lc_organization') }}" method="post">
+            <div class="modal__body" tabindex="0" lang="en-US">
+                <div class="row" style="margin-top: 20px;">
+                    <div class="col-xs-6">
+                        <h1>{{ 'location'|trans|capitalize }}</h1>
+                    </div>
+                    <div class="col-xs-6">
+                        <button style="float: right;" class="modal__close-button">
+                            <i class="icon icon-cross"></i>
+                            {{ 'close'|trans|capitalize }}
+                        </button>
+                    </div>
+                </div>
+                <div class="input input--horizontal">
+                    <div>
+                        <label class="input__label" for="name">{{ 'name'|trans|capitalize }} <span style="color: red;"><strong>*</strong></span></label>
+                    </div>
+                    <input required="" type="text" id="name" name="name" aria-describedby="hint_name" class="input__control input__control--text input__control--l">
+                </div>
+                <div class="input input--horizontal">
+                    <div>
+                        <label class="input__label" for="description">{{ 'description'|trans|capitalize }} <span style="color: red;"><strong>*</strong></span></label>
+                    </div>
+                    <textarea required="" id="description" name="description" aria-describedby="hint_name" class="input__control input__control--text input__control--l"></textarea>
+                </div>
+                <div class="input input--horizontal">
+                    <div>
+                        <label class="input__label" for="organization">{{ 'organization'|trans|capitalize }} <span style="color: red;"><strong>*</strong></span></label>
+                    </div>
+                    <select id="organization" name="organization" class="input__control input__control--l input__control--select">
+                        {% if organizations is defined and organizations is not empty %}
+                            {% for organization in organizations %}
+                                <option value="{{ organization['@id'] }}">{{ organization.name }}</option>
+                            {% endfor %}
+                        {% endif %}
+                    </select>
+                </div>
+                <div class="input input--horizontal">
+                    <div>
+                        <label class="input__label" for="bagId">{{ 'bag id'|trans|capitalize }} <span style="color: red;"><strong>*</strong></span></label>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-8">
+                            <input required="" readonly type="text" id="bagId" name="bagId" aria-describedby="hint_name" class="input__control input__control--text input__control--l">
+                        </div>
+                        <div class="col-xs-4">
+                            <button class="btn" style="float: right" type="button" data-toggle="modal" data-target="#bagModal" onclick="openBagModal()">{{ 'search'|trans|capitalize }}</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="input input--horizontal">
+                    <div>
+                        <label class="input__label" for="url">{{ 'url'|trans|capitalize }}</label>
+                    </div>
+                    <input type="text" id="url" name="url" aria-describedby="hint_name" class="input__control input__control--text input__control--l">
+                </div>
+                <div class="input input--horizontal">
+                    <div>
+                        <label class="input__label" for="telephone">{{ 'telephone'|trans|capitalize }}</label>
+                    </div>
+                    <input type="text" id="telephone" name="telephone" aria-describedby="hint_name" class="input__control input__control--text input__control--l">
+                </div>
+                <div class="input input--horizontal">
+                    <div>
+                        <label class="input__label" for="openingTime">{{ 'opening time'|trans|capitalize }}<span style="color: red;"><strong>*</strong></span></label>
+                    </div>
+                    <input required type="datetime-local" id="openingTime" name="openingTime" aria-describedby="hint_name" class="input__control input__control--text input__control--l">
+                </div>
+                <div class="input input--horizontal">
+                    <div>
+                        <label class="input__label" for="closingTime">{{ 'closing time'|trans|capitalize }}<span style="color: red;"><strong>*</strong></span></label>
+                    </div>
+                    <input required type="datetime-local" id="closingTime" name="closingTime" aria-describedby="hint_name" class="input__control input__control--text input__control--l">
+                </div>
+                <div class="input__group input__group--checkbox">
+                    <input name="publicAccess" type="checkbox" id="publicAccess" value="true" class="input__control input__control--checkbox">
+                    <label class="input__label input__label--checkbox" for="publicAccess">{{ 'public access'|trans|capitalize }}</label>
+                </div>
+                <div class="input__group input__group--checkbox">
+                    <input name="smokingAllowed" type="checkbox" id="smokingAllowed" value="true" class="input__control input__control--checkbox">
+                    <label class="input__label input__label--checkbox" for="smokingAllowed">{{ 'smoking allowed'|trans|capitalize }}</label>
+                </div>
+            </div>
+                <footer class="modal__footer" lang="en-US">
+                <button class="btn btn--primary">{{ 'create'|trans|capitalize }}</button>
+            </footer>
+        </form>
+    </section>
+</div>
+
+
+<div class="modal modal--backdrop" role="dialog" id="bagModal" tabindex="-1" aria-describedby="modal-description3">
+    <section class="modal__content" role="document">
+        <div class="modal__body" tabindex="0" lang="en-US">
+            <div class="row" style="margin-top: 20px;">
+                <div class="col-xs-6">
+                    <h1>{{ 'Bag id'|trans|capitalize }}</h1>
+                </div>
+                <div class="col-xs-6">
+                    <button style="float: right;" id="bagClose" class="modal__close-button">
+                        <i class="icon icon-cross"></i>
+                        {{ 'close'|trans|capitalize }}
+                    </button>
+                </div>
+            </div>
+
+            <div class="skiplink-target content" id="main-content">
+                <div class="row">
+                    <div class="col-sm-12 col-lg-3">
+                        <label class="input__label" for="postalCode">Postcode</label>
+                        <input class="input__control input__control--text" id="postcode" type="text">
+                    </div>
+                    <div class="col-sm-12 col-lg-3">
+                        <label class="input__label" for="houseNumber">Huisnummer</label>
+                        <input class="input__control input__control--text" id="huisnummer" type="text">
+                    </div>
+                    <div class="col-sm-12 col-lg-3">
+                        <label class="i4put__label" for="houseNumberSuffix">toevoeging</label>
+                        <input class="input__control input__control--text" id="toevoeging" type="text">
+                    </div>
+                    <div class="col-sm-12 col-lg-2">
+                        <br>
+                        <button type="button" onclick="getBagKeys()" style="width: 100%; color: black; background-color: #f9e11e" class="btn btn-primary">Zoeken</button>
+                    </div>
+                </div>
+
+                <hr style="margin-top: 20px;">
+
+                <div class="spinner">
+                    <div aria-live="assertive" class="screenreader-only">Aan het laden</div>
+                </div>
+
+                <fieldset class="input" id="adresLijst" style="margin-top: 20px;">
+
+                </fieldset>
+
+
+                <script>
+                    $('.spinner').hide();
+
+                    function getBagKeys(){
+                        $('.spinner').show();
+                        let postcode = document.getElementById('postcode').value;
+                        postcode = postcode.toUpperCase();
+
+                        let huisnummer = document.getElementById('huisnummer').value;
+
+                        let toevoeging = document.getElementById('toevoeging').value;
+
+
+                        console.log(postcode);
+                        console.log(huisnummer);
+
+                        let list = document.getElementById('adresLijst');
+                        while(list.firstChild){
+                            list.firstChild.remove();
+                        }
+
+
+
+                        $.ajax({
+                            url: "/api/as/adressen",
+                            type: 'GET',
+                            processData: true,
+                            headers: {
+                                Accept: 'application/ld+json'
+                            },
+                            data: { postcode:postcode, huisnummer:huisnummer, toevoeging:toevoeging },
+                            statusCode: {
+                                404: function() {
+                                    console.log( "page not found" );
+                                },
+                                500: function() {
+                                    console.log( "internal server error" );
+                                },
+                                200: function() {
+                                    console.log( "worked" );
+                                }
+                            },
+                            success: function(result) {
+                                $('.spinner').hide();
+                                if(result["hydra:member"].length >= 1){
+                                    $('#adresLijst').append('<legend class="input__legend">Adressen:</legend>')
+                                    for(let i = 0; i < result['hydra:member'].length; i++){
+                                        if(result['hydra:member'][i]['huisnummertoevoeging'] === null){
+                                            result['hydra:member'][i]['huisnummertoevoeging'] = '';
+                                        }
+                                        $('#adresLijst').append('<div class="input__group input__group--radio test">');
+                                        $('#adresLijst').append('<input value="'+ result["hydra:member"][i]['id'] +'" type="radio" name="adres" id="'+i+'" class="input__control--radio">');
+                                        $('#adresLijst').append('<label class="input__label input__label--radio" for="'+i+'"> '
+                                            + result["hydra:member"][i]["straat"]
+                                            + ' '
+                                            + result["hydra:member"][i]["huisnummer"]
+                                            + ' '
+                                            + result["hydra:member"][i]["huisnummertoevoeging"]
+                                            + ' | '
+                                            + result["hydra:member"][i]["postcode"]
+                                            + ' | '
+                                            + result["hydra:member"][i]["woonplaats"]
+                                            + ' </label>');
+                                        $('#adresLijst').append('</div>');
+
+                                    }
+                                } else {
+                                    $('#adresLijst').append('<p>Geen adressen gevonden op de meegegeven gegevens</p>');
+                                }
+                                $('#adresLijst').append('<button style="margin-top: 20px; width: 100%; color: black; background-color: #f9e11e" class="btn btn-primary modal__close-button" onclick="selectBag()">Selecteer</button>');
+                            },
+                        });
+
+                    }
+
+                    function selectBag(){
+                        let input = $("input[type='radio'][name='adres']:checked").val();
+                        let output = document.getElementById('bagId');
+                        output.value = input;
+                        $( "#bagClose" ).trigger( "click" );
+                    }
+                </script>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+    let bagModal;
+    // Load modal component
+    System.import('/uno/components/modal/modal.js').then(function (module) {
+        bagModal = new module.Modal(document.getElementById('bagModal'));
+    });
+
+    // Called when the user clicks the button
+    function openBagModal() {
+        bagModal.open();
+    }
+</script>

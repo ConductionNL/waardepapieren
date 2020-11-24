@@ -1,0 +1,22 @@
+{% if file is defined and files is not empty%}
+<div style="height: 20px"></div>
+
+<div class="content-background">
+    <div class="content">
+        <h2>{{ 'documents'|trans|capitalize }}</h2>
+        {% for file in files %}
+            <li class="file">
+                <i class="file__icon icon icon-document"></i>
+
+                <div class="file__data">
+                    <div class="file__filename">
+                        <strong class="file__title break-all">c50bed25.jpg</strong>
+                        <span class="meta">JPG, 396.05 kB</span>
+                    </div>
+                    <button class="btn btn--link file__button">Verwijder</button>
+                </div>
+            </li>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}

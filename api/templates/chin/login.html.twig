@@ -1,0 +1,167 @@
+{# templates/home/index.html.twig #}
+
+{% extends 'base.html.twig' %}
+    {% if resource.organization is defined and resource.organization is not empty %}
+        {% set org = commonground_resource(resource.organization) %}
+        {% set orgCc = commonground_resource_list({'component':'cc', 'type':'organizations'}, {'name':org.name})['hydra:member'] %}
+        {% if orgCc[0] is defined and orgCc[0] is not empty %}
+            {% set orgCc = orgCc[0] %}
+            {% if orgCc.socials[0] is defined %}
+                {% set social = orgCc.socials[0] %}
+            {% endif %}
+        {% endif %}
+    {% endif %}
+    {% block style %}
+        <style>
+
+            @media (max-width: 555px) {
+                body {
+                    position: fixed;
+                    width: 100%;
+                }
+            }
+
+            .background{
+                color: white;
+            }
+
+            {% if org.style.css is defined and org.style.css is not empty %}
+            {{ org.style.css|raw }}
+            {% endif %}
+        </style>
+    {% endblock %}
+
+{% block container %}
+
+
+    <div class="container background" style="background-size: 300px; width: 100%; max-width: 100%;">
+        <form action="{{ path('app_chin_login') }}" method="post">
+            <div class="row">
+                <div class="col-md-12 col-sm-12" style="padding: 0;">
+                    <div class="" style="height: calc(100vh - 38px); text-align: center; display: flex; flex-direction: column; justify-content: space-evenly">
+                        <div class="row">
+                            {% if org.style.favicon.base64 is defined and org.style.favicon.base64 is not empty %}
+                                <div class="col-xs-12">
+                                    <img style="width: 30rem;" src="{{ org.style.favicon.base64 }}" alt="">
+                                </div>
+                            {% else %}
+                                <div class="col-xs-12">
+                                    <span style="font-size: 20rem; color: #39870c;" class="icon icon-check"></span>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-1"></div>
+                            <div class="col-xs-10" style="margin-bottom: 15px;">
+                                <div style="width: 100%; background-color: white; border-radius: 20px; padding-top: 20px; padding-bottom: 5px;">
+                                    <div class="definition-list__description">
+                                        {% if resource.place is defined and resource.place is not empty %}
+                                            {% set place = commonground_resource(resource.place) %}
+                                            {% if place.bagId is defined and place.bagId is not empty %}
+                                                {% set adres = commonground_resource({'component':'as', 'type': 'adressen', 'id': place.bagId}) %}
+                                            {% endif %}
+                                            <p style="margin-bottom: 0;"><h2 style="color: black; margin-top: 0;">-{{ place.name }}-</h2></p>
+                                            <p style="color: #000000; margin-bottom: 30px;">
+                                                {% if adres is defined and adres is not empty %}
+                                                    <i style="margin-right: 10px;" class="fas fa-map-marker-alt"></i>{{ adres.straat }} {{ adres.huisnummer }}, {{ adres.postcode }} <br>
+                                                    {{ adres.woonplaats }}
+                                                {% endif %}</p>
+                                        {% endif %}
+                                    </div>
+                                    <span style="color: black">Aanmelden met</span>
+                                    {% if resource.methods is defined and resource.methods is not empty %}
+                                        {% if resource.methods['idin'] is defined and resource.methods['idin'] %}
+                                            <div style="margin-top: 5px; padding: 0 10px;">
+                                                <button name="method" value="idin" style="width: 100%; background-color: #01689B; border: 0; color: white; border-radius: 20px;"><h2 style="margin-top: 4px;">Idin</h2></button>
+                                            </div>
+                                        {% endif %}
+                                        {% if resource.methods['facebook'] is defined and resource.methods['facebook'] %}
+                                            <div style="margin-top: 5px; padding: 0 10px;">
+                                                <button name="method" value="facebook" style="width: 100%; background-color: #01689B; border: 0; color: white; border-radius: 20px;"><h2 style="margin-top: 4px;">Facebook</h2></button>
+                                            </div>
+                                        {% endif %}
+                                        {% if resource.methods['google'] is defined and resource.methods['google'] %}
+                                            <div style="margin-top: 5px; padding: 0 10px;">
+                                                <button name="method" value="google" style="width: 100%; background-color: #01689B; border: 0; color: white; border-radius: 20px;"><h2 style="margin-top: 4px;">Google</h2></button>
+                                            </div>
+                                        {% endif %}
+                                        <div style="margin-top: 5px; padding: 0 10px;">
+                                            <button name="method" value="email" style="width: 100%; background-color: #01689B; border: 0; color: white; border-radius: 20px;"><h2 style="margin-top: 4px;">Email</h2></button>
+                                        </div>
+                                    {% else %}
+                                        <div style="margin-top: 5px; padding: 0 10px;">
+                                            <button name="method" value="email" style="width: 100%; background-color: #01689B; border: 0; color: white; border-radius: 20px;"><h2 style="margin-top: 4px;">Email</h2></button>
+                                        </div>
+                                    {% endif %}
+                                    <div class="input" style="margin-top: 5px; margin-bottom: 5px; padding: 0 10px;">
+                                        <div class="input__group input__group--checkbox">
+                                            <input checked name="hobbies[]" type="checkbox" id="chkbx1"
+                                                   class="input__control input__control--m input__control--checkbox" required>
+                                            <label style="line-height: 14px; color: black;" class="input__label input__label--checkbox" for="chkbx1">
+                                                Gebruikersaccount aanmaken zodat ik mijn gegevens kan inzien
+                                                </label>
+                                        </div>
+                                        <div class="input__group input__group--checkbox">
+                                            <input name="hobbies[]" type="checkbox" id="chkbx2"
+                                                   class="input__control input__control--m input__control--checkbox" required="">
+                                            <label style="line-height: 14px; color: black;" class="input__label input__label--checkbox" for="chkbx2">Ik ga akkoord met de <a
+                                                    href="/proclaimer" target="_blank">proclaimer</a> en de <a href="/privacy"
+                                                                                                               target="_blank">privacy</a>
+                                                regels</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-1"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-2"></div>
+                            {% if social is defined and social is not empty %}
+                                <div class="col-xs-8">
+                                    <div style="display: flex; justify-content: space-between">
+                                        {% if social.website is defined and social.website is not empty %}
+                                            <div style="height: 35px; width: 35px; background-color: #01689B; border-radius: 50%">
+                                                <a target="_blank" href="{{ social.website }}">
+                                                    <i style="font-size: 2rem; line-height: 1.8; color: white;" class="fas fa-globe"></i>
+                                                </a>
+                                            </div>
+                                        {% endif %}
+                                        {% if social.facebook is defined and social.facebook is not empty %}
+                                            <div style="height: 35px; width: 35px; background-color: #01689B; border-radius: 50%">
+                                                <a target="_blank" href="{{ social.facebook }}">
+                                                    <i style="font-size: 2rem; line-height: 1.8; color: white;" class="fab fa-facebook-f"></i>
+                                                </a>
+                                            </div>
+                                        {% endif %}
+                                        {% if social.instagram is defined and social.instagram is not empty %}
+                                            <div style="height: 35px; width: 35px; background-color: #01689B; border-radius: 50%">
+                                                <a target="_blank" href="{{ social.instagram }}">
+                                                    <i style="font-size: 2rem; line-height: 1.8; color: white;" class="fab fa-instagram"></i>
+                                                </a>
+                                            </div>
+                                        {% endif %}
+                                        {% if social.twitter is defined and social.twitter is not empty %}
+                                            <div style="height: 35px; width: 35px; background-color: #01689B; border-radius: 50%">
+                                                <a target="_blank" href="{{ social.twitter }}">
+                                                    <i style="font-size: 2rem; line-height: 1.8; color: white;" class="fab fa-twitter"></i>
+                                                </a>
+                                            </div>
+                                        {% endif %}
+                                        {% if social.linkedin is defined and social.linkedin is not empty %}
+                                            <div style="height: 35px; width: 35px; background-color: #01689B; border-radius: 50%">
+                                                <a target="_blank" href="{{ social.linkedin }}">
+                                                    <i style="font-size: 2rem; line-height: 1.8; color: white;" class="fab fa-linkedin-in"></i>
+                                                </a>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endif %}
+                            <div class="col-xs-2"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div><!-- /.container -->
+{% endblock %}

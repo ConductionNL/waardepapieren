@@ -1,0 +1,107 @@
+{% extends "content.html.twig" %}
+
+{% block content %}
+
+
+    <section class="row">
+        <div class="col-md-12">
+            <div class="content">
+                <header class="content__header">
+                    {% if resource.backlink is defined %}
+                        <a class="backlink" href="{{ resource.backlink }}">{{ 'previous'|trans|capitalize }}</a>
+                    {% endif %}
+                    <header class="content__header">
+                        <h1 class="content__header-title">{{ 'message'|trans|capitalize }}</h1>
+                    </header>
+                </header>
+            </div><!-- ./content -->
+        </div><!-- ./col -->
+    </section>
+
+    {% if not app.user %}
+        <div class="notification notification--info">
+            <div class="notification__content">
+                <div class="notification__type">{{ 'attention'|trans|capitalize }}</div>
+                <h2 class="notification__title">{{ 'you can not submit a message if you are not loged in'|trans|capitalize }}</h2>
+            </div>
+        </div>
+    {% endif %}
+
+    <form method="post" action="{{ path('app_cmc_send') }}" class="form">
+        <div class="row">
+            <div class="col-md-8  col-sm-12">
+                <div class="content-background">
+                    <div class="content">
+                        <div class="input">
+                            <label class="input__label" for="sender">{{ 'sender'|trans|capitalize }}</label>
+                            <input required="" type="text" name="sender" id="sender"
+                                   class="input__control input__control--text"
+                                   {% if resource.sender is defined %}value="{{ commonground_resource(resource.sender).naam.aanschrijfwijze }}" disabled{% endif %}>
+                            {% if resource.sender is defined and resource.sender is not empty %}
+                                <input type="hidden" name="sender_uri" id="sender_uri" class="input__control input__control--text"
+                                       value="{{ commonground_resource(resource.sender)['@id'] }}">
+                            {% endif %}
+                        </div>
+                        <div class="input">
+                            <label class="input__label" for="receiver">{{ 'receiver'|trans|capitalize }}</label>
+                            <input required="" type="text" name="receiver" id="receiver"
+                                   class="input__control input__control--text"
+                                   {% if resource.receiver is defined %}value="{{ commonground_resource(resource.receiver).name }}" disabled{% endif %}>
+                            {% if resource.receiver is defined %}
+                            <input type="hidden" name="receiver_uri" id="receiver_uri"
+                                   class="input__control input__control--text"
+                                   value="{{ commonground_resource(resource.receiver)['@id'] }}">
+                            {% endif %}
+                        </div>
+                        <div class="input">
+                            {#                    <label class="input__label" for="channel">{{ 'channel'|trans|capitalize }}</label>#}
+                            <input required="" type="hidden" name="channel" id="channel"
+                                   class="input__control input__control--text" value="website">
+                        </div>
+                        <div class="input">
+                            <label class="input__label" for="topic">{{ 'topic'|trans|capitalize }}</label>
+                            <input required type="text" name="topic" id="topic"
+                                   class="input__control input__control--text"
+                                   {% if resource.topic is defined %}value="{{ resource.topic }}"{% endif %}>
+                        </div>
+                        <div class="input">
+                            <label class="input__label" for="message">{{ 'message'|trans|capitalize }}</label>
+                            <textarea required="" name="message" id="message"
+                                      class="input__control input__control--m input__control--text">{% if resource.message is defined %}{{ resource.message }}{% endif %}</textarea>
+                        </div>
+                    </div><!-- /.content -->
+                </div><!-- /.content-background -->
+
+                <!-- Page Break -->
+                <div style="height: 20px"></div>
+                <button class="btn btn--block" name="submit">{{ 'send'|trans|capitalize }}</button>
+            </div><!-- /.col -->
+
+            <div class="col-md-4  col-sm-12">
+                <div class="content-background">
+                    <div class="content">
+                        <h2 id="regarding">{{ 'regarding'|trans|capitalize }}</h2>
+                        <ul class="input__group-list" aria-describedby="regarding">
+                            <li class="input__group input__group--checkbox">
+                                <ul>
+                                    {% for resourceLink in resource.resources %}
+                                        {% set resourceItem = commonground_resource(resourceLink) %}
+                                        <li>
+                                            <input type="checkbox" class="input__control input__control--checkbox"
+                                                   value="{{ resourceLink }}" name="resources[]"
+                                                   id="{{ resourceLink }}">
+                                            <label for="{{ resourceLink }}"
+                                                   class="input__label input__label--checkbox">{{ resourceItem.reference }}
+                                            </label>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+
+                        </ul>
+                    </div><!-- /.content -->
+                </div><!-- /.content-background -->
+            </div>
+        </div>
+    </form>
+{% endblock %}

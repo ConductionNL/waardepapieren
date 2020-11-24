@@ -1,0 +1,439 @@
+{% extends "base.html.twig" %}
+
+{% block content %}
+
+    {% if app.user is defined and app.user is not null %}
+        {% if user is defined and user is not null %}
+            {% set userContact = user['@id'] %}
+        {% elseif app.user.username is defined and app.user.username is not null %}
+            {% set users = commonground_resource_list({'component': 'uc', 'type': 'users'},{'username' : app.user.username})['hydra:member'] %}
+            {% if users|length > 0 %}
+                {% set userContact = users[0].person %}
+            {% endif %}
+        {% endif %}
+        {% set participants = commonground_resource_list({'component': 'edu', 'type': 'participants'},{'person' : userContact})['hydra:member'] %}
+        {% if participants|length > 0 %}
+            {% set participant = participants[0] %}
+        {% endif %}
+    {% endif %}
+
+    {% set meetsPrerequisites = true %}
+    {% if program.programPrerequisites is defined and program.programPrerequisites is not empty %}
+        {% if participant is not defined or participant is null %}
+            {% set meetsPrerequisites = false %}
+        {% else %}
+            {% for prerequisiteUrl in program.programPrerequisites %}
+                {% set prerequisite = commonground_resource(prerequisiteUrl) %}
+                {% set meetsPrerequisite = false %}
+                {% if prerequisite['@type'] == 'Course' %}
+                    {% if participant.courses is defined and participant.courses is not null %}
+                        {% for course in participant.courses %}
+                            {% if course.id == prerequisite.id %}
+                                {% set meetsPrerequisite = true %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% elseif prerequisite['@type'] == 'Program' %}
+                    {% if participant.programs is defined and participant.programs is not null %}
+                        {% for participantProgram in participant.programs %}
+                            {% if participantProgram.id == prerequisite.id %}
+                                {% set meetsPrerequisite = true %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% endif %}
+                {% if meetsPrerequisite == false %}
+                    {% set meetsPrerequisites = false %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endif %}
+
+    {% set registered = false %}
+    {% if participant is defined and participant is not null %}
+        {% if participant.programs is defined and participant.programs is not null %}
+            {% for participantProgram in participant.programs %}
+                {% if participantProgram.id == program.id %}
+                    {% set registered = true %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endif %}
+
+    <!-- the alert box -->
+
+    <div class="container">
+        <section class="row">
+            <div class="col-xl-9 col-xl-offset-3 col-lg-8 col-lg-offset-4 col-md-9 col-md-offset-3 col-xs-12">
+                <header class="content__header">
+                    <h1 class="content__header-title">{{ program.name|capitalize }}</h1>
+                </header>
+            </div>
+        </section>
+
+        <article>
+            <div class="row">
+                <aside class="col-xl-3 col-lg-4 col-md-3 col-sm-modal">
+                    <nav class="sidenav">
+                        <ul>
+                            <li class="sidenav__item">
+                                <a href="{{ path('app_education_programs') }}">
+                                    Over Programma's
+                                </a>
+                            </li>
+                            {% for program in resources %}
+                                <li class="sidenav__item {% if id is defined and id == program.id %}sidenav__item--active{% endif %}">
+                                    <a href="{{ path('app_education_program', {id: program.id}) }}">
+                                        {{ program.name|capitalize }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </nav>
+                </aside>
+
+                <div class="col-xl-9 col-lg-8 col-md-9">
+                    {% if app.user is defined and app.user is not null %}
+                        {% if meetsPrerequisites == false %}
+                            <div class="notification notification--warning">
+                                <div class="notification__content">
+                                    <div class="notification__type">LET OP</div>
+                                    <h2 class="notification__title">U voldoet nog niet aan de (start)voorwaarden voor dit programma</h2>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+
+                    {% set deadline = false %}
+                    {% if program.applicationDeadline is defined and program.applicationDeadline is not empty %}
+                        {% if program.applicationDeadline|date('Y-m-d') <= 'now'|date('Y-m-d') %}
+                            {% set deadline = true %}
+                        {% endif %}
+
+                        <div class="notification notification--warning">
+                            <div class="notification__content">
+                                <div class="notification__type">LET OP</div>
+                                <h2 class="notification__title">
+                                    {% if deadline == false %}
+                                        Voor dit programma geld een aanmeldings deadline
+                                    {% else %}
+                                        De aanmeldings deadline voor dit programma is verlopen
+                                    {% endif %}
+                                </h2>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <div class="content-background">
+                        <div class="content">
+                            <div class="edit-section">
+                                <h2>Algemene gegevens</h2>
+                            </div>
+                            <ul class="definition-list">
+                                <li class="definition-list__item definition-list__item--horizontal">
+                                    <div class="definition-list__title">
+                                        Naam
+                                    </div>
+                                    <div class="definition-list__description">
+                                        <p>{{ program.name }}</p>
+                                    </div>
+                                </li>
+                                {% if program.provider is defined and program.provider is not empty %}
+                                    <li class="definition-list__item definition-list__item--horizontal">
+                                        <div class="definition-list__title">
+                                            Aanbieder
+                                        </div>
+                                        <div class="definition-list__description">
+                                            <div class="row">
+                                                {% if commonground_is_resource(program.provider) %}
+                                                    {% set provider = commonground_resource(program.provider) %}
+                                                    {% if provider is defined and provider is not empty %}
+                                                        <div class="col-sm-6">
+                                                            <p>Naam: {{ provider.name }}</p>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <div style="float: right;">
+                                                                <div style="display: flex; flex-direction: column; justify-items: center;">
+                                                                    <a href="{{ path('app_education_organization', {id: provider.id}) }}">Lees meer over {{ provider.name }}</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        {% if provider.description is defined and provider.description is not empty %}
+                                                            <div class="col-sm-12">
+                                                                <p>Omschrijving: {{ provider.description }}</p>
+                                                            </div>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </li>
+                                {% endif %}
+
+                                {% if program.programPrerequisites is defined and program.programPrerequisites is not empty %}
+                                    <li class="definition-list__item definition-list__item--horizontal">
+                                        <div class="definition-list__title">
+                                            {% if meetsPrerequisites == false %}
+                                                <span>Programma vereisten</span>
+                                            {% else %}
+                                                Programma vereisten
+                                            {% endif %}
+                                        </div>
+                                        <div class="definition-list__description">
+                                            {% for prerequisiteUrl in program.programPrerequisites %}
+                                                {% set prerequisite = commonground_resource(prerequisiteUrl) %}
+                                                <p>
+                                                    {% if prerequisite['@type'] == 'Course' %}
+                                                        {% if participant.courses is defined and participant.courses is not null %}
+                                                            {% for course in participant.courses %}
+                                                                {% if course.id == prerequisite.id %}
+                                                                    <i class="fas fa-check"></i>
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                        Tutorial: <a href="{{ path('app_education_course', {id: prerequisite.id}) }}">{{ prerequisite.name }}</a>
+                                                    {% elseif prerequisite['@type'] == 'Program' %}
+                                                        {% if participant.programs is defined and participant.programs is not null %}
+                                                            {% for participantProgram in participant.programs %}
+                                                                {% if participantProgram.id == prerequisite.id %}
+                                                                    <i class="fas fa-check"></i>
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                        Programma: <a href="{{ path('app_education_program', {id: prerequisite.id}) }}">{{ prerequisite.name }}</a>
+                                                    {% else %}
+                                                        {{ prerequisite.name }}
+                                                    {% endif %}
+                                                </p>
+                                            {% endfor %}
+                                        </div>
+                                    </li>
+                                {% endif %}
+                                {% if program.applicationDeadline is defined and program.applicationDeadline is not empty %}
+                                    <li class="definition-list__item definition-list__item--horizontal">
+                                        <div class="definition-list__title">
+                                            <span>Aanmelden vóór</span>
+                                        </div>
+                                        <div class="definition-list__description">
+                                            <p>{{ program.applicationDeadline|date("d-m-Y", "Europe/Paris") }}</p>
+                                        </div>
+                                    </li>
+                                {% endif %}
+                                {% if program.startDate is defined and program.startDate is not empty %}
+                                    <li class="definition-list__item definition-list__item--horizontal">
+                                        <div class="definition-list__title">
+                                            Begindatum
+                                        </div>
+                                        <div class="definition-list__description">
+                                            <p>{{ program.startDate|date("d-m-Y", "Europe/Paris") }}</p>
+                                        </div>
+                                    </li>
+                                {% endif %}
+                                {% if program.occupationalCategory is defined and program.occupationalCategory is not empty %}
+                                    <li class="definition-list__item definition-list__item--horizontal">
+                                        <div class="definition-list__title">
+                                            Programma categorie
+                                        </div>
+                                        <div class="definition-list__description">
+                                            <p>{{ program.occupationalCategory }}</p>
+                                        </div>
+                                    </li>
+                                {% endif %}
+                                {% if program.timeToComplete is defined and program.timeToComplete is not empty %}
+                                    <li class="definition-list__item definition-list__item--horizontal">
+                                        <div class="definition-list__title">
+                                            Programmaduur
+                                        </div>
+                                        <div class="definition-list__description">
+                                            <p>{{ program.timeToComplete }}</p>
+                                        </div>
+                                    </li>
+                                {% endif %}
+                                {% if program.educationalProgramMode is defined and program.educationalProgramMode is not empty %}
+                                    <li class="definition-list__item definition-list__item--horizontal">
+                                        <div class="definition-list__title">
+                                            Werktijd
+                                        </div>
+                                        <div class="definition-list__description">
+                                            <p>{{ program.educationalProgramMode }}</p>
+                                        </div>
+                                    </li>
+                                {% endif %}
+                                {% if program.trainingSalary is defined and program.trainingSalary is not empty %}
+                                    <li class="definition-list__item definition-list__item--horizontal">
+                                        <div class="definition-list__title">
+                                            Vergoeding
+                                        </div>
+                                        <div class="definition-list__description">
+                                            <p>{{ program.trainingSalary }}</p>
+                                        </div>
+                                    </li>
+                                {% endif %}
+                                {% if program.description is defined and program.description is not empty %}
+                                    <li class="definition-list__item ">
+                                        <div class="definition-list__title">
+                                            {{ 'beschrijving'|capitalize }}
+                                        </div>
+                                        <div class="definition-list__description">
+                                            <p>{{ program.description }}</p>
+                                        </div>
+                                    </li>
+                                {% endif %}
+                                {% if program.numberOfCredits is defined and program.numberOfCredits is not empty %}
+                                    <li class="definition-list__item definition-list__item--horizontal">
+                                        <div class="definition-list__title">
+                                            Te behalen punten
+                                        </div>
+                                        <div class="definition-list__description">
+                                            <p>{{ program.numberOfCredits }}</p>
+                                        </div>
+                                    </li>
+                                {% endif %}
+                                {% if program.occupationalCredentialAwarded is defined and program.occupationalCredentialAwarded is not empty %}
+                                    <li class="definition-list__item ">
+                                        <div class="definition-list__title">
+                                            {{ 'toegekende beroeps referentie na succesvolle afronding'|capitalize }}
+                                        </div>
+                                        <div class="definition-list__description">
+                                            <p>{{ program.occupationalCredentialAwarded }}</p>
+                                        </div>
+                                    </li>
+                                {% endif %}
+                                {% if program.educationalCredentialAwarded is defined and program.educationalCredentialAwarded is not empty %}
+                                    <li class="definition-list__item ">
+                                        <div class="definition-list__title">
+                                            {{ 'toegekende educatieve referentie na succesvolle afronding'|capitalize }}
+                                        </div>
+                                        <div class="definition-list__description">
+                                            <p>{{ program.educationalCredentialAwarded }}</p>
+                                        </div>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div style="height:20px;"></div>
+
+                    <div class="content-background background--hemelblauw">
+                        <div class="content">
+                            <h2>{{ 'tutorials'|capitalize }}</h2>
+                            <ul class="list list--links list--chevrons columns">
+                                {% for course in program.courses %}
+                                    <li>
+                                        <a href="{{ path('app_education_course', {id: course.id}) }}">
+                                            {{ course.name|capitalize }}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div style="height:20px;"></div>
+
+                    <div class="collapse" role="status">
+                        <div x-uno-collapse="" class="collapse__header">
+                            <i class="collapse__indicator">
+                                <span class="screenreader-only" data-contracted-i18n="ingeklapt" data-expanded-i18n="uitgeklapt"></span>
+                            </i>
+                            <span class="collapse__title">Inschrijven voor dit programma</span>
+                        </div>
+                        <div class="collapse__details collapse__details--open">
+                            {% if registered == false %}
+                                {% if deadline == false %}
+                                    {% if app.user is defined and app.user is not null %}
+                                        {% if meetsPrerequisites == true %}
+                                            <h2>Motiveer uw inschrijving</h2>
+
+                                            <form method="post" action="{{ path('app_education_program', {id: program.id}) }}">
+                                                <div class="input">
+                                                    <label class="input__label" for="reason_visit">Waarom heeft u zich ingeschreven voor dit programma? <span style="color: red">*</span></label>
+                                                    <textarea class="input__control input__control--text" required=""></textarea>
+                                                </div>
+
+                                                <div class="input">
+                                                    <label class="input__label" for="what_did_you_expect">Wat verwacht u van dit programma? <span style="color: red">*</span></label>
+                                                    <textarea class="input__control input__control--text" required=""></textarea>
+                                                </div>
+
+                                                <div class="input">
+                                                    <button type="submit" class="btn">inschrijven <i class="icon icon-arr-forward"></i></button>
+                                                </div>
+                                            </form>
+                                        {% else %}
+                                            <aside class="hint">
+                                                <span class="hint__title">Vereisten</span>
+                                                <p>U moet eerst de volgende programma's en tutorials afgerond hebben voordat u zich voor dit programma kunt inschrijven: </p>
+                                                {% for prerequisiteUrl in program.programPrerequisites %}
+                                                    {% set prerequisite = commonground_resource(prerequisiteUrl) %}
+                                                    <p>
+                                                        {% set meetsPrerequisite = false %}
+                                                        {% if prerequisite['@type'] == 'Course' %}
+                                                            {% if participant.courses is defined and participant.courses is not null %}
+                                                                {% for course in participant.courses %}
+                                                                    {% if course.id == prerequisite.id %}
+                                                                        {% set meetsPrerequisite = true %}
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            {% endif %}
+                                                            {% if meetsPrerequisite == false %}
+                                                                Tutorial: <a href="{{ path('app_education_course', {id: prerequisite.id}) }}">{{ prerequisite.name }}</a>
+                                                            {% endif %}
+                                                        {% elseif prerequisite['@type'] == 'Program' %}
+                                                            {% if participant.programs is defined and participant.programs is not null %}
+                                                                {% for participantProgram in participant.programs %}
+                                                                    {% if participantProgram.id == prerequisite.id %}
+                                                                        {% set meetsPrerequisite = true %}
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            {% endif %}
+                                                            {% if meetsPrerequisite == false %}
+                                                                Programma: <a href="{{ path('app_education_program', {id: prerequisite.id}) }}">{{ prerequisite.name }}</a>
+                                                            {% endif %}
+                                                        {% else %}
+                                                            {{ prerequisite.name }}
+                                                        {% endif %}
+                                                    </p>
+                                                {% endfor %}
+                                            </aside>
+                                        {% endif %}
+                                    {% else %}
+                                        <aside class="hint">
+                                            <span class="hint__title">Inloggen</span>
+                                            <p>U dient eerst in te loggen voordat u zich voor dit programma kunt inschrijven.<br>
+                                                Klik <a href="{{ commonground_cleanurl({"component":"ds"}) }}?responceUrl={{ absolute_url(path('app_default_index')) }}digispoof&backUrl={{ absolute_url(path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params'))) }}">hier</a> om te kunnen inloggen.</p>
+                                        </aside>
+                                    {% endif %}
+                                {% else %}
+                                    <aside class="hint">
+                                        <span class="hint__title">Deadline</span>
+                                        <p>De aanmeldings deadline voor dit programma is verlopen.</p>
+                                    </aside>
+                                {% endif %}
+                            {% else %}
+                                <aside class="hint">
+                                    <span class="hint__title">Ingeschreven</span>
+                                    <p>U bent al ingeschreven voor dit programma.</p>
+                                </aside>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </div>
+
+    <script>
+        // Load collapse component
+        System.import('/uno/components/collapse/collapse.js').then(function (module) {
+            // Select all collapsible elements on the page
+            var collapses = document.querySelectorAll('[x-uno-collapse]');
+            // Initialize all collapses
+            for (var i = 0; i < collapses.length; i++) {
+                new module.Collapse(collapses.item(i));
+            }
+        });
+    </script>
+
+{% endblock %}

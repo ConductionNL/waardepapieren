@@ -1,0 +1,14 @@
+
+<div class="input input--horizontal {%if property.valid is defined and not property.valid %}input--invalid{% endif %}">
+    <div>
+        <label class="input__label" for="{{ property.id }}" id="{{ property.id }}_label">{{ property.title }} {% if property.required is defined and property.required %}<span style="color: red;"><strong>*</strong></span>{% endif %}</label>
+    </div>
+    {%  if property.description %}<span class="input__hint" id="{{ property.id }}_name">{{ property.description }}</span>{% endif %}
+
+    <input class="input__control input__control--text input__control--l" id="{{ property.id }}" type="" name="request[properties][{{ property.name }}]" {% if property.required is defined and property.required %}required{% endif %}
+        {% if property.example is defined and property.example is not empty %}placeholder="{{ property.example }}" {% endif %}
+        {% if request['properties'][property.name] is defined and  request['properties'][property.name] is not empty %}
+        value="{{  request['properties'][property.name] }}"
+        {% endif %}>
+</div>
+

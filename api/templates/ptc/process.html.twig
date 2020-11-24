@@ -1,0 +1,144 @@
+{% extends "content.html.twig" %}
+
+{% block content %}
+    </div>
+{% if stage.show is defined and stage.show != true %}
+    <script>
+        window.location.replace('{{ path('app_ptc_process_stage',{id:process.id, stage:stage.next.slug}) }}');
+    </script>
+{% else %}
+    <div class="container background--grijs-2" style="width: 100% !important; margin: 0 !important; max-width: 100%;">
+        <div class="container">
+        <section class="row">
+            <div class="col-md-12">
+                <div class="content">
+
+                    <header class="content__header">
+                        <a class="backlink" href="{{ path('app_ptc_index') }}">{{ 'processes'|trans|capitalize }}</a>
+                        <header class="content__header">
+                            {% if stage.name is defined %}
+                                <h1 class="content__header-title">
+                                    {% if stage.icon is defined and stage.icon is not empty %}
+                                        <i style="margin-right: 10px;" class="{{ stage.icon }}"></i>
+                                    {% endif %}
+                                    {{ stage.name|capitalize }}
+                                    {% if stage.valid is defined and stage.valid %}<span class="icon icon-check"
+                                                                                         role="presentation" x-uno-tooltip=""
+                                                                                         title="{{ 'You have correctly filled out all required questions for this stage'|trans|capitalize }}"></span>{% endif %}
+                                </h1>
+                                {{ stage.description|raw }}
+                            {% else %}
+                                <h1 class="content__header-title">{{ process.name|capitalize }}</h1>
+                                {{ process.description|raw }}
+                            {% endif %}
+                        </header>
+                    </header>
+                </div><!-- ./content -->
+            </div><!-- ./col -->
+        </section>
+
+        {% if not app.user %}
+            <div class="notification notification--info">
+                <div class="notification__content">
+                    <div class="notification__type">{{ 'attention'|trans|capitalize }}</div>
+                    <h2 class="notification__title">{{ 'you can not save or submit procceses if you are not loged in'|trans|capitalize }}</h2>
+                </div>
+            </div>
+        {% endif %}
+
+
+        {% if request.status == 'in-progress' %}
+            <div class="notification notification--info">
+                <div class="notification__content">
+                    <div class="notification__type">{{ 'attention'|trans|capitalize }}</div>
+                    <h2 class="notification__title">{{ 'this request is in progress and can no longer be altered'|trans|capitalize }}</h2>
+                </div>
+            </div>
+        {% elseif request.status == 'processed ' %}
+            <div class="notification notification--info">
+                <div class="notification__content">
+                    <div class="notification__type">{{ 'attention'|trans|capitalize }}</div>
+                    <h2 class="notification__title">{{ 'this request has been procceced and can no longer be altered'|trans|capitalize }}</h2>
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="row">
+            {% if request %}
+
+                {% if process.stages is defined and process.stages|length > 1 %}
+                    <div class="col-md-8  col-sm-12">
+                {% else %}
+                    <div class="col-sm-12">
+                {% endif %}
+            {% if stage.next.slug is defined %}
+                <form method="post" action="{{ path('app_ptc_process_stage',{id:process.id, stage:stage.next.slug}) }}"
+                      class="form" enctype="multipart/form-data">
+            {% else %}
+                <form method="post" action="{{ path('app_ptc_process',{id:process.id}) }}?submit=true" class="form"
+                      enctype="multipart/form-data">
+            {% endif %}
+                {% include 'ptc/widgets/default.html.twig' %}
+
+                {# lets se whats the current request status #}
+                {% if submit != 'true' and (request.status is not defined or request.status is empty or request.status == 'incomplete' or request.status == 'complete') %}
+
+                    {% if slug is not defined or slug == false or request.currentStage is not defined or request.currentStage is empty %}
+                        {% include 'ptc/widgets/instruction.html.twig' %}
+                    {% else %}
+                        {% include 'ptc/widgets/form.html.twig' %}
+                    {% endif %}
+
+                {% elseif request.status == 'complete' or submit == 'true' %}
+                    {% include 'ptc/widgets/submit.html.twig' %}
+                {% elseif request.status == 'submitted' %}
+                    {% include 'ptc/widgets/submitted.html.twig' %}
+                {% elseif request.status == 'in-progress' %}
+                    {% include 'ptc/widgets/in-progress.html.twig' %}
+                {% elseif request.status == 'processed' %}
+                    {% include 'ptc/widgets/processed.html.twig' %}
+                {% elseif request.status == 'retracted' %}
+                    {% include 'ptc/widgets/retracted.html.twig' %}
+                {% elseif request.status == 'cancelled' %}
+                    {% include 'ptc/widgets/cancelled.html.twig' %}
+                {% else %}
+                    {{ 'unknow process status'|trans|capitalize }}:{{ request.status }}
+                {% endif %}
+
+                </form>
+
+                <!-- Page Break -->
+                <div style="height: 20px;"></div>
+
+                </div><!-- /.col -->
+
+                {% if process.stages is defined and process.stages|length > 1 %}
+                    <div class="col-md-4  col-sm-12">
+                        {% if request.currentStage is not defined or request.currentStage is empty %}
+                            {% if app.user is not empty and process.requireLogin == 'true' %}
+                                {% include 'ptc/widgets/requests.html.twig' %}
+                            {% endif %}
+                        {% else %}
+                            {% include 'ptc/widgets/progressbar.html.twig' %}
+
+                            {% include 'ptc/widgets/stages.html.twig' %}
+
+                            {% include 'ptc/widgets/order.html.twig' %}
+
+                            {% if not app.request.get('submit') %}
+                                {% include 'ptc/widgets/properties.html.twig' %}
+                            {% endif %}
+
+                            {% include 'ptc/widgets/contact.html.twig' %}
+                        {% endif %}
+                    </div>
+                {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+        {% endblock %}
+
+

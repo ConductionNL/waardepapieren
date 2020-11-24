@@ -1,0 +1,37 @@
+
+
+
+.calendarSelect {
+    border: none;
+    background-color: white;
+    width: 70px;
+}
+
+@media only screen and (min-width: 990px) {
+    .calendarSelect{
+        width: 100%;
+    }
+}
+
+.progressbar {
+    background-color: grey;
+    padding: 3px;
+    position: relative;
+    text-align: center;
+}
+
+.progressbar>div {
+    background-color: #148839;
+    width: 0%;
+    height: 20px;
+}
+
+.progressbar>p {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    color: white;
+}

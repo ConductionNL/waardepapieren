@@ -1,0 +1,155 @@
+{% extends 'content.html.twig' %}
+
+{% block content %}
+
+
+{#    {% if app.user is null %}#}
+
+{#        <div class="notification notification--error">#}
+{#            <div class="notification__content">#}
+{#                <div class="notification__type">ERROR</div>#}
+{#                <h2 class="notification__title">{{ 'u must be logged in to visit this page'|trans|capitalize }}</h2>#}
+{#            </div>#}
+{#        </div>#}
+
+{#    {% else %}#}
+
+        <div class="content-background">
+            <div class="content">
+                <div class="row">
+
+                    <div id="subs">
+
+                        <div id="subsText">
+                            <h1 style="display: inline-block">{{ 'current subscriptions'|trans|capitalize }}</h1>
+                            <button id="newSubButton" style="float: right"
+                                    class="btn btn-primary">{{ 'new'|trans|capitalize~' '~'subscription'|trans }}</button>
+                        </div>
+
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th scope="col">{{ 'name'|trans|capitalize }}</th>
+                                <th scope="col">{{ 'description'|trans|capitalize }}</th>
+                                <th scope="col">{{ 'price'|trans|capitalize }}</th>
+                                <th scope="col">{{ 'start date'|trans|capitalize }}</th>
+                                <th scope="col">{{ 'end date'|trans|capitalize }}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>test</td>
+                                <td>test</td>
+                                <td>test</td>
+                                <td>test</td>
+                                <td>test</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="newSubForm">
+
+                        <div id="newSubText">
+                            <h1 style="display: inline-block">{{ 'new'|trans|capitalize~' '~'subscription'|trans }}</h1>
+                            <button id="showSubsButton" style="float: right"
+                                    class="btn btn-primary">{{ 'show current subscriptions'|trans|capitalize }}</button>
+                        </div>
+
+                        <form action="{{ path('app_orc_order') }}" method="post">
+
+                            <div class="input">
+                                <label class="input__label"
+                                       for="subscription">{{ 'subscriptions'|trans|capitalize }}</label>
+                                <select onchange="showSelectedSub(this)" id="subscription" name="offers[]"
+                                        class="input__control input__control--l input__control--select">
+                                    <option hidden="" value=''></option>
+                                    {% for sub in availableSubscriptions %}
+                                        <option value="{{ sub['@id'] }}">{{ sub['name'] }}<span
+                                                style="float: right">{% if sub.priceCurrency is defined and sub.priceCurrency == 'EUR' %}&euro;{% endif %} {{ sub.price }},-</span>
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div id="subDiv" style="display: none">
+                                <ul class="definition-list">
+                                    <li class="definition-list__item definition-list__item--horizontal">
+                                        <div class="definition-list__title">Beschrijving</div>
+                                        <div class="definition-list__description">
+                                            <p id="subDes"></p>
+                                        </div>
+                                    </li>
+                                    <li class="definition-list__item definition-list__item--horizontal">
+                                        <div class="definition-list__title">Prijs</div>
+                                        <div class="definition-list__description">
+                                            <p id="subPrice"></p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="input">
+                                <button type="submit" class="btn btn-block">{{ 'view order'|trans|capitalize }}</button>
+                            </div>
+
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            var newSubButton = document.getElementById('newSubButton');
+            var showSubsButton = document.getElementById('showSubsButton');
+            var newSubForm = document.getElementById('newSubForm');
+            var subs = document.getElementById('subs');
+            var subsText = document.getElementById('subs');
+            var newSubText = document.getElementById('subs');
+
+            newSubButton.style.display = "inline-block";
+            showSubsButton.style.display = "none";
+            newSubForm.style.display = "none";
+            subs.style.display = "block";
+
+            newSubButton.onclick = function () {
+                newSubButton.style.display = "none";
+                showSubsButton.style.display = "inline-block";
+                newSubForm.style.display = "block";
+                subs.style.display = "none";
+            };
+
+            showSubsButton.onclick = function () {
+                newSubButton.style.display = "inline-block";
+                showSubsButton.style.display = "none";
+                newSubForm.style.display = "none";
+                subs.style.display = "block";
+            };
+
+            function showSelectedSub(sub) {
+                document.getElementById('subDiv').style.display = "block";
+
+                {% for sub in availableSubscriptions %}
+                if ('{{ sub['@id'] }}' === sub.value) {
+                    {#var subName = '{{ sub.name }}';#}
+                    var subDes = '{{ sub.description }}';
+                    var subPrice = '{{ sub.price }},-';
+                }
+
+                // document.getElementById('subName').innerText = subName;
+                if (subDes) {
+                    document.getElementById('subDes').innerText = subDes;
+                } else {
+                    document.getElementById('subDes').style.color = "lightgray";
+                    document.getElementById('subDes').innerText = "Dit product heeft geen beschrijving"
+                }
+                document.getElementById('subPrice').innerText = subPrice;
+                {% endfor %}
+            }
+
+        </script>
+
+{#    {% endif %}#}
+
+{% endblock %}

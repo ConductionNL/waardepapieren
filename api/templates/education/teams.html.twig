@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <section class="row">
+        <div class="col-sm-8">
+            <div class="content">
+                <header class="content__header">
+                    <h1>Teams</h1>
+                </header>
+            </div>
+        </div>
+    </section>
+
+    <article>
+        <div class="row">
+            <div class="col-sm-8">
+                <div class="content-background">
+                    <div class="content">
+                        <h2>Over Teams</h2>
+                        <p>Hier komt een introductie over de teams.</p>
+
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.
+                            Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+                            Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.
+                            Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut,
+                            imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt.
+                            Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula,
+                            porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis,
+                            feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet.
+                            Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <div class="row">
+        <div class="col-sm-8">
+            {% if resources is not empty %}
+                <ul class="list list--card list--card-small">
+                    {% for team in resources %}
+                        {% if team.type is defined and team.type is not empty and (team.type == 'Leerjaar' or team.type == 'Klas' or team.type == 'Studiegroep')%}
+                            <li class="card card--small">
+                                <div class="card__content">
+                                    <div class="card__thumb" style="background-image: url('https://picsum.photos/200')"></div>
+                                    <div class="card__body">
+                                        <div class="row" style=" height: 100%; width: 100%;">
+                                            <div class="col-sm-8" style="padding-right: 0px;">
+                                                <span class="card__title">{{ team.name }}</span><br>
+                                                {% if team.description is defined and team.description is not empty %}
+                                                    <span>{{ team.description }}</span>
+                                                {% endif %}
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div style="float: right;">
+                                                    <div style="display: flex; flex-direction: column; justify-items: center;">
+                                                        <p style="margin: 0;">Groep soort: {{ team.type }}</p>
+                                                        <a href="{{ path('app_education_team', {id: team.id}) }}">lees meer</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>Er zijn op dit moment geen teams</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

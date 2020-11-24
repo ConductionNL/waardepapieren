@@ -1,0 +1,47 @@
+<div class="content-background">
+    <div class="content">
+        {% if process.instructionText is defined and process.instructionText is not empty %}
+            {{ process.instructionText|raw }}
+        {% endif %}
+
+        <h2>{{ 'stages'|trans|capitalize }}</h2>
+
+        <ul class="list list--timeline list--timeline-compact">
+            {% if process.id == 'a8b8ce49-d5db-4270-9e42-4b47902fc817' %}
+                <li class="list__item list__item--active"><b>{{ 'instruction'|trans|capitalize }}</b></li>
+            {% endif %}
+            {% for iteratedStage in process.stages %}
+                <li class="list__item">
+                    <b>{{ iteratedStage.name|capitalize }}</b>{% if iteratedStage.sections|length == 1 %} ({{ iteratedStage.sections|length }} vraag) {% else %} ({{ iteratedStage.sections|length }} vragen) {% endif %}
+                </li>
+            {% endfor %}
+            <li class="list__item"><b>{{ 'submit'|trans|capitalize }}</b></li>
+            <li class="list__item list__item--disabled"><b>{{ 'in progress'|trans|capitalize }}</b></li>
+            <li class="list__item list__item--disabled"><b> {{ 'processed'|trans|capitalize }}</b></li>
+        </ul>
+    </div>
+</div>
+
+<!-- Page Break -->
+
+
+<div class="row">
+{% if not app.user %}
+    {% if process.requireLogin is defined and process.requireLogin != 'true' %}
+        <div class="col-md-6" >
+            <a class="btn btn--block" style="width:100%; margin-top: 20px;" data-toggle="modal" data-target="#myModal" onclick="openModal()"><i style="margin-right: 10px" class="fas fa-lock"></i> {{ 'login'|trans|capitalize }}</a>
+        </div>
+        <div class="col-md-6" >
+            <button class="btn btn--block" style="width:100%; margin-top: 20px;" name="submit">{{ 'continue without logging in'|trans|capitalize }}</button>
+        </div>
+    {%  else %}
+    <div class="col-md-12" >
+        <a class="btn btn--block" style="margin-top: 20px;" data-toggle="modal" data-target="#myModal" onclick="openModal()"><i style="margin-right: 10px" class="fas fa-lock"></i> {{ 'login'|trans|capitalize }}</a>
+    </div>
+    {% endif %}
+{% else %}
+    <div class="col-md-12" >
+        <button class="btn btn--block" style="margin-top: 20px;" name="submit">{% if resource.reference is defined and resource.reference is not empty %}{{ 'next'|trans|capitalize }}{% else %}{{ 'start'|trans|capitalize }}{% endif %}</button>
+    </div>
+{% endif %}
+</div>

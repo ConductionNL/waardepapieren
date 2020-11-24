@@ -1,0 +1,75 @@
+<style>
+    .checkinFont {
+        color: #01689b;
+    }
+
+    .background {
+        background-color: white;
+        background-image: none;
+    }
+</style>
+
+<div class="content-background" >
+    <div class="content">
+        <h2>{{ 'check-ins'|capitalize }}</h2>
+        {% if checkins is defined and checkins is not empty %}
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th scope="col">{{ 'location'|trans|capitalize }}</th>
+                <th scope="col">{{ 'placename'|trans|capitalize }}</th>
+                <th scope="col">{{ 'check-in date'|trans|capitalize }}</th>
+                <th scope="col">{{ 'deletion date'|trans|capitalize }}</th>
+
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for checkin in checkins %}
+            <tr>
+                <td>{{ commonground_resource(checkin.node.organization).name|capitalize }}</td>
+                <td>{{ commonground_resource(checkin.node.place).name|capitalize }}</td>
+                <td>{{ checkin.dateCreated|date("H:i d-m-Y", "Europe/Amsterdam") }}</td>
+                <td>{{ checkin.dateToDestroy|date("H:i d-m-Y", "Europe/Amsterdam") }}</td>
+                <td><a data-toggle="modal" data-target="#checkin-{{ checkin.id }}" onclick="openModal{{ checkin.id|replace({'-': ''}) }}()">{{ 'edit'|trans|capitalize }}</a></td>
+
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+            <aside class="hint">
+                <h2 class="hint__title">{{ 'no checkins available'|trans|capitalize }}</h2>
+            </aside>
+        {% endif %}
+    </div><!-- /.content -->
+</div><!-- /.content-background -->
+
+
+{% for checkin in checkins %}
+    {% include 'chin/modals/checkin_modal.html.twig' with { 'item':checkin } %}
+    <script>
+        let myModal{{ checkin.id|replace({'-': ''}) }};
+        // Load modal component
+        System.import('/uno/components/modal/modal.js').then(function (module) {
+            myModal{{ checkin.id|replace({'-': ''}) }} = new module.Modal(document.getElementById('checkin-{{ checkin.id }}'));
+        });
+
+        // Called when the user clicks the button
+        function openModal{{ checkin.id|replace({'-': ''}) }}() {
+            myModal{{ checkin.id|replace({'-': ''}) }}.open();
+        }
+        // Called when the user clicks the button
+        function closeModal{{ checkin.id|replace({'-': ''}) }}() {
+            myModal{{ checkin.id|replace({'-': ''}) }}.close();
+        }
+    </script>
+{% endfor %}
+
+{% if app.request.query.get('showCheckin') %}
+<script>
+    $(window).on('load',function(){
+        openModal0();
+    });
+</script>
+{% endif %}
