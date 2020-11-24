@@ -19,11 +19,11 @@
             gtag('config', '{{ application['defaultConfiguration']['configuration']['googleTagId'] }}');
         </script>
     {% endif %}
-    {% if app.user is defined and app.user is not empty %}
+    {% if app.user is defined and app.user is not empty and app_session_duration is defined and app_session_duration is not empty %}
         <script>
             setTimeout(function () {
                 window.location.href = '/login/loggedOut';
-            }, 910000);
+            }, {{ (app_session_duration * 1000) + 5000 }});
         </script>
     {% endif %}
 
@@ -104,6 +104,9 @@
     {# Add the new slick-theme.css if you want the default styling #}
     <link rel="stylesheet" type="text/css" href="/slick/slick-theme.css"/>
 
+    <!-- Default GEM widget styling -->
+    <link rel="stylesheet" href="https://www.develop.virtuele-gemeente-assistent.nl/static/css/widget-v0.11.7.css" type="text/css">
+
     <script src="/uno/vendor/js/Promise.min.js"></script>
     <script src="/uno/vendor/js/system.js"></script>
     <script async defer
@@ -166,6 +169,32 @@
         .nav--input__control-group {
             width: 200px;
         }
+
+        {# Navigation position control #}
+        .nav-position {
+            width: 100%;
+            display: flex;
+            justify-content: flex-start;
+            order: 2;
+        }
+
+        .nav-image {
+            order: 1;
+        }
+
+        @media only screen and (max-width: 550px) {
+            .nav-position {
+                width: fit-content;
+                display: flex;
+                justify-content: flex-start;
+                order: 1;
+            }
+
+            .nav-image {
+                order: 2;
+            }
+        }
+
 
         .header-logo a:before {
             background: url("data:image/svg+xml;base64,PHN2ZyBpZD0iw5HDq8Ouw6lfMSIgZGF0YS1uYW1lPSLDkcOrw67DqSAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5MzkuNTcgMTA5OC44OSI+PGRlZnM+PHN0eWxlPi5jbHMtMXtmaWxsOiNjMDA7fS5jbHMtMntmaWxsOiMzNjY5YTU7fTwvc3R5bGU+PC9kZWZzPjx0aXRsZT56dWlkIERyZWNodCBOb3BheW9mZjwvdGl0bGU+PHBhdGggY2xhc3M9ImNscy0xIiBkPSJNNTc2LDk2Ny4xMWMtNTYsNDEuMzktMTAxLjQzLDY2LjA1LTExMSw3MS4xMWE0LDQsMCwwLDEtMy43MiwwYy0yNS41Ny0xMy41LTMwNy40OC0xNjctMzYxLjM3LTQwNmE0LDQsMCwwLDEsNy4zOC0yLjgxYzM4LjU0LDY4LjkzLDEyNS4zNywxMTkuMjYsMTg3LjUxLDE1Mi42OSw1Mi41LDI4LjIzLDExMy42Miw1MC4yMSwxNjguMzQsODAuMzZDNTA4LjIyLDg4Ny4yOSw1NDksOTE3LjY5LDU3Nyw5NjEuNzVBNCw0LDAsMCwxLDU3Niw5NjcuMTFaIi8+PHBhdGggY2xhc3M9ImNscy0xIiBkPSJNODM0LjcxLDIxNS44NFYxMDEuNjVhOC45LDguOSwwLDAsMC04LjktOC45MWgtMjczQTE0LjU5LDE0LjU5LDAsMCwwLDUzOS40MywxMDNsLTE5LDcwLjI4YTE0LjU4LDE0LjU4LDAsMCwxLTEzLjM1LDEwLjIxSDM4M1YxNDcuMTJjMzYuODQtMS4zNCw2Mi40Mi03LjQ1LDgwLjE2LTE1LjEsMjkuNDktMTIuNzQsMzcuMzUtMjkuNzgsMzkuMzYtMzYuNDRhMi4yMiwyLjIyLDAsMCwwLTIuMTMtMi44NEgzMzQuNjFjLTMzLjg4LDAtNjcuOTEsOS4yLTg2LjA4LDQwLjEtMTkuMzgsMzIuOTQtMTguMjQsNzguMDctMTYuNDksMTE0Ljg5LDAsMC01MC02Ni4yMi00MC43Ni0xNDguODdhNS41MSw1LjUxLDAsMCwwLTUuNDgtNi4xMkgxMDAuMzJhOC43OSw4Ljc5LDAsMCwwLTguNzgsOC43OVYxMjRjNC44Niw3OS4yNiw0OS4xNCwyODguNTcsMzcxLjU4LDM4NS40QzczNSw1OTEuMDYsNzc1LjQyLDcxNi4zLDc4My4zMiw3MzguMjRhMS4zOCwxLjM4LDAsMCwwLDIuNTMuMTdjNzUuMy0xNDMuOS04MS40OS0yNDcuNTItODEuNDktMjQ3LjUyLDMxLjMzLDAsNzkuMjMsMTcuOTQsMTE4LDM5Ljc5YTguMjgsOC4yOCwwLDAsMCwxMi4zNy03LjIxVjM2My44M2ExNC42LDE0LjYsMCwwLDAtMTguMTUtMTQuMTdjLTEzLjUsMy4zOS0zMCw2LjY4LTMyLjg3LDcuMjMtMzkuNDYsNy43Ny04NC43NSwxMS4xNS0xMjItOC43M3MtNDcuMjYtNjYuMjctMTguMzMtOTguMjNjMjUuMy0yOCw2NS41My0zNy41LDEwMi4yOS0zNSwyMy41NiwxLjYyLDU1LjE4LDcuNTksNzMuNzEsMTIuNjNBMTIuMTYsMTIuMTYsMCwwLDAsODM0LjcxLDIxNS44NFoiLz48cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik02NTQuODcsOTAxLjVhNCw0LDAsMCwxLTYtLjExYy0xMy41Ni0xNi4yNS03NS40Ni04Ni0xODUuNzMtMTQ2LjQyQTc1Ni40NCw3NTYuNDQsMCwwLDAsMzgzLDcxN2MtMTczLjUzLTcwLjE3LTI4Mi42OS0xNDMuMy0yOTEuNDItMzM4LjF2LTYuMjJhNCw0LDAsMCwxLDcuMjEtMi4zNGM2My42MSw4NywxNDQuNjksMTM3LjksMjQzLjE2LDE4Ni43Nyw0MC4yOCwyMCw4MS4xNywzNi4zMiwxMjEuMjEsNTMuMjUsNjYuMTUsMjgsMTMwLDU3LjU0LDE4NC43MywxMDcuOCwxNi4xOCwxNC44NSwyOS4wOSwyOS4xNSwzNi44MSw1MEM2OTUuNzUsNzk4LjEzLDcwMi41NSw4NDkuMTcsNjU0Ljg3LDkwMS41WiIvPjwvc3ZnPg==") no-repeat bottom;
@@ -529,6 +558,40 @@
             idth: 4rem
         }
 
+        /* user circle on mobile */
+        .user--circle {
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            padding: 8px;
+            padding-top: 3px;
+            padding-bottom: 3px;
+
+            background: var(--primary-color);
+            color: var(--background);
+            text-align: center;
+            font-style: normal;
+            font-weight: bold;
+        }
+
+
+        {% if application['defaultConfiguration']['configuration']['gemId'] is defined and application['defaultConfiguration']['configuration']['gemId'] is not empty %}
+
+        /* GEM WEBCHAT */
+
+         #webchat .rw-launcher, #webchat .rw-header, #webchat .rw-close-button, #webchat .rw-client {
+             background-color:  var(--secondary) !important;
+         }
+
+        #webchat .rw-avatar {
+            background-color:  var(--primary) !important;
+        }
+
+        #webchat .rw-header .rw-avatar {
+            background-color:  var(--secondary) !important;
+        }
+
+    {% endif %}
     </style>
 
     {% if application['defaultConfiguration']['configuration']['stickyMenu'] is defined and application['defaultConfiguration']['configuration']['stickyMenu'] == true %}
@@ -581,6 +644,7 @@
 
 
 
+
     {% block style %}{% endblock %}
 
 </head>
@@ -600,7 +664,7 @@
 
     <main class="skiplink-target main" id="content" tabindex="-1">
 
-        <div class="container">
+        <div class="container flash">
             <!-- the alert box -->
             {% set flashes = [] %}
             {% for label, messages in app.flashes() %}
@@ -638,14 +702,12 @@
 
             // Get the header
             var header = document.getElementById("docs-nav");
-            var stickyMobileNav = document.getElementById("stickyMobileNav");
+            // var stickyMobileNav = document.getElementById("stickyMobileNav");
 
             // Get the offset position of the navbar
             var sticky = header.offsetTop;
-            console.log(header.offsetTop);
 
-            var sticky = stickyMobileNav.offsetTop;
-            console.log(stickyMobileNav.offsetTop);
+            // var sticky = stickyMobileNav.offsetTop;
 
             // Add the sticky class to the header when you reach its scroll position. Remove "sticky" when you leave the scroll position
             function myFunction() {
@@ -653,14 +715,14 @@
                     header.classList.remove("sticky-transition");
                     header.classList.add("sticky-nav");
 
-                    stickyMobileNav.classList.remove("sticky-mobile-transition");
-                    stickyMobileNav.classList.add("sticky-mobile-nav");
+                    // stickyMobileNav.classList.remove("sticky-mobile-transition");
+                    // stickyMobileNav.classList.add("sticky-mobile-nav");
                 } else {
                     header.classList.add("sticky-transition");
                     header.classList.remove("sticky-nav");
 
-                    stickyMobileNav.classList.add("sticky-mobile-transition");
-                    stickyMobileNav.classList.remove("sticky-mobile-nav");
+                    // stickyMobileNav.classList.add("sticky-mobile-transition");
+                    // stickyMobileNav.classList.remove("sticky-mobile-nav");
                 }
             }
         </script>
@@ -720,6 +782,14 @@
     <script type="text/javascript" id="hs-script-loader" async defer
             src="//js.hs-scripts.com/{{ application['defaultConfiguration']['configuration']['hubspotId'] }}.js"></script>
     <!-- End of HubSpot Embed Code -->
+
+{% elseif application['defaultConfiguration']['configuration']['gemId'] is defined and application['defaultConfiguration']['configuration']['gemId'] is not empty %}
+    <!-- GEM  -->
+    <div id="webchat"></div>
+    <!-- Basis script voor het widget -->
+    <script src="https://www.develop.virtuele-gemeente-assistent.nl/static/js/webchat-v0.11.7.js"></script>
+    <!--- Custom widget script -->
+    <script id="widget-script" src="https://www.develop.virtuele-gemeente-assistent.nl/static/js/widget-v0.11.7.js" data-municipality="{{ application['defaultConfiguration']['configuration']['gemId'] }}"></script>
 {% endif %}
 
 </body>

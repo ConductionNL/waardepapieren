@@ -8,7 +8,7 @@
                         {% endif %}
                         {{ section.name|capitalize }} {% if section.valid is defined and section.valid and section.properties|length > 0 %}<span class="icon icon-check" role="presentation" x-uno-tooltip="" title="{{ 'You have correctly filled out all required questions for this section'|trans|capitalize }}"></span>{% endif %}</h2>
                     {% autoescape false %}
-                        <p>{{ section.description|capitalize|raw }}</p>
+                        <p>{{ section.description|first|capitalize ~ section.description|slice(1)|raw }}</p>
                     {% endautoescape %}
                     {% for property in section.properties %}
                         {% set property = commonground_resource(property) %}
@@ -48,6 +48,8 @@
                             {% include 'ptc/formelements/wrcOrganization.html.twig' %}
 
                             {# Let slook for formats #}
+                        {% elseif property.format == 'iban' and property.type == 'array' %}
+                            {% include 'ptc/formelements/iban.html.twig' %}
                         {% elseif property.format == 'phonenumber' %}
                             {% include 'ptc/formelements/generic.html.twig'  with {'type': 'tel'} %}
                         {% elseif property.format == 'datetime' %}

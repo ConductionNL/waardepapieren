@@ -46,7 +46,7 @@ class UserController extends AbstractController
         EventDispatcherInterface $dispatcher,
         $loggedOut = false
     ) {
-        $application = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'applications', 'id' => getenv('APP_ID')]);
+        $application = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'applications', 'id' => $params->get('app_id')]);
 
         if ($loggedOut == 'loggedOut') {
             $text = 'U bent uitgelogd omdat de sessie is verlopen.';
@@ -74,7 +74,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/digispoof")
+     * @Route("/auth/digispoof")
      * @Template
      */
     public function DigispoofAction(Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
@@ -85,7 +85,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/eherkenning")
+     * @Route("/auth/eherkenning")
      * @Template
      */
     public function EherkenningAction(Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
@@ -96,23 +96,80 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/idin")
+     * @Route("/auth/idin/login")
      * @Template
      */
-    public function IdinAction(Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
+    public function IdinLoginAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
     {
-        return $this->redirect('https://eu01.preprod.signicat.com/oidc/authorize?response_type=code&scope=openid+signicat.idin&client_id=demo-preprod-basic&redirect_uri='.$request->getUri().'&acr_values=urn:signicat:oidc:method:idin-ident&state=123');
+        $session->set('backUrl', $request->query->get('backUrl'));
+
+        $redirect = str_replace('http:', 'https:', $request->getUri());
+        if (strpos($redirect, '?') == true) {
+            $redirect = substr($redirect, 0, strpos($redirect, '?'));
+        }
+
+        $provider = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'idin', 'application' => $params->get('app_id')])['hydra:member'];
+        $provider = $provider[0];
+
+        if (isset($provider['configuration']['app_id']) && isset($provider['configuration']['secret']) && isset($provider['configuration']['endpoint'])) {
+            $clientId = $provider['configuration']['app_id'];
+
+            if ($params->get('app_env') == 'prod') {
+                return $this->redirect('https://eu01.signicat.com/oidc/authorize?response_type=code&scope=openid+signicat.idin&client_id='.$clientId.'&redirect_uri='.$redirect.'&acr_values=urn:signicat:oidc:method:idin-login&state=123');
+            } else {
+                return $this->redirect('https://eu01.preprod.signicat.com/oidc/authorize?response_type=code&scope=openid+signicat.idin&client_id='.$clientId.'&redirect_uri='.$redirect.'&acr_values=urn:signicat:oidc:method:idin-login&state=123');
+            }
+        } else {
+            return $this->render('500.html.twig');
+        }
     }
 
     /**
-     * @Route("/facebook")
+     * @Route("/auth/idin/ident")
+     * @Template
+     */
+    public function IdinAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
+    {
+        $session->set('backUrl', $request->query->get('backUrl'));
+
+        $redirect = str_replace('http:', 'https:', $request->getUri());
+        if (strpos($redirect, '?') == true) {
+            $redirect = substr($redirect, 0, strpos($redirect, '?'));
+        }
+
+        $provider = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'idin', 'application' => $params->get('app_id')])['hydra:member'];
+        $provider = $provider[0];
+
+        if (isset($provider['configuration']['app_id']) && isset($provider['configuration']['secret']) && isset($provider['configuration']['endpoint'])) {
+            $clientId = $provider['configuration']['app_id'];
+
+            if ($params->get('app_env') == 'prod') {
+                return $this->redirect('https://eu01.signicat.com/oidc/authorize?response_type=code&scope=openid+signicat.idin&client_id='.$clientId.'&redirect_uri='.$redirect.'&acr_values=urn:signicat:oidc:method:idin-ident&state=123');
+            } else {
+                return $this->redirect('https://eu01.preprod.signicat.com/oidc/authorize?response_type=code&scope=openid+signicat.idin&client_id='.$clientId.'&redirect_uri='.$redirect.'&acr_values=urn:signicat:oidc:method:idin-ident&state=123');
+            }
+        } else {
+            return $this->render('500.html.twig');
+        }
+    }
+
+    /**
+     * @Route("/auth/irma")
+     * @Template
+     */
+    public function IrmaAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
+    {
+    }
+
+    /**
+     * @Route("/auth/facebook")
      * @Template
      */
     public function FacebookAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
     {
-        $session->set('code', $request->query->get('nodeCode'));
+        $session->set('backUrl', $request->query->get('backUrl'));
 
-        $provider = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['name' => 'facebook'])['hydra:member'];
+        $provider = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'facebook', 'application' => $params->get('app_id')])['hydra:member'];
         $provider = $provider[0];
 
         $redirect = $request->getUri();
@@ -121,34 +178,39 @@ class UserController extends AbstractController
         }
 
         if (isset($provider['configuration']['app_id']) && isset($provider['configuration']['secret'])) {
-            return $this->redirect('https://www.facebook.com/v8.0/dialog/oauth?client_id='.$provider['configuration']['app_id'].'&scope=email&redirect_uri='.$redirect.'&state={st=state123abc,ds=123456789}');
+            return $this->redirect('https://www.facebook.com/v8.0/dialog/oauth?client_id='.str_replace('"', '', $provider['configuration']['app_id']).'&scope=email&redirect_uri='.$redirect.'&state={st=state123abc,ds=123456789}');
         } else {
             return $this->render('500.html.twig');
         }
     }
 
     /**
-     * @Route("/github")
+     * @Route("/auth/github")
      * @Template
      */
-    public function githubAction(Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
+    public function githubAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
     {
-        $application = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'applications', 'id' => getenv('APP_ID')]);
+        $session->set('backUrl', $request->query->get('backUrl'));
 
-        return $this->redirect('https://github.com/login/oauth/authorize?state='.getenv('APP_ID').'&redirect_uri=https://checkin.dev.zuid-drecht.nl/github&client_id=0106127e5103f0e5af24');
+        $providers = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'github', 'application' => $params->get('app_id')])['hydra:member'];
+        $provider = $providers[0];
+
+        return $this->redirect('https://github.com/login/oauth/authorize?state='.$this->params->get('app_id').'&redirect_uri=https://checkin.dev.zuid-drecht.nl/github&client_id=0106127e5103f0e5af24');
     }
 
     /**
-     * @Route("/gmail")
+     * @Route("/auth/gmail")
      * @Template
      */
     public function gmailAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
     {
-        $session->set('code', $request->query->get('nodeCode'));
-        $provider = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['name' => 'gmail'])['hydra:member'];
-        $provider = $provider[0];
+        $session->set('backUrl', $request->query->get('backUrl'));
+
+        $providers = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'gmail', 'application' => $params->get('app_id')])['hydra:member'];
+        $provider = $providers[0];
 
         $redirect = $request->getUri();
+
         if (strpos($redirect, '?') == true) {
             $redirect = substr($redirect, 0, strpos($redirect, '?'));
         }
@@ -193,7 +255,7 @@ class UserController extends AbstractController
         $variables['post'] = $request->request->all();
 
         // Get resource
-        $application = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'applications', 'id' => getenv('APP_ID')]);
+        $application = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'applications', 'id' => $params->get('app_id')]);
         $variables['userGroups'] = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'groups'], ['organization' => $application['organization']['@id'], 'canBeRegisteredFor' => true])['hydra:member'];
         // Lets see if there is a post to procces
         if ($request->isMethod('POST')) {
@@ -280,6 +342,105 @@ class UserController extends AbstractController
             $commonGroundService->createResource($user, ['component' => 'uc', 'type' => 'users']);
 
             return $this->redirectToRoute('app_default_index');
+        }
+
+        return $variables;
+    }
+
+    /**
+     * @Route("/userinfo")
+     * @Template
+     */
+    public function userInfoAction(Session $session, Request $request, ApplicationService $applicationService, CommonGroundService $commonGroundService, ParameterBagInterface $params)
+    {
+        $variables = [];
+
+        $variables['person'] = $commonGroundService->getResource($this->getUser()->getPerson());
+
+        if ($request->isMethod('POST') && $request->get('info')) {
+            $resource = $request->request->all();
+            $person = [];
+            $person['@id'] = $commonGroundService->cleanUrl(['component' => 'cc', 'type' => 'people', 'id' => $variables['person']['id']]);
+            $person['id'] = $variables['person']['id'];
+
+            if (isset($resource['firstName'])) {
+                $person['givenName'] = $resource['firstName'];
+            }
+            if (isset($resource['lastName'])) {
+                $person['familyName'] = $resource['lastName'];
+            }
+            if (isset($resource['birthday']) && $resource['birthday'] !== '') {
+                $person['birthday'] = $resource['birthday'];
+            }
+            if (isset($resource['email'])) {
+                $person['emails'][0]['email'] = $resource['email'];
+            }
+            if (isset($resource['telephone'])) {
+                $person['telephones'][0]['telephone'] = $resource['telephone'];
+            }
+            if (isset($resource['street'])) {
+                $person['adresses'][0]['street'] = $resource['street'];
+            }
+            if (isset($resource['houseNumber'])) {
+                $person['adresses'][0]['houseNumber'] = $resource['houseNumber'];
+            }
+            if (isset($resource['houseNumberSuffix'])) {
+                $person['adresses'][0]['houseNumberSuffix'] = $resource['houseNumberSuffix'];
+            }
+            if (isset($resource['postalCode'])) {
+                $person['adresses'][0]['postalCode'] = $resource['postalCode'];
+            }
+            if (isset($resource['locality'])) {
+                $person['adresses'][0]['locality'] = $resource['locality'];
+            }
+
+            $variables['person'] = $commonGroundService->saveResource($person, ['component' => 'cc', 'type' => 'people']);
+        } elseif ($request->isMethod('POST') && $request->get('password')) {
+            $newPassword = $request->get('newPassword');
+            $repeatPassword = $request->get('repeatPassword');
+
+            if ($newPassword !== $repeatPassword) {
+                $variables['error'] = true;
+
+                return $variables;
+            } else {
+                $credentials = [
+                    'username'   => $this->getUser()->getUsername(),
+                    'password'   => $request->request->get('currentPassword'),
+                    'csrf_token' => $request->request->get('_csrf_token'),
+                ];
+
+                $user = $commonGroundService->createResource($credentials, ['component'=>'uc', 'type'=>'login'], false, true, false, false);
+
+                if (!$user) {
+                    $variables['wrongPassword'] = true;
+
+                    return $variables;
+                }
+
+                $users = $commonGroundService->getResourceList(['component'=>'uc', 'type'=>'users'], ['username'=> $this->getUser()->getUsername()], true, false, true, false, false)['hydra:member'];
+                $user = $users[0];
+
+                $user['password'] = $newPassword;
+
+                $this->addFlash('success', 'wachtwoord aangepast');
+                $commonGroundService->updateResource($user);
+
+                $message = [];
+
+                if ($params->get('app_env') == 'prod') {
+                    $message['service'] = '/services/eb7ffa01-4803-44ce-91dc-d4e3da7917da';
+                } else {
+                    $message['service'] = '/services/1541d15b-7de3-4a1a-a437-80079e4a14e0';
+                }
+                $message['status'] = 'queued';
+                $message['data'] = ['receiver' => $variables['person']['name']];
+                $message['content'] = $commonGroundService->cleanUrl(['component'=>'wrc', 'type'=>'templates', 'id'=>'4125221c-74e0-46f9-97c9-3825a2011012']);
+                $message['reciever'] = $user['username'];
+                $message['sender'] = 'no-reply@conduction.nl';
+
+                $commonGroundService->createResource($message, ['component'=>'bs', 'type'=>'messages']);
+            }
         }
 
         return $variables;

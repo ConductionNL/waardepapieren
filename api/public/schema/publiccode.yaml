@@ -1,13 +1,13 @@
 publiccodeYmlVersion: "0.2"
 
-name: pan
+name: waardepapieren
 applicationSuite: commonground
-url: "https://github.com/ConductionNL/pan"
-landingURL: "www.zuid-drecht.nl" 
+url: "https://github.com/ConductionNL/waardepapieren"
+landingURL: "dev.waardepapieren.com" 
 isBasedOn: "https://github.com/ConductionNL/Proto-component-commonground.git" 
 softwareVersion: "V1.0"
-releaseDate: "2020-17-09"
-logo: www.zuid-drecht.nl 
+releaseDate: "2020-24-11"
+logo: www.waardepapieren.com 
 monochromeLogo: img/logo-mono.svg
 
 inputTypes:
@@ -37,7 +37,7 @@ usedBy:
   - Gemeente Hoorn
   
 
-roadmap: "https://github.com/ConductionNL/pan/blob/master/ROADMAP.md"
+roadmap: "https://github.com/ConductionNL/waardepapieren/blob/master/ROADMAP.md"
 
 developmentStatus: development
 
@@ -66,8 +66,8 @@ description:
 #          on multiple rows. You should note what the software
 #          is and why one should need it.
 
-    documentation: "https://github.com/ConductionNL/pan/blob/master/README.md"
-    apiDocumentation: "www.zuid-drecht.nl"
+    documentation: "https://github.com/ConductionNL/waardepapieren/blob/master/README.md"
+    apiDocumentation: "dev.waardepapieren.com"
 #
 #    features:
 #       - Very important feature

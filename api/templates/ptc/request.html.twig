@@ -27,7 +27,7 @@
 <div class="row">
     <div class="col-md-8  col-sm-12">
         <form method="post" action="{{ path('app_ptc_slug',{id:process.id, slug:slug}) }}" class="form" enctype="multipart/form-data">
-            {% include 'ptc/default.html.twig' %}
+            {% include 'ptc/widgets/default.html.twig' %}
 
             {% if slug is not defined or slug == 'instruction' %}
                 {% include 'ptc/instruction.html.twig' %}
@@ -39,7 +39,7 @@
             {% elseif slug == 'processed' %}
                 {% include 'ptc/processed.html.twig' %}
             {% elseif stage.sections is defined and stage.sections is not null %}
-                {% include 'ptc/widgets/form.html.twig' %}
+                {% include 'ptc/widgets/procces.html.twig' %}
             {% endif %}
             <!-- Page Break -->
             <div style="height: 20px;"></div>

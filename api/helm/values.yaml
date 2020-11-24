@@ -4,21 +4,21 @@
 
 settings:
   registryBase: docker.io/conduction
-  projectName: pan
-  name: pan
-  title: Proto Applicatie NL Design
+  projectName: waardepapieren
+  name: waardepapieren
+  title: Waardepapieren
   version: V1.0
   majorVersion: v1
-  id: 31a2ad29-ee03-4aa9-be81-abf1fda7bbcc
+  id: aae458e7-dd33-494c-a99c-383a7b1658a0
   description: 'Naast deze JSON rest API is er ook een [graphql](/graphql) interface beschikbaar.'
   type: application
-  repro: https://github.com/ConductionNL/pan
-  demo: www.zuid-drecht.nl
-  container: https://hub.docker.com/repository/docker/conduction/pc-php
+  repro: https://github.com/ConductionNL/waardepapieren
+  demo: dev.waardepapieren.com
+  container: https://hub.docker.com/repository/docker/conduction/waardepapieren-php
   domain: zuid-drecht.nl
   subdomain: false
-  subpath: false
-  subpathRouting: 
+  subpath: 
+  subpathRouting: true
   organisationName: Conduction
   email: info@conduction.nl
   country: Netherlands
