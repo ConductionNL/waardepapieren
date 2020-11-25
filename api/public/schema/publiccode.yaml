@@ -3,10 +3,10 @@ publiccodeYmlVersion: "0.2"
 name: waardepapieren
 applicationSuite: commonground
 url: "https://github.com/ConductionNL/waardepapieren"
-landingURL: "dev.waardepapieren.com" 
+landingURL: "dev.waardepapieren-gemeentehoorn.commonground.nu" 
 isBasedOn: "https://github.com/ConductionNL/Proto-component-commonground.git" 
 softwareVersion: "V1.0"
-releaseDate: "2020-24-11"
+releaseDate: "2020-25-11"
 logo: www.waardepapieren.com 
 monochromeLogo: img/logo-mono.svg
 
@@ -67,7 +67,7 @@ description:
 #          is and why one should need it.
 
     documentation: "https://github.com/ConductionNL/waardepapieren/blob/master/README.md"
-    apiDocumentation: "dev.waardepapieren.com"
+    apiDocumentation: "dev.waardepapieren-gemeentehoorn.commonground.nu"
 #
 #    features:
 #       - Very important feature
