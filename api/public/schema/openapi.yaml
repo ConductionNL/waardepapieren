@@ -3538,12 +3538,12 @@ definitions:
         description: 'The moment this request was created'
         type: string
         format: date-time
-        example: '2020-11-24 14:40:33'
+        example: '2020-11-25 08:28:49'
       dateModified:
         description: 'The moment this request last Modified'
         type: string
         format: date-time
-        example: '2020-11-24 14:40:33'
+        example: '2020-11-25 08:28:49'
     required: []
   AuditTrail-write:
     properties:
@@ -3591,12 +3591,12 @@ definitions:
         description: 'The moment this request was created'
         type: string
         format: date-time
-        example: '2020-11-24 14:40:33'
+        example: '2020-11-25 08:28:49'
       dateModified:
         description: 'The moment this request last Modified'
         type: string
         format: date-time
-        example: '2020-11-24 14:40:33'
+        example: '2020-11-25 08:28:49'
     required: []
   ChangeLog-write:
     properties:
@@ -3698,8 +3698,8 @@ securityDefinitions:
 host: irc.zaakonline.nl
 servers:
   -
-    name: zuid-drecht.nl
-    url: waardepapieren.dev.zuid-drecht.nl
+    name: waardepapieren-gemeentehoorn.commonground.nu
+    url: waardepapieren.dev.waardepapieren-gemeentehoorn.commonground.nu
 externalDocs:
   -
     description: 'OAS Documentatie'
