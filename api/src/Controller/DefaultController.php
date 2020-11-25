@@ -29,9 +29,14 @@ class DefaultController extends AbstractController
         // On an index route we might want to filter based on user input
         $variables['query'] = array_merge($request->query->all(), $variables['post'] = $request->request->all());
 
-        if ($this->getUser()) {
-            $person = $commonGroundService->getResource($this->getUser()->getPerson());
-            $personUrl = $commonGroundService->cleanUrl(['component' => 'cc', 'type' => 'people', 'id' => $person['id']]);
+//        if ($this->getUser()) {
+//            $person = $commonGroundService->getResource($this->getUser()->getPerson());
+//            $personUrl = $commonGroundService->cleanUrl(['component' => 'cc', 'type' => 'people', 'id' => $person['id']]);
+//        }
+
+        if ($request->isMethod('POST')) {
+            $variables['certificate'] = $request->request->all();
+            $variables['certificate'] = $commonGroundService->createResource($variables['certificate'], 'https://waardepapieren-gemeentehoorn.commonground.nu/api/v1/waar/certificates');
         }
 
         return $variables;
