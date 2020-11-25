@@ -1,48 +1,44 @@
-{% set application = commonground_application() %}
+{#{% set application = commonground_application() %}#}
 <!DOCTYPE html>
 <html lang="nl-NL">
 <head>
 
-    {% if application['defaultConfiguration']['configuration']['googleTagId'] is defined and application['defaultConfiguration']['configuration']['googleTagId'] is not empty %}
-        <!-- Global site tag (gtag.js) - Google Analytics -->
-        <script async
-                src="https://www.googletagmanager.com/gtag/js?id={{ application['defaultConfiguration']['configuration']['googleTagId'] }}"></script>
-        <script>
-            window.dataLayer = window.dataLayer || [];
+{#    {% if application['defaultConfiguration']['configuration']['googleTagId'] is defined and application['defaultConfiguration']['configuration']['googleTagId'] is not empty %}#}
+{#        <!-- Global site tag (gtag.js) - Google Analytics -->#}
+{#        <script async#}
+{#                src="https://www.googletagmanager.com/gtag/js?id={{ application['defaultConfiguration']['configuration']['googleTagId'] }}"></script>#}
+{#        <script>#}
+{#            window.dataLayer = window.dataLayer || [];#}
 
-            function gtag() {
-                dataLayer.push(arguments);
-            }
+{#            function gtag() {#}
+{#                dataLayer.push(arguments);#}
+{#            }#}
 
-            gtag('js', new Date());
+{#            gtag('js', new Date());#}
 
-            gtag('config', '{{ application['defaultConfiguration']['configuration']['googleTagId'] }}');
-        </script>
-    {% endif %}
-    {% if app.user is defined and app.user is not empty and app_session_duration is defined and app_session_duration is not empty %}
-        <script>
-            setTimeout(function () {
-                window.location.href = '/login/loggedOut';
-            }, {{ (app_session_duration * 1000) + 5000 }});
-        </script>
-    {% endif %}
+{#            gtag('config', '{{ application['defaultConfiguration']['configuration']['googleTagId'] }}');#}
+{#        </script>#}
+{#    {% endif %}#}
+{#    {% if app.user is defined and app.user is not empty and app_session_duration is defined and app_session_duration is not empty %}#}
+{#        <script>#}
+{#            setTimeout(function () {#}
+{#                window.location.href = '/login/loggedOut';#}
+{#            }, {{ (app_session_duration * 1000) + 5000 }});#}
+{#        </script>#}
+{#    {% endif %}#}
 
     <meta name="generator" content="Hexo 3.9.0">
     <meta charset="utf-8">
 
-    <title> {% if application is not empty %}
-            {% if slug is defined and slug is not empty %}
-                {{ slug|capitalize }} |
-            {% endif %}
-            {{ application['name'] }}{% else %} Applicatie{% endif %}</title>
+    <title>Waardepapieren | Hoorn</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    {% if application['style']['favicon']['base64'] is defined and application['style']['favicon']['base64'] is not empty %}
-        <link rel="icon" href="{{ application['style']['favicon']['base64']|raw }}">
-    {% else %}
-        <link rel="icon" href="/uno/components/favicon/ro-favicon-wit-0xffffff.png">
-    {% endif %}
+{#    {% if application['style']['favicon']['base64'] is defined and application['style']['favicon']['base64'] is not empty %}#}
+{#        <link rel="icon" href="{{ application['style']['favicon']['base64']|raw }}">#}
+{#    {% else %}#}
+{#        <link rel="icon" href="/uno/components/favicon/ro-favicon-wit-0xffffff.png">#}
+{#    {% endif %}#}
     <link rel="stylesheet" href="/uno/core/base.css">
     <link rel="stylesheet" href="/uno/core/grid.css">
     <link rel="stylesheet" href="/uno/core/animations.css">
@@ -217,18 +213,18 @@
             text-align: center;
         }
 
-        {% if application is not empty and application['style']['css'] is defined %}
-        {{ application['style']['css']|raw }}
+{#        {% if application|default and application['style']['css'] is defined %}#}
+{#        {{ application['style']['css']|raw }}#}
 
-        html {
-            background-color: var(--footer) !important;
-        }
+{#        html {#}
+{#            background-color: var(--footer) !important;#}
+{#        }#}
 
-        .sf-toolbar-clearer {
-            background-color: var(--footer) !important;
-        }
+{#        .sf-toolbar-clearer {#}
+{#            background-color: var(--footer) !important;#}
+{#        }#}
 
-        {% endif %}
+{#        {% endif %}#}
 
         .header {
             height: auto;
@@ -575,72 +571,72 @@
         }
 
 
-        {% if application['defaultConfiguration']['configuration']['gemId'] is defined and application['defaultConfiguration']['configuration']['gemId'] is not empty %}
+{#        {% if application['defaultConfiguration']['configuration']['gemId'] is defined and application['defaultConfiguration']['configuration']['gemId'] is not empty %}#}
 
-        /* GEM WEBCHAT */
+{#        /* GEM WEBCHAT */#}
 
-         #webchat .rw-launcher, #webchat .rw-header, #webchat .rw-close-button, #webchat .rw-client {
-             background-color:  var(--secondary) !important;
-         }
+{#         #webchat .rw-launcher, #webchat .rw-header, #webchat .rw-close-button, #webchat .rw-client {#}
+{#             background-color:  var(--secondary) !important;#}
+{#         }#}
 
-        #webchat .rw-avatar {
-            background-color:  var(--primary) !important;
-        }
+{#        #webchat .rw-avatar {#}
+{#            background-color:  var(--primary) !important;#}
+{#        }#}
 
-        #webchat .rw-header .rw-avatar {
-            background-color:  var(--secondary) !important;
-        }
+{#        #webchat .rw-header .rw-avatar {#}
+{#            background-color:  var(--secondary) !important;#}
+{#        }#}
 
-    {% endif %}
+{#    {% endif %}#}
     </style>
 
-    {% if application['defaultConfiguration']['configuration']['stickyMenu'] is defined and application['defaultConfiguration']['configuration']['stickyMenu'] == true %}
-        <style>
+{#    {% if application['defaultConfiguration']['configuration']['stickyMenu'] is defined and application['defaultConfiguration']['configuration']['stickyMenu'] == true %}#}
+{#/*        <style>*/#}
 
-            /* Sticky docs-nav bar */
+{#            /* Sticky docs-nav bar */#}
 
-            /* The sticky class is added to the header with JS when it reaches its scroll position */
-            .sticky-nav {
-                position: sticky;
-                top: 0px;
-                background: var(--menu) !important;
-                color: var(--menu-color) !important;
-                transition: 0.2s;
-                z-index: 1;
-            }
+{#            /* The sticky class is added to the header with JS when it reaches its scroll position */#}
+{#            .sticky-nav {#}
+{#                position: sticky;#}
+{#                top: 0px;#}
+{#                background: var(--menu) !important;#}
+{#                color: var(--menu-color) !important;#}
+{#                transition: 0.2s;#}
+{#                z-index: 1;#}
+{#            }#}
 
-            .sticky-transition {
-                transition: 0.5s;
-            }
+{#            .sticky-transition {#}
+{#                transition: 0.5s;#}
+{#            }#}
 
-            .sticky-mobile-nav {
-                position: sticky;
-                top: 65px;
-                background: var(--menu) !important;
-                color: var(--menu-color) !important;
-                transition: 0.2s;
-                z-index: 1;
-            }
+{#            .sticky-mobile-nav {#}
+{#                position: sticky;#}
+{#                top: 65px;#}
+{#                background: var(--menu) !important;#}
+{#                color: var(--menu-color) !important;#}
+{#                transition: 0.2s;#}
+{#                z-index: 1;#}
+{#            }#}
 
-            .sticky-mobile-transition {
-                transition: 0.5s;
-            }
+{#            .sticky-mobile-transition {#}
+{#                transition: 0.5s;#}
+{#            }#}
 
-            .anchor {
-                margin-top: -70px;
-                position: absolute;
-            }
+{#            .anchor {#}
+{#                margin-top: -70px;#}
+{#                position: absolute;#}
+{#            }#}
 
 
 
-            /* Add some top padding to the page content to prevent sudden quick movement (as the header gets a new position at the top of the page (position:fixed and top:0) */
-            /*.sticky-nav + .content {*/
-            /*    padding-top: 102px;*/
-            /*}*/
+{#            /* Add some top padding to the page content to prevent sudden quick movement (as the header gets a new position at the top of the page (position:fixed and top:0) */#}
+{#            /*.sticky-nav + .content {*/#}
+{#            /*    padding-top: 102px;*/#}
+{#            /*}*/#}
 
-        </style>
+{#        </style>#}
 
-    {% endif %}
+{#    {% endif %}#}
 
 
 
@@ -656,9 +652,9 @@
     </a>
 
     {# lets be able to disable this #}
-    {% if application['defaultConfiguration']['configuration']['header'] is not defined or (application['defaultConfiguration']['configuration']['header'] is defined and application['defaultConfiguration']['configuration']['header'] == true) %}
-        {% include "header.html.twig" %}
-    {% endif %}
+{#    {% if application['defaultConfiguration']['configuration']['header'] is not defined or (application['defaultConfiguration']['configuration']['header'] is defined and application['defaultConfiguration']['configuration']['header'] == true) %}#}
+{#        {% include "header.html.twig" %}#}
+{#    {% endif %}#}
 
     {% include "menu.html.twig" %}
 
