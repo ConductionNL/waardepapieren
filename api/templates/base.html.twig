@@ -39,6 +39,9 @@
 {#    {% else %}#}
 {#        <link rel="icon" href="/uno/components/favicon/ro-favicon-wit-0xffffff.png">#}
 {#    {% endif %}#}
+
+            <link rel="icon" href="/images/favicon-new.ico">
+
     <link rel="stylesheet" href="/uno/core/base.css">
     <link rel="stylesheet" href="/uno/core/grid.css">
     <link rel="stylesheet" href="/uno/core/animations.css">
@@ -148,9 +151,9 @@
             --secondary-color: #0047BB;
 
             --header: white;
-            --menu: #0047BB;
+            --menu: white;
             --menu-over: #3669A5;
-            --menu-color: white;
+            --menu-color: black;
             --footer: #0047BB;
             --footer-color: white;
         }
@@ -368,8 +371,16 @@
         }
 
         #docs-nav {
-            background: white;
+            background: var(--menu);
             color: var(--menu-color) !important;
+        }
+
+        .navigation__link {
+            margin-right: 20px;
+        }
+
+        .top-nav__block a {
+            color: #266EA1 !important;
         }
 
         .top-nav-autoresize .nav__link:hover {

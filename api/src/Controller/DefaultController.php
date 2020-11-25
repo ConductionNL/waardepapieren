@@ -34,6 +34,8 @@ class DefaultController extends AbstractController
 //            $personUrl = $commonGroundService->cleanUrl(['component' => 'cc', 'type' => 'people', 'id' => $person['id']]);
 //        }
 
+//        $variables['claim'] = base64_encode(json_encode(array("Peter"=>35, "Ben"=>37, "Joe"=>43)));
+
         if ($request->isMethod('POST')) {
             $variables['certificate'] = $request->request->all();
             $variables['certificate'] = $commonGroundService->createResource($variables['certificate'], 'https://waardepapieren-gemeentehoorn.commonground.nu/api/v1/waar/certificates');

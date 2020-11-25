@@ -78,22 +78,21 @@
                             </a>
                         {% endif %}
 
-                        {#                            {% if certificate.claim|default %}#}
-                        {#                                <div class="file">#}
-                        {#                                    <a href="data:text/plain;base64,{{ certificate.claim }}" download>#}
-                        {#                                        <i class="file__icon icon icon-document" role="presentation"></i>#}
-                        {#                                        <div class="file__data">#}
-                        {#                                            <div class="file__filename">#}
-                        {#                                                <strong class="file__title break-all">PDF</strong>#}
-                        {#                                                #}{#                                                <span class="meta">PDF, 1.05 mB</span>#}
-                        {#                                            </div>#}
-                        {#                                        </div>#}
-                        {#                                    </a>#}
-                        {#                                </div>#}
-                        {#                            {% endif %}#}
+                        {% if certificate.claim|default %}
+                            <a href="data:application/json;base64,{{ certificate.claim }}" download>
+                                <div class="file">
+                                    <i class="file__icon icon icon-document" role="presentation"></i>
+                                    <div class="file__data">
+                                        <div class="file__filename">
+                                            <strong class="file__title break-all">JSON</strong>
+                                            <span class="meta">Claim</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        {% endif %}
 
                     {% endif %}
-
 
                 </div><!-- /.content -->
             </div><!-- /.content-background -->
