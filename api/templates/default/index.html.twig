@@ -3,137 +3,101 @@
 {% block content %}
     <div class="row">
 
-        <div class="col-md-8 col-sm-12">
+        <div class="col-md-offset-1 col-md-10 col-sm-12">
 
-            <div class="content-background" >
+            <div class="content-background">
                 <div class="content">
-                    <h2>Waardepapieren</h2>
-                    <p>In deze applicatie kunt u ...<br>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum..</p>
+
+                    {% if not certificate|default %}
+
+                        <h2>Waardepapieren</h2>
+                        <p>In deze applicatie kunt u waardepapieren downloaden. Ga snel aan de slag met het
+                            formulier.</p>
+
+                        <form class="mb4" action="{{ path('app_default_index') }}" method="post">
+                            <div class="input">
+                                <label class="input__label" for="person">Uw brp:</label>
+                                <input name="person" type="text" id="person"
+                                       class="input__control input__control--xl input__control--text"
+                                       value="https://waardepapieren-gemeentehoorn.commonground.nu/api/v1/brp/ingeschrevenpersonen/999999928"
+                                       required>
+
+                            </div>
+                            <div class="input">
+                                <label class="input__label" for="type">Kies een waardepapier:</label>
+                                <select id="type" name="type"
+                                        class="input__control input__control--m input__control--select" required>
+                                    <option value="" style="color: lightgrey;">Maak een keuze</option>
+                                    <option value="geboorte akte">Geboorte akte</option>
+                                    <option value="verblijfs geschiedenis">Verblijfs geschiedenis</option>
+                                    <option value="uitreksel brp">Uitreksel brp</option>
+                                </select>
+                            </div>
+
+                            <div class="input">
+                                <button type="submit" class="btn btn--primary">Verder</button>
+                            </div>
+                        </form>
+
+                    {% else %}
+
+                        {% if certificate.type|default %}
+                            <h2>{{ certificate.type|capitalize }}</h2>
+                        {% endif %}
+
+                        {% if certificate.image|default or certificate.document|default %}
+                            <p>Download hier uw waardepapier:</p>
+                        {% endif %}
+
+                        {% if certificate.image|default %}
+                            <a href="{{ certificate.image }}" download>
+                                <div class="file">
+                                    <i class="file__icon icon icon-document" role="presentation"></i>
+                                    <div class="file__data">
+                                        <div class="file__filename">
+                                            <strong class="file__title break-all">JPG</strong>
+                                            <span class="meta">Foto</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        {% endif %}
+
+                        {% if certificate.document|default %}
+                            <br>
+                            <a href="{{ certificate.document }}" download>
+                                <div class="file">
+                                    <i class="file__icon icon icon-document" role="presentation"></i>
+                                    <div class="file__data">
+                                        <div class="file__filename">
+                                            <strong class="file__title break-all">PDF</strong>
+                                            <span class="meta">Document</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        {% endif %}
+
+                        {#                            {% if certificate.claim|default %}#}
+                        {#                                <div class="file">#}
+                        {#                                    <a href="data:text/plain;base64,{{ certificate.claim }}" download>#}
+                        {#                                        <i class="file__icon icon icon-document" role="presentation"></i>#}
+                        {#                                        <div class="file__data">#}
+                        {#                                            <div class="file__filename">#}
+                        {#                                                <strong class="file__title break-all">PDF</strong>#}
+                        {#                                                #}{#                                                <span class="meta">PDF, 1.05 mB</span>#}
+                        {#                                            </div>#}
+                        {#                                        </div>#}
+                        {#                                    </a>#}
+                        {#                                </div>#}
+                        {#                            {% endif %}#}
+
+                    {% endif %}
+
 
                 </div><!-- /.content -->
             </div><!-- /.content-background -->
         </div><!-- /.col -->
-
-        <div class="col-md-4  col-sm-12">
-
-            {% if app.user is not empty%}
-                <div class="content-background">
-
-                    <div class="content">
-                        <h2>Uw gegevens</h2>
-                        <ul class="definition-list">
-                            <li class="definition-list__item definition-list__item--horizontal">
-                                <div class="definition-list__title">
-                                    Voornamen
-                                </div>
-                                <div class="definition-list__description">
-                                    <p>{{ user.naam.voornamen }}</p>
-                                </div>
-                            </li>
-                            <li class="definition-list__item definition-list__item--horizontal">
-                                <div class="definition-list__title">
-                                    Achternaam
-                                </div>
-                                <div class="definition-list__description">
-                                    <p>{{ user.naam.geslachtsnaam }}</p>
-                                </div>
-                            </li>
-                            {% if user.naam.voorvoegsel is not empty%}
-                                <li class="definition-list__item definition-list__item--horizontal">
-                                    <div class="definition-list__title">
-                                        Voorvoegsel
-                                    </div>
-                                    <div class="definition-list__description">
-                                        <p>{{ user.naam.voorvoegsel }}</p>
-                                    </div>
-                                </li>
-                                <li class="definition-list__item definition-list__item--horizontal">
-                                    <div class="definition-list__title">
-                                        Leeftijd
-                                    </div>
-                                    <div class="definition-list__description">
-                                        <p>{{ user.leeftijd }}</p>
-                                    </div>
-                                </li>
-                                <li class="definition-list__item definition-list__item--horizontal">
-                                    <div class="definition-list__title">
-                                        Geslacht
-                                    </div>
-                                    <div class="definition-list__description">
-                                        <p>{{ user.geslachtsaanduiding }}</p>
-                                    </div>
-                                </li>
-                            {% endif %}
-                            <li class="definition-list__item definition-list__item--horizontal">
-                                <div class="definition-list__title">
-                                    Addres
-                                </div>
-                                <div class="definition-list__description">
-                                    <p>{{ user.verblijfplaats.straatnaam }} {{ user.verblijfplaats.huisnummer }}{{ user.verblijfplaats.huisletter }}{{ user.verblijfplaats.huisnummertoevoeging }}
-                                        <br>{{ user.verblijfplaats.postcode }} {{ user.verblijfplaats.woonplaatsnaam }}</p>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Page Break -->
-                <div style="height: 20px"></div>
-
-            {% endif %}
-
-            <!--
-            <div class="content-background background--geel">
-                <div class="content">
-                    <button class="btn btn--primary">Primaire knop</button>
-                </div>
-            </div>
-
-
-            <div class="content-background background--donkergeel">
-                <div class="content">
-                	<button class="btn btn--primary">Primaire knop</button>
-
-                </div>
-            </div>
-            -->
-        </div>
     </div>
-    {#
-<div class="row">
-        <div class="col-md-12">
-            <h2> Uitgelicht</h2>
-            <ul class="list list--card">
-                <li class="card">
-                    <a href="{{  path('app_challenge_index') }}" class="card__content">
-                        <div class="card__thumb" style="background-image: url('https://picsum.photos/id/1/200')"></div>
-                        <div class="card__body">
-                            <span class="card__title">Ik heb hulp nodig</span>
-                            Heeft u behoefte aan hulp? Bijvoorbeeld omdat u geen eten meer in huis heeft, of ergens niet uit komt? <br><br> Lees hier hoe u aan hulp kan komen.
-                        </div>
-                    </a>
-                </li>
-                <li class="card">
-                    <a href="{{   path('app_pitch_index') }}" class="card__content">
-                        <div class="card__thumb" style="background-image: url('https://picsum.photos/id/1/200')"></div>
-                        <div class="card__body">
-                            <span class="card__title">Ik wil helpen</span>
-                            Wilt u hulp aanbieden aan uw buren of gemeenschap? Bijvoorbeeld omdat u beschikt over bepaalde vaardigheden of inventaris. <br><br>Lees hier hoe u dat kenbaar kan maken.
-                        </div>
-                    </a>
-                </li>
-                <li class="card">
-                    <a href="{{ path('app_news_index') }}" class="card__content">
-                        <div class="card__thumb" style="background-image: url('https://picsum.photos/id/1/200')"></div>
-                        <div class="card__body">
-                            <span class="card__title">Ik denk dat ik Corona heb</span>
-                            Vermoedt u dat u zelf besmet bent met het corona virus? <br><br><br>  Lees dan hier wat u moet doen
-                        </div>
-                    </a>
-                </li>
-            </ul>
-        </div> <!-- /.col -->
-    </div> <!-- /.col -->
-    #}
+
 {% endblock %}

@@ -13,9 +13,9 @@ settings:
   description: 'Naast deze JSON rest API is er ook een [graphql](/graphql) interface beschikbaar.'
   type: application
   repro: https://github.com/ConductionNL/waardepapieren
-  demo: dev.waardepapieren.com
+  demo: dev.waardepapieren-gemeentehoorn.commonground.nu
   container: https://hub.docker.com/repository/docker/conduction/waardepapieren-php
-  domain: zuid-drecht.nl
+  domain: waardepapieren-gemeentehoorn.commonground.nu
   subdomain: false
   subpath: 
   subpathRouting: true

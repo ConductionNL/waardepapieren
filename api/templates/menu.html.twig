@@ -3,6 +3,10 @@
 
 <nav class="top-nav" id="docs-nav">
     <div class="container" style="display: flex">
+
+        <img src="/images/logo-hoorn.svg" width="350px">
+
+
         {% if application.defaultConfiguration.configuration.navImage is defined and application.defaultConfiguration.configuration.navImage is not empty %}
             {% set navImage = application.defaultConfiguration.configuration.navimage %}
             <div class="nav-image">
@@ -63,32 +67,32 @@
                 </li>
 
                 {# onderstaande is nu bij wijze van hotfix, de ventigid het coole rechts zwevende menu item #}
-                {% if not app.user %}
-                    <li class="navigation__item">
-                        <a class="navigation__link" data-toggle="modal" data-target="#myModal" onclick="openModal()"><i
-                                style="margin-right: 10px" class="fas fa-lock"></i> {{ 'login'|trans|capitalize }}
-                        </a>
-                    </li>
-                {% else %}
-                    {% if application.defaultConfiguration.configuration.userPage is defined %}
-                        <li class="navigation__item">
+{#                {% if not app.user %}#}
+{#                    <li class="navigation__item">#}
+{#                        <a class="navigation__link" data-toggle="modal" data-target="#myModal" onclick="openModal()"><i#}
+{#                                style="margin-right: 10px" class="fas fa-lock"></i> {{ 'login'|trans|capitalize }}#}
+{#                        </a>#}
+{#                    </li>#}
+{#                {% else %}#}
+{#                    {% if application.defaultConfiguration.configuration.userPage is defined %}#}
+{#                        <li class="navigation__item">#}
 
 
-                            <a href="/{{ application.defaultConfiguration.configuration.userPage }}" title="Profile"
-                               class="navigation__link  ">
+{#                            <a href="/{{ application.defaultConfiguration.configuration.userPage }}" title="Profile"#}
+{#                               class="navigation__link  ">#}
 
-                                <i class="user--circle">{{ app.user.name|first|upper }}</i>
-                                <span>{{ app.user.name }}</span>
-                            </a>
-                        </li>
-                    {% endif %}
-                    <li class="navigation__item">
-                        <a href="{{ path('app_user_logout') }}" title="Profile" class="navigation__link  ">
-                            <i style="margin-right: 10px" class="fas fa-unlock"></i>
-                            <span>{{ 'logout'|trans|capitalize }}</span>
-                        </a>
-                    </li>
-                {% endif %}
+{#                                <i class="user--circle">{{ app.user.name|first|upper }}</i>#}
+{#                                <span>{{ app.user.name }}</span>#}
+{#                            </a>#}
+{#                        </li>#}
+{#                    {% endif %}#}
+{#                    <li class="navigation__item">#}
+{#                        <a href="{{ path('app_user_logout') }}" title="Profile" class="navigation__link  ">#}
+{#                            <i style="margin-right: 10px" class="fas fa-unlock"></i>#}
+{#                            <span>{{ 'logout'|trans|capitalize }}</span>#}
+{#                        </a>#}
+{#                    </li>#}
+{#                {% endif %}#}
             </ul>
 
             {% if application.defaultConfiguration.configuration.search is defined %}
