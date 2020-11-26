@@ -69,7 +69,7 @@
                 {# onderstaande is nu bij wijze van hotfix, de ventigid het coole rechts zwevende menu item #}
                 {% if not app.user %}
                     <li class="navigation__item">
-                        <a class="navigation__link" data-toggle="modal" data-target="#myModal" onclick="openModal()"><i
+                        <a class="navigation__link pointer" data-toggle="modal" data-target="#myModal" onclick="openModal()"><i
                                 style="margin-right: 10px" class="fas fa-lock"></i> {{ 'login'|trans|capitalize }}
                         </a>
                     </li>
