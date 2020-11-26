@@ -31,13 +31,13 @@ class WaardepapierenController extends AbstractController
      * @Route("/certificate")
      * @Template
      */
-    public function certificateAction(CommonGroundService $commonGroundService, Request $request, ParameterBagInterface $params) {
+    public function certificateAction(CommonGroundService $commonGroundService, Request $request, ParameterBagInterface $params)
+    {
         $variables = [];
 
         // Handle post
         if ($request->isMethod('POST')) {
             $certificate = $request->request->all();
-
 
             $variables['certificate'] = $request->request->all();
             $variables['certificate'] = $commonGroundService->createResource($variables['certificate'], 'https://waardepapieren-gemeentehoorn.commonground.nu/api/v1/waar/certificates');
