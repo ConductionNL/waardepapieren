@@ -1,0 +1,49 @@
+<div class="modal modal--backdrop" role="dialog" id="downCert{{ item.id }}Modal" tabindex="-1"
+     aria-describedby="modal-description3">
+    <section class="modal__content" role="document">
+        <div class="modal__body" tabindex="0" lang="en-US">
+            <div class="row" style="margin-top: 20px;">
+                <div class="col-xs-6">
+                    <h1>{{ cert.type|default }}</h1>
+                </div>
+                <div class="col-xs-6">
+                    <button style="float: right;" class="modal__close-button">
+                        <i class="icon icon-cross"></i>
+                        {{ 'close'|trans|capitalize }}
+                    </button>
+                </div>
+            </div>
+            <div class="skiplink-target content" id="main-content">
+                {% if item.image|default %}
+                    <a href="{{ item.image }}" download>
+                        <div class="file">
+                            <i class="file__icon icon icon-document" role="presentation"></i>
+                            <div class="file__data">
+                                <div class="file__filename">
+                                    <strong class="file__title break-all">JPG</strong>
+                                    <span class="meta">Foto</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                {% endif %}
+
+                {% if item.document|default %}
+                    <br>
+                    <a href="{{ item.document }}" download>
+                        <div class="file">
+                            <i class="file__icon icon icon-document" role="presentation"></i>
+                            <div class="file__data">
+                                <div class="file__filename">
+                                    <strong class="file__title break-all">PDF</strong>
+                                    <span class="meta">Document</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+</div>
+</section>
+</div>

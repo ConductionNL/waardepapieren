@@ -49,50 +49,50 @@
 
             <ul class="navigation">
 
-                <li class="navigation__item navigation__item--has-popout">
-                    <a class="navigation__link" href="#"><i class="fas fa-language" role="presentation"></i> {{ app.request.locale|upper }}</a>
-                    <div class="navigation__popout" style="min-width: 70px;">
-                        <ul class="list list--links list--chevrons navigation__popout-items">
-                            {% set query = app.request.attributes.get('_route_params') %}
-                            {% set query = query|merge({'_locale': 'nl'}) %}
-                            <li class="navigation__popout-item">{# absolute_url(path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params'))) #}
-                                <a class="navigation__popout-link" href="{{ absolute_url(path(app.request.attributes.get('_route'), query)) }}"  style="padding: 0; color: #000"> <i class="" role="presentation"></i>NL</a>
-                            </li>
-                            {% set query = query|merge({'_locale': 'en'}) %}
-                            <li class="navigation__popout-item">{# absolute_url(path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params'))) #}
-                                <a class="navigation__popout-link" href="{{ absolute_url(path(app.request.attributes.get('_route'), query)) }}" style="padding: 0; color: #000"> <i class="" role="presentation"></i>EN</a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
+{#                <li class="navigation__item navigation__item--has-popout">#}
+{#                    <a class="navigation__link" href="#"><i class="fas fa-language" role="presentation"></i> {{ app.request.locale|upper }}</a>#}
+{#                    <div class="navigation__popout" style="min-width: 70px;">#}
+{#                        <ul class="list list--links list--chevrons navigation__popout-items">#}
+{#                            {% set query = app.request.attributes.get('_route_params') %}#}
+{#                            {% set query = query|merge({'_locale': 'nl'}) %}#}
+{#                            <li class="navigation__popout-item">#}{# absolute_url(path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params'))) #}
+{#                                <a class="navigation__popout-link" href="{{ absolute_url(path(app.request.attributes.get('_route'), query)) }}"  style="padding: 0; color: #000"> <i class="" role="presentation"></i>NL</a>#}
+{#                            </li>#}
+{#                            {% set query = query|merge({'_locale': 'en'}) %}#}
+{#                            <li class="navigation__popout-item">#}{# absolute_url(path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params'))) #}
+{#                                <a class="navigation__popout-link" href="{{ absolute_url(path(app.request.attributes.get('_route'), query)) }}" style="padding: 0; color: #000"> <i class="" role="presentation"></i>EN</a>#}
+{#                            </li>#}
+{#                        </ul>#}
+{#                    </div>#}
+{#                </li>#}
 
                 {# onderstaande is nu bij wijze van hotfix, de ventigid het coole rechts zwevende menu item #}
-{#                {% if not app.user %}#}
-{#                    <li class="navigation__item">#}
-{#                        <a class="navigation__link" data-toggle="modal" data-target="#myModal" onclick="openModal()"><i#}
-{#                                style="margin-right: 10px" class="fas fa-lock"></i> {{ 'login'|trans|capitalize }}#}
-{#                        </a>#}
-{#                    </li>#}
-{#                {% else %}#}
-{#                    {% if application.defaultConfiguration.configuration.userPage is defined %}#}
-{#                        <li class="navigation__item">#}
+                {% if not app.user %}
+                    <li class="navigation__item">
+                        <a class="navigation__link pointer" data-toggle="modal" data-target="#myModal" onclick="openModal()"><i
+                                style="margin-right: 10px" class="fas fa-lock"></i> {{ 'login'|trans|capitalize }}
+                        </a>
+                    </li>
+                {% else %}
+                    {% if application.defaultConfiguration.configuration.userPage is defined %}
+                        <li class="navigation__item">
 
 
-{#                            <a href="/{{ application.defaultConfiguration.configuration.userPage }}" title="Profile"#}
-{#                               class="navigation__link  ">#}
+                            <a href="/{{ application.defaultConfiguration.configuration.userPage }}" title="Profile"
+                               class="navigation__link  ">
 
-{#                                <i class="user--circle">{{ app.user.name|first|upper }}</i>#}
-{#                                <span>{{ app.user.name }}</span>#}
-{#                            </a>#}
-{#                        </li>#}
-{#                    {% endif %}#}
-{#                    <li class="navigation__item">#}
-{#                        <a href="{{ path('app_user_logout') }}" title="Profile" class="navigation__link  ">#}
-{#                            <i style="margin-right: 10px" class="fas fa-unlock"></i>#}
-{#                            <span>{{ 'logout'|trans|capitalize }}</span>#}
-{#                        </a>#}
-{#                    </li>#}
-{#                {% endif %}#}
+                                <i class="user--circle">{{ app.user.name|first|upper }}</i>
+                                <span>{{ app.user.name }}</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                    <li class="navigation__item">
+                        <a href="{{ path('app_user_logout') }}" title="Profile" class="navigation__link  ">
+                            <i style="margin-right: 10px" class="fas fa-unlock"></i>
+                            <span>{{ 'logout'|trans|capitalize }}</span>
+                        </a>
+                    </li>
+                {% endif %}
             </ul>
 
             {% if application.defaultConfiguration.configuration.search is defined %}

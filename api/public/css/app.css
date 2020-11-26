@@ -1,0 +1,10 @@
+.pointer:hover {
+    cursor: pointer;
+    background: none;
+    border: none;
+}
+
+.pointer {
+    background: none;
+    border: none;
+}
