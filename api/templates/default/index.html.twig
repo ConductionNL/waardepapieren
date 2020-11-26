@@ -17,13 +17,14 @@
                             <form class="mb4" action="{{ path('app_default_index') }}" method="post">
                                 <div class="input">
                                     {#                                <label class="input__label" for="person">Uw brp:</label>#}
-                                    <input  name="person" type="hidden" id="person"
+                                    <input name="person" type="hidden" id="person"
                                            class="input__control input__control--xl input__control--text"
                                            value="{{ app.user.person }}">
 
                                 </div>
                                 <div class="input">
-                                    <label class="input__label" for="type">Kies een waardepapier om te op te halen:</label>
+                                    <label class="input__label" for="type">Kies een waardepapier om te op te
+                                        halen:</label>
                                     <select id="type" name="type"
                                             class="input__control input__control--xl input__control--select" required>
                                         <option value="" style="color: lightgrey;">Maak een keuze</option>
@@ -79,19 +80,20 @@
 
                         {% endif %}
 
-                        {#                            {% if certificate.claim|default %}#}
-                        {#                                <a href="data:application/json;base64,{{ certificate.claim }}" download>#}
-                        {#                                    <div class="file">#}
-                        {#                                        <i class="file__icon icon icon-document" role="presentation"></i>#}
-                        {#                                        <div class="file__data">#}
-                        {#                                            <div class="file__filename">#}
-                        {#                                                <strong class="file__title break-all">JSON</strong>#}
-                        {#                                                <span class="meta">Claim</span>#}
-                        {#                                            </div>#}
-                        {#                                        </div>#}
-                        {#                                    </div>#}
-                        {#                                </a>#}
-                        {#                            {% endif %}#}
+                        {% if certificate.claim|default %}
+                            <br>
+                            <a href="data:application/json;base64,{{ certificate.claim }}" download>
+                                <div class="file">
+                                    <i class="file__icon icon icon-document" role="presentation"></i>
+                                    <div class="file__data">
+                                        <div class="file__filename">
+                                            <strong class="file__title break-all">JSON</strong>
+                                            <span class="meta">Claim</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        {% endif %}
 
                         <br>
 
@@ -102,7 +104,7 @@
                             <tr>
                                 <th scope="col">ID</th>
                                 <th scope="col">Aangemaakt op</th>
-                                <th>JPG</th>
+                                <th class="center">JPG</th>
                                 <th>PDF</th>
                             </tr>
                             </thead>
