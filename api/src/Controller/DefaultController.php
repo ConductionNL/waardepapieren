@@ -43,7 +43,7 @@ class DefaultController extends AbstractController
         ];
         $variables['types'][] = [
             'name'=> 'Akte van registratie van een partnerschap',
-            'type'=> 'akte_van_registratie_van_een_parterschap',
+            'type'=> 'akte_van_registratie_van_een_partnerschap',
         ];
         $variables['types'][] = [
             'name'=> 'Akte van omzetting van een huwelijk in een registratie van een partnerschap',
