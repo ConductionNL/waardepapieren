@@ -14,7 +14,7 @@
 
                         {% if not certificate|default %}
 
-                            <form class="mb4" action="{{ path('app_default_index') }}" method="post">
+                            <form class="mb4" action="{{ url('app_default_index') }}" method="post">
                                 <div class="input">
                                     {#                                <label class="input__label" for="person">Uw brp:</label>#}
                                     <input name="person" type="hidden" id="person"
@@ -171,9 +171,7 @@
                     {% else %}
 
                         <p>In deze applicatie kunt u uw waardepapieren downloaden. <a class="pointer"
-                                                                                      data-toggle="modal"
-                                                                                      data-target="#myModal"
-                                                                                      onclick="openModal()">Login</a>
+                                                                                      href="https://waardepapieren-gemeentehoorn.commonground.nu/digispoof?responceUrl={{ url('app_user_digispoof') }}&backUrl={{ url('app_default_index') }}">Login</a>
                             om
                             te starten.</p>
 
