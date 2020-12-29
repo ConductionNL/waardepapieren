@@ -61,9 +61,9 @@ $ kubectl create namespace prod
 
 If you want to create a new instance
 ```CLI
-$ helm install --name pc-dev ./api/helm  --kubeconfig kubeconfig.yaml --namespace dev  --set settings.env=dev,settings.debug=1
-$ helm install --name pc-stag ./api/helm --kubeconfig kubeconfig.yaml --namespace stag --set settings.env=stag,settings.debug=0,settings.cache=1
-$ helm install --name pc-prod ./api/helm --kubeconfig kubeconfig.yaml --namespace prod --set settings.env=prod,settings.debug=0,settings.cache=1
+$ helm install pc-dev ./api/helm  --kubeconfig kubeconfig.yaml --namespace dev  --set settings.env=dev,settings.debug=1
+$ helm install pc-stag ./api/helm --kubeconfig kubeconfig.yaml --namespace stag --set settings.env=stag,settings.debug=0,settings.cache=1
+$ helm install pc-prod ./api/helm --kubeconfig kubeconfig.yaml --namespace prod --set settings.env=prod,settings.debug=0,settings.cache=1
 ```
 
 Or update if you want to update an existing one
