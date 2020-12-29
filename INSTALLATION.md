@@ -2,7 +2,7 @@
 This document dives a little bit deeper into installing your component on a kubernetes cluster, looking for information on setting up your component on a local machine? Take a look at the [tutorial](TUTORIAL.md) instead. 
 
 ## Setting up helm
-We first need to be sure the stable repository of helm and kubernetes is added. We do this using the following command:
+We first need to be sure the ingress nginx repository of helm and kubernetes is added. We do this using the following command:
 ```CLI
 $ helm repo list
 ```
@@ -27,7 +27,7 @@ $ kubectl describe ingress pc-dev-ingress -n=kube-system --kubeconfig kubeconfig
 ```
 
 ## Setting up Kubernetes Dashboard
-After we installed helm and tiller we can easily use both to install kubernetes dashboard
+After we installed helm we can easily use both to install kubernetes dashboard
 
 ```CLI
 $ kubectl create -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0/aio/deploy/recommended.yaml --kubeconfig kubeconfig.yaml
@@ -81,9 +81,9 @@ $ kubectl rollout restart deployments/pc-varnish --namespace dev --kubeconfig ku
 ``` 
 Or del if you want to delete an existing one
 ```CLI
-$ helm del pc-dev  --purge --kubeconfig kubeconfig.yaml
-$ helm del pc-stag --purge --kubeconfig kubeconfig.yaml
-$ helm del pc-prod --purge --kubeconfig kubeconfig.yaml
+$ helm del pc-dev --kubeconfig kubeconfig.yaml
+$ helm del pc-stag --kubeconfig kubeconfig.yaml
+$ helm del pc-prod --kubeconfig kubeconfig.yaml
 ```
 
 Note that you can replace common ground with the namespace that you want to use (normally the name of your component).
