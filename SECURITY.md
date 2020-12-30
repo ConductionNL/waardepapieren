@@ -37,5 +37,5 @@ Also, with the help of StyleCI, the components are checked for adherence to the 
 
 ## So what should you do?
 -	Follow the steps to regularly merge updates from the common ground proto repository into your codebase
--	Use the provided travis ci scipting
+-	Use the provided GitHub Actions CI scipting
 

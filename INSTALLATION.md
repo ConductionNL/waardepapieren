@@ -3,6 +3,14 @@ This document dives a little bit deeper into installing your component on a kube
 
 For installation of components you will have to have [helm 3](https://helm.sh) and [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) installed.
 
+## Minimal system requirements for your cluster
+- Kubernetes 1.16 of later
+- A minimum 3 nodes
+- 4 vCPUs per node
+- 4 GB RAM per node
+- 50 GB disk space per node
+- Helm 3
+
 ## Setting up helm
 We first need to be sure the ingress nginx repository of helm and kubernetes is added. We do this using the following command:
 ```CLI
