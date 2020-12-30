@@ -13,8 +13,8 @@ For installation of components you will have to have [helm 3](https://helm.sh) a
 ## Kubernetes Providers
 There is a number of Kubernetes providers that are suitable to run CommonGround components. Most notable are:
 
-- [TransIP](https://transip.nl)
 - [Fuga cloud](https://fuga.cloud)
+- [TransIP](https://transip.nl)
 - [Digital Ocean](https://digitalocean.com)
 - [Google Cloud](https://cloud.google.com)
 - [Amazon Web Services](https://aws.amazon.com)
