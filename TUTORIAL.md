@@ -304,6 +304,15 @@ Be mindful of the --env=dev here! Doctrine wil only allow fixture loading on a d
 
 More information on using data fixtures can be found at the [symfony website](https://symfony.com/doc/current/bundles/DoctrineFixturesBundle/index.html) (you can skipp the installation instructions) we also encourage you to take a look at the [tabellen component](https://github.com/ConductionNL/landelijketabellencatalogus) that makes extensive use of data fixtures.
 
+## Keeping up-to-date with your dependencies
+If you use third-party dependencies in your component on top of the dependencies of the dependencies used by the Proto Component Commonground you will have to update them regularly. This can be done with the following command:
+
+```CLI
+$ docker-compose exec php composer update
+```
+
+Or, when logged in using ```docker-compose exec php bash``` by just running ```composer update```.
+
 ## Sharing your work 
 A vital part of te common ground community is sharing your work, and telling other people what you are working. This way people can help you with problems that you run into. And keep tabs on any (security) updates that you make to you code. Sounds like a lot of work right?
 
@@ -312,7 +321,7 @@ Wel it actually isn't, there is a specific common ground platform over at common
 Another option that we have is to declare our repository on [publiccode](), to do this you need to copy the publiccode.yaml from the [api/public/schema](api/public/schema]) folder to your root folder (dont forget to redo this every time you make a major change to your repository concerning versioning or licencing).  
 
 
-Continues integration
+Continuous integration
 -------
 > The following bit of the tutorial requires an additional account
 > - [https://hub.docker.com/](https://hub.docker.com/) (You might already have this for docker for desktop)
