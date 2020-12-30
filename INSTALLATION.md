@@ -2,47 +2,41 @@
 This document dives a little bit deeper into installing your component on a kubernetes cluster, looking for information on setting up your component on a local machine? Take a look at the [tutorial](TUTORIAL.md) instead. 
 
 ## Setting up helm
-We first need to be sure the stable repository of helm and kubernetes is added. We do this using the following command:
+We first need to be sure the ingress nginx repository of helm and kubernetes is added. We do this using the following command:
 ```CLI
 $ helm repo list
 ```
 
-If in the output there is no repository 'stable' we need to add it:
+If in the output there is no repository 'ingress-nginx' we need to add it:
 
 ```CLI
-$ helm repo add stable https://kubernetes-charts.storage.googleapis.com
+$ helm repo add stable https://kubernetes.github.io/ingress-nginx
 ```
 
 ## Setting up ingress
 We need at least one nginx controller per kubernetes kluster, doh optionally we could set on up on a per namebase basis
 
 ```CLI
-$ helm install stable/nginx-ingress --name loadbalancer --kubeconfig="kubeconfig.yaml"
+$ helm install ingress-nginx/ingress-nginx --name loadbalancer --kubeconfig kubeconfig.yaml
 ```
 
-We can check that out with 
+After installing a component we can check that out with 
 
 ```CLI
-$ kubectl describe ingress pc-dev-ingress -n=kube-system --kubeconfig="kubeconfig.yaml"
+$ kubectl describe ingress pc-dev-ingress -n=kube-system --kubeconfig kubeconfig.yaml
 ```
 
 ## Setting up Kubernetes Dashboard
-After we installed helm and tiller we can easily use both to install kubernetes dashboard
+After we installed helm we can easily use both to install kubernetes dashboard
 
 ```CLI
-$ kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0/aio/deploy/recommended.yaml --kubeconfig=kubeconfig.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0/aio/deploy/recommended.yaml --kubeconfig kubeconfig.yaml
 ```
-
-But before we can login to tiller we need a token, we can get one of those trough the secrets. Get yourself a secret list by running the following command
-```CLI
-$ kubectl -n kube-system get secret  --kubeconfig="kubeconfig.yaml"
-```
-
 
 This should return the token, copy it to somewhere save (just the token not the other returned information) and start up a dashboard connection
 
 ```CLI
-$ kubectl proxy --kubeconfig="kubeconfig.yaml"
+$ kubectl proxy --kubeconfig kubeconfig.yaml
 ```
 
 This should proxy our dashboard to helm making it available trough our favorite browser and a simple link
@@ -50,52 +44,46 @@ This should proxy our dashboard to helm making it available trough our favorite 
 http://localhost:8001/api/v1/namespaces/kube-system/services/https:dashboard-kubernetes-dashboard:https/proxy/#!/login
 ```
 
-
-## Cert Manager
-https://cert-manager.io/docs/installation/kubernetes/
- 
-```CLI
-$ kubectl create namespace cert-manager --kubeconfig="kubeconfig.yaml"
-```
- 
- The we need tp deploy the cert manager to our cluster
- 
-```CLI
-$ helm repo add jetstack https://charts.jetstack.io
-$ helm install cert-manager --namespace cert-manager --version v0.15.0 jetstack/cert-manager --set installCRDS=true --kubeconfig="kubeconfig.yaml"
-```
-
-lets check if everything is working
-
-```CLI
-$ kubectl get pods --namespace cert-manager --kubeconfig="kubeconfig.yaml"
-$ kubectl describe certificate -n dev --kubeconfig="kubeconfig.yaml"
-```
+Then, you can login using the Kubeconfig option and uploading your kubeconfig.
 
 ## Deploying trough helm
 First we always need to update our dependencies
 ```CLI
 $ helm dependency update ./api/helm
 ```
+
+And then we need to setup the desired namespaces
+```CLI
+$ kubectl create namespace dev
+$ kubectl create namespace stag
+$ kubectl create namespace prod
+```
+
 If you want to create a new instance
 ```CLI
-$ helm install --name pc-dev ./api/helm  --kubeconfig="api/helm/conduction-kubeconfig.yaml" --namespace=dev  --set settings.env=dev,settings.debug=1
-$ helm install --name pc-stag ./api/helm --kubeconfig="api/helm/conduction-kubeconfig.yaml" --namespace=stag --set settings.env=stag,settings.debug=0
-$ helm install --name pc-prod ./api/helm --kubeconfig="api/helm/conduction-kubeconfig.yaml" --namespace=prod --set settings.env=prod,settings.debug=0
+$ helm install pc-dev ./api/helm  --kubeconfig kubeconfig.yaml --namespace dev  --set settings.env=dev,settings.debug=1
+$ helm install pc-stag ./api/helm --kubeconfig kubeconfig.yaml --namespace stag --set settings.env=stag,settings.debug=0,settings.cache=1
+$ helm install pc-prod ./api/helm --kubeconfig kubeconfig.yaml --namespace prod --set settings.env=prod,settings.debug=0,settings.cache=1
 ```
 
 Or update if you want to update an existing one
 ```CLI
-$ helm upgrade pc-dev ./api/helm  --kubeconfig="api/helm/conduction-kubeconfig.yaml" --namespace=dev  --set settings.env=dev,settings.debug=1
-$ helm upgrade pc-stag ./api/helm --kubeconfig="api/helm/conduction-kubeconfig.yaml" --namespace=stag --set settings.env=stag,settings.debug=0
-$ helm upgrade pc-prod ./api/helm --kubeconfig="api/helm/conduction-kubeconfig.yaml" --namespace=prod --set settings.env=prod,settings.debug=0
+$ helm upgrade pc-dev ./api/helm  --kubeconfig kubeconfig.yaml --namespace dev  --set settings.env=dev,settings.debug=1
+$ helm upgrade pc-stag ./api/helm --kubeconfig kubeconfig.yaml --namespace stag --set settings.env=stag,settings.debug=0,settings.cache=1
+$ helm upgrade pc-prod ./api/helm --kubeconfig kubeconfig.yaml --namespace prod --set settings.env=prod,settings.debug=0,settings.cache=1
 ```
 
-Or del if you want to delete an existing  one
+Or just restart the containers of the component
 ```CLI
-$ helm del pc-dev  --purge --kubeconfig="api/helm/conduction-kubeconfig.yaml" 
-$ helm del pc-stag --purge --kubeconfig="api/helm/conduction-kubeconfig.yaml" 
-$ helm del pc-prod --purge --kubeconfig="api/helm/conduction-kubeconfig.yaml" 
+$ kubectl rollout restart deployments/pc-php --namespace dev --kubeconfig kubeconfig.yaml
+$ kubectl rollout restart deployments/pc-nginx --namespace dev --kubeconfig kubeconfig.yaml
+$ kubectl rollout restart deployments/pc-varnish --namespace dev --kubeconfig kubeconfig.yaml
+``` 
+Or del if you want to delete an existing one
+```CLI
+$ helm del pc-dev --kubeconfig kubeconfig.yaml
+$ helm del pc-stag --kubeconfig kubeconfig.yaml
+$ helm del pc-prod --kubeconfig kubeconfig.yaml
 ```
 
 Note that you can replace common ground with the namespace that you want to use (normally the name of your component).
