@@ -10,7 +10,7 @@ First of the code base, if you are extending the common ground-proto-component y
 
 For the first two parts there is very little to worry about, symphony has an excellent safety reputation.
    
-What you should however definitely do is keeping your dependencies, symfony, doctrine and others, up to date by regularly running composer update in your containers (see the [Tutorial](TUTORIAL.md:307)).
+What you should however definitely do is keeping your dependencies, symfony, doctrine and others, up to date by regularly running composer update in your containers (see the [Tutorial](TUTORIAL.md#keeping-up-to-date-with-your-dependencies)).
 
 ## Containers
 
