@@ -1,6 +1,8 @@
 # Installation
 This document dives a little bit deeper into installing your component on a kubernetes cluster, looking for information on setting up your component on a local machine? Take a look at the [tutorial](TUTORIAL.md) instead. 
 
+For installation of components you will have to have [helm 3](https://helm.sh) and [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) installed.
+
 ## Setting up helm
 We first need to be sure the ingress nginx repository of helm and kubernetes is added. We do this using the following command:
 ```CLI
