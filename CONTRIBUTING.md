@@ -29,7 +29,7 @@ Once this is done you can clone it to your local machine.
 
 ### Making the changes
 On your local machine, create a new branch on the development branch.
-please your the following naming convention for your branch name:
+please use the following naming convention for your branch name:
 - `issue/issue-number`
 
 Once you have made changes or additions to the code, you can commit them (try to keep the commit message descriptive but short). If an issue exists in the repository for the changes you made, be sure to format your commit message to include the issue number.
