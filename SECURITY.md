@@ -14,7 +14,9 @@ What you should however definitely do is keeping your dependencies, symfony, doc
 
 ## Containers
 
+
 ## Deployment Clusters
+It is best practise to run Common Ground components on clusters that comply to [haven](https://haven.commonground.nu). This means compliancy to the best practices for information security, both by industry standards as governmental standards.
 
 ## Authentication versus Authorization (Better known as access) 
 At this moment the component is protected using a general API key, which is set in the APP_COMMONGROUND_KEY and APP_APPLICATION_KEY in the .env-file, hence in security.commongroundKey and security.applicationKey.
@@ -28,7 +30,7 @@ The component contains an automated CI/CD street for running, testing and releas
 
 This CI/CD street tests the component for a number of parameters, including:
 
-- Is the component working: The components are tested with the use of a postman script that describes the calls that can be made to the component. If all calls succeed, the component is assumed to be working in order. This script is found in the [schema folder](src/api/public/schema).
+- Is the component working: The components are tested with the use of a postman script that describes the calls that can be made to the component. If all calls succeed, the component is assumed to be working in order. This script is found in the [schema folder](api/public/schema).
 - Are the dependencies up-to-date, using the sensiolabs security checker
 
 Also, with the help of StyleCI, the components are checked for adherence to the symfony code standards, while dependabot also checks them for outdated dependencies.
