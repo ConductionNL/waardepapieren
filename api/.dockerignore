@@ -13,7 +13,5 @@
 .editorconfig
 .env.*
 .php_cs.cache
-bin/*
-!bin/console
 docker/db/data/
 var/
