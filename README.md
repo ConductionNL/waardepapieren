@@ -1,62 +1,93 @@
-# Readme
--------
-Welcome to the the VNG Common Ground proto component!
+Additional Information
+----
 
-This "proto" component provides a plug and play solution for component generation on Common Ground. That means that it takes away all the hassle of setting op codebases, containers and following the VNG Api Standaard. It does all that for you! 
+For deployment to kubernetes clusters we use Helm 3.
 
-For that we use **[Api Platform](https://api-platform.com)**, a next-generation web framework designed to easily create API-first projects, without compromising extensibility and flexibility. 
+For an in depth installation guide you can refer to the [installation guide](INSTALLATION.md).
 
-Getting started
--------
-Do you want to create your own Commonground component? Take a look at our in depht [tutorial](TUTORIAL.md) on spinning up your own component!
+- [Contributing](CONTRIBUTING.md)
 
-The commonground bundle
--------
-This repository uses the power of conductions [commonground bundle](https://packagist.org/packages/conduction/commongroundbundle) for symfony to provide common ground specific functionality based on the [VNG Api Strategie](https://docs.geostandaarden.nl/api/API-Strategie/). Including  
+- [ChangeLogs](CHANGELOG.md)
 
-* Build in support for public API's like BAG (Kadaster), KVK (Kamer van Koophandel)
-* Build in validators for common dutch variables like BSN (Burger service nummer), RSIN(), KVK(), BTW()
-* AVG and VNG proof audit trails
-* And [much more](https://packagist.org/packages/conduction/commongroundbundle) .... 
+- [RoadMap](ROADMAP.md)
 
-Be sure to read our [design considerations](/design.md) concerning the [VNG Api Strategie](https://docs.geostandaarden.nl/api/API-Strategie/). 
+- [Security](SECURITY.md)
+
+- [Licence](LICENSE.md)
+
+Description
+----
+The CommonGround Waardepapieren Interface
+
+##About Waardepapieren
+
+The waardenpapieren project aims at digitizing proof from the dutch government for its citizens (e.g. birth certificates, marriage certificates and proof of residence and residential history) it is based on the [W3C claims structure](https://w3c.github.io/vc-data-model/#claims) for standardization.
+
+At the core of the waardepapieren concept is that a “proof” should be applicable both digital and non-digital. Therefore a proof is presented as a PDF containing an JTW based claim, the claim itself however can also be used separately. For more information about the inner workings of waardepapieren see the waardepapieren service at it [repro]( https://github.com/ConductionNL/waardepapieren-service).
+
+##Online test environment
+There are several online environments available for testing
+
+1. [Example user interface](https://waardepapieren-gemeentehoorn.commonground.nu)
+2. [Example registration desk interface](https://waardepapieren-gemeentehoorn.commonground.nu/waardepapieren-balie)
+3. [Example Wordpress implementation](https://dev.zuiddrecht.nl)
+4. [Example Waardepapieren Service](https://waardepapieren-gemeentehoorn.commonground.nu/api/v1/waar)
+5. [Example Waardepapieren Registration](https://waardepapieren-gemeentehoorn.commonground.nu/api/v1/wari )
+
+##Dependencies
+
+For this repository you will need an API key at a waardepapieren service, a valid api key can be obtained at [Dimpac](https://www.dimpact.nl/) a key for the test api can be obtained from [Conduction](https://condution.nl).
+
+## Setup your local environment
+Before we can spin up our component we must first get a local copy from our repository, we can either do this through the command line or use a Git client.
+
+For this example we're going to use [GitKraken](https://www.gitkraken.com/) but you can use any tool you like, feel free to skip this part if you are already familiar with setting up a local clone of your repository.
+
+Open gitkraken press "clone a repo" and fill in the form (select where on your local machine you want the repository to be stored, and fill in the link of your repository on github), press "clone a repo" and you should then see GitKraken downloading your code. After it's done press "open now" (in the box on top) and voilá your codebase (you should see an initial commit on a master branch).
+
+You can now navigate to the folder where you just installed your code, it should contain some folders and files and generally look like this. We will get into the files later, lets first spin up our component!
+
+Next make sure you have [docker desktop](https://www.docker.com/products/docker-desktop) running on your computer.
+
+Open a command window (example) and browse to the folder where you just stuffed your code, navigating in a command window is done by cd, so for our example we could type
+cd c:\repos\common-ground\my-component (if you installed your code on a different disk then where the cmd window opens first type <diskname>: for example D: and hit enter to go to that disk, D in this case). We are now in our folder, so let's go! Type docker-compose up and hit enter. From now on whenever we describe a command line command we will document it as follows (the $ isn't actually typed but represents your folder structure):
+
+```CLI
+$ docker-compose up
+```
+
+Your computer should now start up your local development environment. Don't worry about al the code coming by, let's just wait until it finishes. You're free to watch along and see what exactly docker is doing, you will know when it's finished when it tells you that it is ready to handle connections.
+
+Open your browser type [<http://localhost/>](https://localhost) as address and hit enter, you should now see your common ground component up and running.
 
 
-Requesting features
--------
-Do you need a feature that is not on this list? don't hesitate to send us a [feature request](https://github.com/ConductionNL/commonground-component/issues/new?assignees=&labels=&template=feature_request.md&title=).  
+##Installation 
+This repository comes with an helm installation package and guide for installations on kubernates and haven environments. The installation guide can be found under INSTALLATION.md[](INSTALLATION.md).
 
-Staying up to date
--------
+##Other Repro’s
+*UI*
+1. [Burger interface](https://github.com/ConductionNL/waardepapieren) 
+2. [Ballie interface](https://github.com/ConductionNL/waardepapieren-ballie)
 
-## Features
--------
-API Platform embraces open web standards (OpenAPI, JSON-LD, GraphQL, Hydra, HAL, JSONAPI, JWT, OAuth, HTTP...) and the [Linked Data](https://www.w3.org/standards/semanticweb/data) movement. Your API will automatically expose structured data in Schema.org/JSON-LD.
-It means that your commonground application is usable **out of the box** with technologies of the semantic web.
+*Componenten*
+1. [Motorblok](https://github.com/ConductionNL/waardepapieren-service) 
+2. [Register](https://github.com/ConductionNL/waardepapieren-register) 
 
-* Comes with a paired [React](https://reactjs.org/) application, to provide face to your code
-* And a fully functional (and automatically updated) [React Admin](https://marmelab.com/react-admin/) backend to easily test and proof your component
-* Design your own data model as plain old PHP classes or [**import an existing one**](https://api-platform.com/docs/schema-generator)
-  from the [Schema.org](https://schema.org/) vocabulary
-* **Expose in minutes a hypermedia REST or a GraphQL API** with pagination, data validation, access control, relation embedding,
-  filters and error handling...
-* Benefit from Content Negotiation: [GraphQL](http://graphql.org), [JSON-LD](http://json-ld.org), [Hydra](http://hydra-cg.com),
-  [HAL](http://stateless.co/hal_specification.html), [JSONAPI](https://jsonapi.org/), [YAML](http://yaml.org/), [JSON](http://www.json.org/), [XML](https://www.w3.org/XML/) and [CSV](https://www.ietf.org/rfc/rfc4180.txt) are supported out of the box
-* Enjoy the **beautiful automatically generated API documentation** (Swagger/[OpenAPI](https://www.openapis.org/))
-* Add [**a convenient Material Design administration interface**](https://api-platform.com/docs/admin) built with [React](https://reactjs.org/)
-  without writing a line of code
-* **Scaffold fully functional Progressive-Web-Apps and mobile apps** built with [React](https://api-platform.com/docs/client-generator/react), [Vue.js](https://api-platform.com/docs/client-generator/vuejs) or [React Native](https://api-platform.com/docs/client-generator/react-native) thanks to [the client
-  generator](https://api-platform.com/docs/client-generator) (a Vue.js generator is also available)
-* Install a development environment and deploy your project in production using **[Docker](https://api-platform.com/docs/distribution#using-the-official-distribution-recommended)** and [Kubernetes](https://api-platform.com/docs/deployment/kubernetes)
-* Easily add **[JSON Web Token](https://api-platform.com/docs/core/jwt) or [OAuth](https://oauth.net/) authentication**
-* Create specs and tests with a **developer friendly API testing tool** on top of [Behat](http://behat.org/)
-* use **thousands of Symfony bundles and React components** with API Platform
-* reuse **all your Symfony and React skills**, benefit of the incredible amount of documentation available
-* enjoy the popular [Doctrine ORM](http://www.doctrine-project.org/projects/orm.html) (used by default, but fully optional:
-  you can use the data provider you want, including but not limited to MongoDB and ElasticSearch)
-  
+*Libraries*
+1. [PHP](https://github.com/ConductionNL/waardepapieren-php)
+
+*Plugins*
+1. [Wordpress](https://github.com/ConductionNL/waardepapieren_wordpress) 
+2. [Typo3](https://github.com/ConductionNL/waardepapieren_typo3) 
+3. [Drupal](https://github.com/ConductionNL/waardepapieren_drupal) 
+
 
 Credits
--------
+----
 
-Created by [Ruben van der Linde](https://www.conduction.nl/team) for conduction. But based on [api platform](https://api-platform.com) by [Kévin Dunglas](https://dunglas.fr). Commercial support for common ground components available from [Conduction](https://www.conduction.nl).
+Information about the authors of this component can be found [here](AUTHORS.md)
+
+This component is based on the [ICTU discipl project](https://github.com/discipl/waardepapieren)
+
+Copyright © [Dimpact](https://www.dimpact.nl/) 2020
+
