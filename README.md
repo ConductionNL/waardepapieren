@@ -1,3 +1,4 @@
+#  Waardepapieren User Interface
 Additional Information
 ----
 
@@ -17,15 +18,15 @@ For an in depth installation guide you can refer to the [installation guide](INS
 
 Description
 ----
-The CommonGround Waardepapieren Interface
+The CommonGround Waardepapieren Interface provides a citizen focused interface for the creation of waardepapieren
 
-##About Waardepapieren
+## About Waardepapieren
 
 The waardenpapieren project aims at digitizing proof from the dutch government for its citizens (e.g. birth certificates, marriage certificates and proof of residence and residential history) it is based on the [W3C claims structure](https://w3c.github.io/vc-data-model/#claims) for standardization.
 
 At the core of the waardepapieren concept is that a “proof” should be applicable both digital and non-digital. Therefore a proof is presented as a PDF containing an JTW based claim, the claim itself however can also be used separately. For more information about the inner workings of waardepapieren see the waardepapieren service at it [repro]( https://github.com/ConductionNL/waardepapieren-service).
 
-##Online test environment
+## Online test environment
 There are several online environments available for testing
 
 1. [Example user interface](https://waardepapieren-gemeentehoorn.commonground.nu)
@@ -34,7 +35,7 @@ There are several online environments available for testing
 4. [Example Waardepapieren Service](https://waardepapieren-gemeentehoorn.commonground.nu/api/v1/waar)
 5. [Example Waardepapieren Registration](https://waardepapieren-gemeentehoorn.commonground.nu/api/v1/wari )
 
-##Dependencies
+## Dependencies
 
 For this repository you will need an API key at a waardepapieren service, a valid api key can be obtained at [Dimpac](https://www.dimpact.nl/) a key for the test api can be obtained from [Conduction](https://condution.nl).
 
@@ -61,10 +62,10 @@ Your computer should now start up your local development environment. Don't worr
 Open your browser type [<http://localhost/>](https://localhost) as address and hit enter, you should now see your common ground component up and running.
 
 
-##Installation 
+## Installation 
 This repository comes with an helm installation package and guide for installations on kubernates and haven environments. The installation guide can be found under INSTALLATION.md[](INSTALLATION.md).
 
-##Other Repro’s
+## Other Repro’s
 *UI*
 1. [Burger interface](https://github.com/ConductionNL/waardepapieren) 
 2. [Ballie interface](https://github.com/ConductionNL/waardepapieren-ballie)
