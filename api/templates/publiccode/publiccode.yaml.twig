@@ -29,6 +29,9 @@ outputTypes:
 
 platforms:
     - web
+    - haven
+    - nlx
+    - gaia-x
 
 categories:
     - it-development
@@ -115,4 +118,8 @@ dependsOn:
     open:
         - name: Kubernetes
           versionMin: "1.15.5-do.1"
+
+installations:
+    - type: helm
+      url: "{{ app_repro }}/raw/master/api/helm/{{ app_name|replace({' ':''})|lower }}-0.1.0.tgz"
 
