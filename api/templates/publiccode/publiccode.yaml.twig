@@ -5,7 +5,6 @@ name: {{ app_name }}
 applicationSuite: commonground
 url: "{{ app_repro }}"
 landingURL: "{{ app_demo }}"
-    {# we asume that everything is based on the proto component #}
 isBasedOn: "https://github.com/ConductionNL/Proto-component-commonground.git"
 softwareVersion: "{{ app_version }}"
 releaseDate: "{{ "now"|date("Y-d-m") }}"
@@ -121,5 +120,5 @@ dependsOn:
 
 installations:
     - type: helm
-      url: "{{ app_repro }}/raw/master/api/helm/{{ app_name|replace({' ':''})|lower }}-0.1.0.tgz"
+      url: "https://raw.githubusercontent.com/{{ app_repro|trim('https://github.com', 'left') }}/master/api/helm/"
 
