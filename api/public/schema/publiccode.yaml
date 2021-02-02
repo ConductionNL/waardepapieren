@@ -119,4 +119,4 @@ dependsOn:
 
 installations:
     - type: helm
-      url: "https://github.com/ConductionNL/Proto-component-commonground/raw/master/api/helm/pc-0.1.0.tgz"
+      url: "https://raw.githubusercontent.com/ConductionNL/Proto-component-commonground/master/api/helm/"
