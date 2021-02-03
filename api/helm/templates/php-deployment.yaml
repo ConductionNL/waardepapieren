@@ -184,6 +184,16 @@ spec:
                 configMapKeyRef:
                   name: {{ template "fullname" . }}
                   key: app-web
+            -   name: APP_INTERNAL
+                valueFrom:
+                    configMapKeyRef:
+                        name: {{ template "fullname" . }}
+                        key: app-internal
+            -   name: APP_SESSION_DURATION
+                valueFrom:
+                    configMapKeyRef:
+                        name: {{ template "fullname" . }}
+                        key: app-session-duration
             - name: APP_SUBPATH_ROUTING
               valueFrom:
                 configMapKeyRef:
@@ -262,6 +272,36 @@ spec:
               {{- else }}
               value: https://{{ $.Values.settings.env }}.{{ $.Values.settings.domain }}
               {{- end }}
+              {{ if .Values.security.mollieKey }}
+              -   name: APP_MOLLIE_KEY
+                  valueFrom:
+                      secretKeyRef:
+                          name: {{ template "fullname" . }}
+                          key: app_mollie_key
+              {{ end }}
+          #Redis
+            - name: REDIS_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ template "fullname" . }}
+                  key: redis-host
+            - name: REDIS_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ template "fullname" . }}
+                  key: redis-port
+                  
+          #URLs
+            - name: APP_DIGISPOOF_LOCATION
+              valueFrom:
+                  configMapKeyRef:
+                      name: {{ template "fullname" . }}
+                      key: digispoof-location
+            - name: APP_EHERKENNING_LOCATION
+              valueFrom:
+                  configMapKeyRef:
+                      name: {{ template "fullname" . }}
+                      key: eherkenning-location
           resources:
 {{ toYaml .Values.resources | indent 12 }}
     {{- if .Values.nodeSelector }}
