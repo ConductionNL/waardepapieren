@@ -85,6 +85,7 @@ class DefaultController extends AbstractController
 
         if ($request->isMethod('POST')) {
             $variables['certificate'] = $request->request->all();
+            $variables['certificate']['organization'] = '123456789';
             $variables['certificate'] = $commonGroundService->createResource($variables['certificate'], 'https://waardepapieren-gemeentehoorn.commonground.nu/api/v1/waar/certificates');
             $variables['certificate']['claim'] = base64_encode(json_encode($variables['certificate']['claim']));
         }
