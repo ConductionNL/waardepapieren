@@ -4,9 +4,9 @@ name: waardepapieren
 applicationSuite: commonground
 url: "https://github.com/ConductionNL/waardepapieren"
 landingURL: "dev.waardepapieren-gemeentehoorn.commonground.nu"
-    isBasedOn: "https://github.com/ConductionNL/Proto-component-commonground.git"
+isBasedOn: "https://github.com/ConductionNL/Proto-component-commonground.git"
 softwareVersion: "V1.0"
-releaseDate: "2021-02-02"
+releaseDate: "2021-03-02"
 logo: www.waardepapieren.com
 monochromeLogo: img/logo-mono.svg
 
@@ -119,5 +119,5 @@ dependsOn:
 
 installations:
     - type: helm
-      url: "https://github.com/ConductionNL/waardepapieren/raw/master/api/helm/waardepapieren-0.1.0.tgz"
+      url: "https://raw.githubusercontent.com/ConductionNL/waardepapieren/master/api/helm/"
 

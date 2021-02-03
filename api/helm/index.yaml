@@ -3,14 +3,14 @@ entries:
   waardepapieren:
   - apiVersion: v1
     appVersion: V1.0
-    created: "2021-02-02T09:17:52.4251874Z"
+    created: "2021-02-03T07:48:01.6998566Z"
     description: Naast deze JSON rest API is er ook een [graphql](/graphql) interface
       beschikbaar.
-    digest: 50449e6e814680b4f6a367baa38e7d66912e07423c2694007e1f66a37417b3ca
+    digest: d413a422a7dbb2a90ab5608a79f0894c907614ac2acf946ee37b202e5b8a5f7c
     home: www.waardepapieren.com
     icon: www.waardepapieren.com
     name: waardepapieren
     urls:
     - waardepapieren-0.1.0.tgz
     version: 0.1.0
-generated: "2021-02-02T09:17:52.4193756Z"
+generated: "2021-02-03T07:48:01.6951651Z"
