@@ -33,22 +33,22 @@ class DefaultController extends AbstractController
             'name'=> 'Akte van geboorte',
             'type'=> 'akte_van_geboorte',
         ];
-        $variables['types'][] = [
-            'name'=> 'Akte van overlijden',
-            'type'=> 'akte_van_overlijden',
-        ];
+//        $variables['types'][] = [
+//            'name'=> 'Akte van overlijden',
+//            'type'=> 'akte_van_overlijden',
+//        ];
         $variables['types'][] = [
             'name'=> 'Verklaring van in leven zijn',
             'type'=> 'verklaring_van_in_leven_zijn',
         ];
-        $variables['types'][] = [
-            'name'=> 'Verklaring van Nederlanderschap',
-            'type'=> 'verklaring_van_nederlanderschap',
-        ];
-        $variables['types'][] = [
-            'name'=> 'Uittreksel basis registratie personen',
-            'type'=> 'uittreksel_basis_registratie_personen',
-        ];
+//        $variables['types'][] = [
+//            'name'=> 'Verklaring van Nederlanderschap',
+//            'type'=> 'verklaring_van_nederlanderschap',
+//        ];
+//        $variables['types'][] = [
+//            'name'=> 'Uittreksel basis registratie personen',
+//            'type'=> 'uittreksel_basis_registratie_personen',
+//        ];
         $variables['types'][] = [
             'name'=> 'Historisch uittreksel basis registratie personen',
             'type'=> 'historisch_uittreksel_basis_registratie_personen',
@@ -61,7 +61,7 @@ class DefaultController extends AbstractController
 
         if ($request->isMethod('POST')) {
             $variables['certificate'] = $request->request->all();
-            $variables['certificate']['organization'] = '123456789';
+            $variables['certificate']['organization'] = '001516814';
             $variables['certificate'] = $commonGroundService->createResource($variables['certificate'], 'https://waardepapieren-gemeentehoorn.commonground.nu/api/v1/waar/certificates');
             $variables['certificate']['claim'] = base64_encode(json_encode($variables['certificate']['claim']));
         }
