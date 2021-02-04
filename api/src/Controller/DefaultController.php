@@ -34,28 +34,8 @@ class DefaultController extends AbstractController
             'type'=> 'akte_van_geboorte',
         ];
         $variables['types'][] = [
-            'name'=> 'Akte van huwelijk',
-            'type'=> 'akte_van_huwelijk',
-        ];
-        $variables['types'][] = [
             'name'=> 'Akte van overlijden',
             'type'=> 'akte_van_overlijden',
-        ];
-        $variables['types'][] = [
-            'name'=> 'Akte van registratie van een partnerschap',
-            'type'=> 'akte_van_registratie_van_een_partnerschap',
-        ];
-        $variables['types'][] = [
-            'name'=> 'Akte van omzetting van een huwelijk in een registratie van een partnerschap',
-            'type'=> 'akte_van_omzetting_van_een_huwelijk_in_een_registratie_van_een_partnerschap',
-        ];
-        $variables['types'][] = [
-            'name'=> 'Akte van omzetting van een registratie van een partnerschap',
-            'type'=> 'akte_van_omzetting_van_een_registratie_van_een_partnerschap',
-        ];
-        $variables['types'][] = [
-            'name'=> 'Verklaring van huwelijksbevoegdheid',
-            'type'=> 'verklaring_van_huwelijksbevoegdheid',
         ];
         $variables['types'][] = [
             'name'=> 'Verklaring van in leven zijn',
@@ -70,10 +50,6 @@ class DefaultController extends AbstractController
             'type'=> 'uittreksel_basis_registratie_personen',
         ];
         $variables['types'][] = [
-            'name'=> 'Uittreksel registratie niet ingezetenen',
-            'type'=> 'uittreksel_registratie_niet_ingezetenen',
-        ];
-        $variables['types'][] = [
             'name'=> 'Historisch uittreksel basis registratie personen',
             'type'=> 'historisch_uittreksel_basis_registratie_personen',
         ];
@@ -85,6 +61,7 @@ class DefaultController extends AbstractController
 
         if ($request->isMethod('POST')) {
             $variables['certificate'] = $request->request->all();
+            $variables['certificate']['organization'] = '123456789';
             $variables['certificate'] = $commonGroundService->createResource($variables['certificate'], 'https://waardepapieren-gemeentehoorn.commonground.nu/api/v1/waar/certificates');
             $variables['certificate']['claim'] = base64_encode(json_encode($variables['certificate']['claim']));
         }
