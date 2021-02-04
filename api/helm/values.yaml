@@ -29,7 +29,7 @@ settings:
   web: false
   internal: false
   debug: 1
-  cache: 1
+  cache: false
   sessionDuration: 900
   replicaCount: 1
   corsAllowOrigin: ['*']
@@ -149,3 +149,9 @@ resources: {}
   # requests:
   #  cpu: 100m
   #  memory: 128Mi
+
+commonground:
+    eherkenning:
+        location: https://waardepapieren-gemeentehoorn.commonground.nu/eherkenning
+    digispoof:
+        location: https://waardepapieren-gemeentehoorn.commonground.nu/digispoof
