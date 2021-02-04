@@ -5,8 +5,3 @@ name: waardepapieren
 version: 0.1.0
 home: www.waardepapieren.com
 icon: www.waardepapieren.com
-dependencies:
-    - name: postgresql
-      repository: https://charts.bitnami.com/bitnami
-      version: 10.1.1
-      condition: postgresql.enabled
