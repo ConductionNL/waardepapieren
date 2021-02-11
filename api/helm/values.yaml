@@ -17,7 +17,7 @@ settings:
   container: https://hub.docker.com/repository/docker/conduction/waardepapieren-php
   domain: waardepapieren-gemeentehoorn.commonground.nu
   subdomain: false
-  subpath: 
+  subpath: ""
   subpathRouting: true
   organisationName: Conduction
   email: info@conduction.nl
