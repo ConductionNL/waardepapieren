@@ -29,15 +29,44 @@ class DefaultController extends AbstractController
         // On an index route we might want to filter based on user input
         $variables['query'] = array_merge($request->query->all(), $variables['post'] = $request->request->all());
 
-//        if ($this->getUser()) {
-//            $person = $commonGroundService->getResource($this->getUser()->getPerson());
-//            $personUrl = $commonGroundService->cleanUrl(['component' => 'cc', 'type' => 'people', 'id' => $person['id']]);
-//        }
+        $variables['types'][] = [
+            'name'=> 'Akte van geboorte',
+            'type'=> 'akte_van_geboorte',
+        ];
+//        $variables['types'][] = [
+//            'name'=> 'Akte van overlijden',
+//            'type'=> 'akte_van_overlijden',
+//        ];
+        $variables['types'][] = [
+            'name'=> 'Verklaring van in leven zijn',
+            'type'=> 'verklaring_van_in_leven_zijn',
+        ];
+//        $variables['types'][] = [
+//            'name'=> 'Verklaring van Nederlanderschap',
+//            'type'=> 'verklaring_van_nederlanderschap',
+//        ];
+//        $variables['types'][] = [
+//            'name'=> 'Uittreksel basis registratie personen',
+//            'type'=> 'uittreksel_basis_registratie_personen',
+//        ];
+        $variables['types'][] = [
+            'name'=> 'Historisch uittreksel basis registratie personen',
+            'type'=> 'historisch_uittreksel_basis_registratie_personen',
+        ];
+
+        if ($this->getUser() && $this->getUser()->getPerson()) {
+            $variables['certificates'] = $commonGroundService->getResourceList('https://waardepapieren-gemeentehoorn.commonground.nu/api/v1/wari/certificates', ['person' => $this->getUser()->getPerson()])['hydra:member'];
+//            $variables['certificates'][] = array('type' => 'geboorte akte', 'created' => '17-09-2020', 'id' => '1');
+        }
 
         if ($request->isMethod('POST')) {
             $variables['certificate'] = $request->request->all();
+            $variables['certificate']['organization'] = '001516814';
             $variables['certificate'] = $commonGroundService->createResource($variables['certificate'], 'https://waardepapieren-gemeentehoorn.commonground.nu/api/v1/waar/certificates');
+            $variables['certificate']['claim'] = base64_encode(json_encode($variables['certificate']['claim']));
         }
+
+//        $variables['claim'] = base64_encode(json_encode(array("Peter"=>35, "Ben"=>37, "Joe"=>43)));
 
         return $variables;
     }

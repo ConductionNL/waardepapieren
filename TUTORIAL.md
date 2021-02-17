@@ -18,7 +18,7 @@ You can install docker-desktop from [the docker website](https://hub.docker.com/
 ## Generating your component (repository/codebase)
 Starting up your first Common Ground component is extremely easy, al you need is a GitHub account and go the link below and fill in the form, press create and press to we have a component!
 
-[https://github.com/ConductionNL/Proto-application-NLDesign/generate](https://github.com/ConductionNL/Proto-application-NLDesign/generate) 
+[https://github.com/ConductionNL/Proto-component-commonground/generate](https://github.com/ConductionNL/Proto-component-commonground/generate) 
 
 After that you should be redirected to your own brand new repository. 
 
@@ -85,31 +85,25 @@ Best practice is to fetch the Conduction Common Ground component into a local up
 __Please make sure the you have committed al your changes to your current codebase and pushed a backup copy to your Git repo before continuing__
 
 ```CLI
-$ git remote add upstream https://github.com/ConductionNL/Proto-application-NLDesign.git
-$ git fetch upstream
-$ git branch upstream upstream/master
+git remote add upstream https://github.com/ConductionNL/Proto-component-commonground.git
+git fetch upstream
+git branch upstream upstream/master
 ```
 
 You can then use your favorite Git tool to merge this branch into your normal working branch without the danger of overwriting your local code. Or alternatively you can use your GIT CLI (not  recommended)
 
 ```CLI
-$ git checkout master
-$ git pull upstream master --allow-unrelated-histories
-```
-
-If you are feeling particulary lazy you can do all the above with
-
-```CLI
-$ git remote add upstream https://github.com/ConductionNL/Proto-application-NLDesign.git && git fetch upstream && git branch upstream upstream/master && git checkout master && git pull upstream master --allow-unrelated-histories
+git checkout master
+git pull upstream master --allow-unrelated-histories
 ```
 
 You might get an error at this point in the lines of 'refusing to merge unrelated histories', that basically means that you lost your history connection with the original repository. This can happen for several reasons, but is easily fixable.
 
 ```CLI
-$ git checkout upstream
-$ git pull upstream master --allow-unrelated-histories
-$ git checkout master
-$ git merge upstream --allow-unrelated-histories
+git checkout upstream
+git pull upstream master --allow-unrelated-histories
+git checkout master
+git merge upstream --allow-unrelated-histories
 ``` 
 
 Keep in mind that you wil need to make sure to stay up to date about changes on the Common Ground component repository.
@@ -310,6 +304,15 @@ Be mindful of the --env=dev here! Doctrine wil only allow fixture loading on a d
 
 More information on using data fixtures can be found at the [symfony website](https://symfony.com/doc/current/bundles/DoctrineFixturesBundle/index.html) (you can skipp the installation instructions) we also encourage you to take a look at the [tabellen component](https://github.com/ConductionNL/landelijketabellencatalogus) that makes extensive use of data fixtures.
 
+## Keeping up-to-date with your dependencies
+If you use third-party dependencies in your component on top of the dependencies of the dependencies used by the Proto Component Commonground you will have to update them regularly. This can be done with the following command:
+
+```CLI
+$ docker-compose exec php composer update
+```
+
+Or, when logged in using ```docker-compose exec php bash``` by just running ```composer update```.
+
 ## Sharing your work 
 A vital part of te common ground community is sharing your work, and telling other people what you are working. This way people can help you with problems that you run into. And keep tabs on any (security) updates that you make to you code. Sounds like a lot of work right?
 
@@ -318,7 +321,7 @@ Wel it actually isn't, there is a specific common ground platform over at common
 Another option that we have is to declare our repository on [publiccode](), to do this you need to copy the publiccode.yaml from the [api/public/schema](api/public/schema]) folder to your root folder (dont forget to redo this every time you make a major change to your repository concerning versioning or licencing).  
 
 
-Continues integration
+Continuous integration
 -------
 > The following bit of the tutorial requires an additional account
 > - [https://hub.docker.com/](https://hub.docker.com/) (You might already have this for docker for desktop)

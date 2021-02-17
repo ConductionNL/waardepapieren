@@ -17,7 +17,7 @@ settings:
   container: https://hub.docker.com/repository/docker/conduction/waardepapieren-php
   domain: waardepapieren-gemeentehoorn.commonground.nu
   subdomain: false
-  subpath: 
+  subpath: ""
   subpathRouting: true
   organisationName: Conduction
   email: info@conduction.nl
@@ -29,7 +29,7 @@ settings:
   web: false
   internal: false
   debug: 1
-  cache: 1
+  cache: false
   sessionDuration: 900
   replicaCount: 1
   corsAllowOrigin: ['*']
@@ -53,9 +53,9 @@ settings:
 
 security:
   commongroundId: "aae458e7-dd33-494c-a99c-383a7b1658a0"
-  commongroundKey: "45c1a4b6-59d3-4a6e-86bf-88a872f35845"
-  applicationKey: "45c1a4b6-59d3-4a6e-86bf-88a872f35845"
-  userKey: "45c1a4b6-59d3-4a6e-86bf-88a872f35845"
+  commongroundKey: "47e971de-2272-4e09-a141-134612e46a22"
+  applicationKey: "47e971de-2272-4e09-a141-134612e46a22"
+  userKey: "47e971de-2272-4e09-a141-134612e46a22"
   authorisationProviderUser: https://uc.zuid-drecht.nl
   authorisationProviderApplication: https://openzaak.dev.zuid-drecht.nl/authorizaties/api/v1
 
@@ -149,3 +149,9 @@ resources: {}
   # requests:
   #  cpu: 100m
   #  memory: 128Mi
+
+commonground:
+    eherkenning:
+        location: https://waardepapieren-gemeentehoorn.commonground.nu/eherkenning
+    digispoof:
+        location: https://waardepapieren-gemeentehoorn.commonground.nu/digispoof

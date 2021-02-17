@@ -8,92 +8,174 @@
             <div class="content-background">
                 <div class="content">
 
-                    {% if not certificate|default %}
+                    <h2>Waardepapieren</h2>
 
-                        <h2>Waardepapieren</h2>
-                        <p>In deze applicatie kunt u waardepapieren downloaden. Ga snel aan de slag met het
-                            formulier.</p>
+                    {% if app.user|default %}
 
-                        <form class="mb4" action="{{ path('app_default_index') }}" method="post">
-                            <div class="input">
-                                <label class="input__label" for="person">Uw brp:</label>
-                                <input name="person" type="text" id="person"
-                                       class="input__control input__control--xl input__control--text"
-                                       value="https://waardepapieren-gemeentehoorn.commonground.nu/api/v1/brp/ingeschrevenpersonen/999999928"
-                                       required>
+                        {% if not certificate|default %}
 
-                            </div>
-                            <div class="input">
-                                <label class="input__label" for="type">Kies een waardepapier:</label>
-                                <select id="type" name="type"
-                                        class="input__control input__control--m input__control--select" required>
-                                    <option value="" style="color: lightgrey;">Maak een keuze</option>
-                                    <option value="geboorte akte">Geboorte akte</option>
-                                    <option value="verblijfs geschiedenis">Verblijfs geschiedenis</option>
-                                    <option value="uitreksel brp">Uitreksel brp</option>
-                                </select>
-                            </div>
+                            <form class="mb4" action="{{ url('app_default_index') }}" method="post">
+                                <div class="input">
+                                    {#                                <label class="input__label" for="person">Uw brp:</label>#}
+                                    <input name="person" type="hidden" id="person"
+                                           class="input__control input__control--xl input__control--text"
+                                           value="{{ app.user.person }}">
 
-                            <div class="input">
-                                <button type="submit" class="btn btn--primary">Verder</button>
-                            </div>
-                        </form>
+                                </div>
+                                <div class="input">
+                                    <label class="input__label" for="type">Kies een waardepapier om te op te
+                                        halen:</label>
+                                    <select id="type" name="type"
+                                            class="input__control input__control--xl input__control--select" required>
+                                        <option value="" style="color: lightgrey;">Maak een keuze</option>
+                                        {% for type in types %}
+                                            <option value="{{ type.type }}">{{ type.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="input">
+                                    <button type="submit" class="btn btn--primary">Verder</button>
+                                </div>
+                            </form>
+
+                        {% else %}
+
+                            {% if certificate.type|default %}
+                                <h2>{{ certificate.type|capitalize }}</h2>
+                            {% endif %}
+
+                            {% if certificate.image|default or certificate.document|default %}
+                                <p>Download hier uw waardepapier:</p>
+                            {% endif %}
+
+                            {% if certificate.image|default %}
+                                <a href="{{ certificate.image }}" download>
+                                    <div class="file">
+                                        <i class="file__icon icon icon-document" role="presentation"></i>
+                                        <div class="file__data">
+                                            <div class="file__filename">
+                                                <strong class="file__title break-all">PNG</strong>
+                                                <span class="meta">Foto</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            {% endif %}
+
+                            {% if certificate.document|default %}
+                                <br>
+                                <a href="{{ certificate.document }}" download>
+                                    <div class="file">
+                                        <i class="file__icon icon icon-document" role="presentation"></i>
+                                        <div class="file__data">
+                                            <div class="file__filename">
+                                                <strong class="file__title break-all">PDF</strong>
+                                                <span class="meta">Document</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            {% endif %}
+
+                        {% endif %}
+
+                        {% if certificate.claim|default %}
+                            <br>
+                            <a href="data:application/json;base64,{{ certificate.claim }}" download>
+                                <div class="file">
+                                    <i class="file__icon icon icon-document" role="presentation"></i>
+                                    <div class="file__data">
+                                        <div class="file__filename">
+                                            <strong class="file__title break-all">JSON</strong>
+                                            <span class="meta">Claim</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        {% endif %}
+
+                        <br>
+
+                        <h3>Uw bestaande waardepapieren</h3>
+
+                        <table class="table table-responsive" aria-describedby="tabelbeschrijving">
+                            <thead>
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Aangemaakt op</th>
+                                <th class="center">PNG</th>
+                                <th>PDF</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% if certificates|default %}
+                                {% for cert in certificates %}
+                                    <tr>
+                                        <th scope="row">{{ cert.id|capitalize }}</th>
+                                        <td>{{ cert.dateCreated|date('d-m-Y') }}</td>
+                                        <td>                {% if cert.image|default %}
+                                                <a href="{{ cert.image }}" download>
+                                                    <i class="fa fa-image"></i>
+                                                </a>
+                                            {% endif %}</td>
+                                        <td>                {% if cert.document|default %}
+                                                <a href="{{ cert.document }}" download>
+                                                    <i class="fa fa-file-pdf"></i>
+                                                </a>
+                                            {% endif %}</td>
+                                        {#                                        <td class="text-right">#}
+                                        {#                                            <form action="{{ path('app_waardepapieren_certificate') }}" method="post">#}
+                                        {#                                                <input name="type" value="{{ cert.type }}" hidden>#}
+                                        {#                                                <input name="person" value="{{ app.user.person }}" hidden>#}
+                                        {#                                                <button type="submit" class="pointer">Bekijken</button>#}
+                                        {#                                            </form>#}
+                                        {#                                        </td>#}
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <th scope="row" style="color: lightgrey">U heeft nog geen waardepapieren</th>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            {% endif %}
+                            </tbody>
+                        </table>
+
+
+                        {#                    {% if certificates|default %}#}
+                        {#                        {% for cert in certificates %}#}
+
+                        {#                        {% include 'waardepapieren/widgets/download_modal.html.twig' with {#}
+                        {#                            'item': cert,#}
+                        {#                        } %}#}
+
+                        {#                        <script>#}
+                        {#                            var downCert{{ cert.id|slice(0, 8) }}Modal;#}
+                        {#                            // Load modal component#}
+                        {#                            System.import('/uno/components/modal/modal.js').then(function (module) {#}
+                        {#                                downCert{{ cert.id|slice(0, 8) }}Modal = new module.Modal(document.getElementById('downCert{{ cert.id }}Modal'));#}
+                        {#                            });#}
+
+                        {#                            // Called when the user clicks the button#}
+                        {#                            function openCert{{ cert.id|slice(0, 8) }}Modal() {#}
+                        {#                                downCert{{ cert.id|slice(0, 8) }}Modal.open();#}
+                        {#                            }#}
+                        {#                        </script>#}
+
+                        {#                        {% endfor %}#}
+                        {#                    {% endif %}#}
 
                     {% else %}
 
-                        {% if certificate.type|default %}
-                            <h2>{{ certificate.type|capitalize }}</h2>
-                        {% endif %}
-
-                        {% if certificate.image|default or certificate.document|default %}
-                            <p>Download hier uw waardepapier:</p>
-                        {% endif %}
-
-                        {% if certificate.image|default %}
-                            <a href="{{ certificate.image }}" download>
-                                <div class="file">
-                                    <i class="file__icon icon icon-document" role="presentation"></i>
-                                    <div class="file__data">
-                                        <div class="file__filename">
-                                            <strong class="file__title break-all">JPG</strong>
-                                            <span class="meta">Foto</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        {% endif %}
-
-                        {% if certificate.document|default %}
-                            <br>
-                            <a href="{{ certificate.document }}" download>
-                                <div class="file">
-                                    <i class="file__icon icon icon-document" role="presentation"></i>
-                                    <div class="file__data">
-                                        <div class="file__filename">
-                                            <strong class="file__title break-all">PDF</strong>
-                                            <span class="meta">Document</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        {% endif %}
-
-                        {#                            {% if certificate.claim|default %}#}
-                        {#                                <div class="file">#}
-                        {#                                    <a href="data:text/plain;base64,{{ certificate.claim }}" download>#}
-                        {#                                        <i class="file__icon icon icon-document" role="presentation"></i>#}
-                        {#                                        <div class="file__data">#}
-                        {#                                            <div class="file__filename">#}
-                        {#                                                <strong class="file__title break-all">PDF</strong>#}
-                        {#                                                #}{#                                                <span class="meta">PDF, 1.05 mB</span>#}
-                        {#                                            </div>#}
-                        {#                                        </div>#}
-                        {#                                    </a>#}
-                        {#                                </div>#}
-                        {#                            {% endif %}#}
+                        <p>In deze applicatie kunt u uw waardepapieren downloaden. <a class="pointer"
+                                                                                      href="https://waardepapieren-gemeentehoorn.commonground.nu/digispoof?responceUrl={{ url('app_user_digispoof') }}&backUrl={{ url('app_default_index') }}">Login</a>
+                            om
+                            te starten.</p>
 
                     {% endif %}
-
 
                 </div><!-- /.content -->
             </div><!-- /.content-background -->
