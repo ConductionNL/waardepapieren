@@ -5,7 +5,7 @@ entries:
       category: Database
     apiVersion: v2
     appVersion: 11.10.0
-    created: "2021-02-03T10:41:08.5399667Z"
+    created: "2021-02-19T06:48:16.4475519Z"
     dependencies:
     - name: common
       repository: https://charts.bitnami.com/bitnami
@@ -37,14 +37,27 @@ entries:
   waardepapieren:
   - apiVersion: v1
     appVersion: V1.0
-    created: "2021-02-03T10:41:08.5257807Z"
+    created: "2021-02-19T06:48:16.4264076Z"
     description: Naast deze JSON rest API is er ook een [graphql](/graphql) interface
       beschikbaar.
-    digest: 4e8c5c8a49fd4e1941afaae15e9c03dc610bfc273b3f55b07758c07df3e0c9ac
-    home: www.waardepapieren.com
-    icon: www.waardepapieren.com
+    digest: bd1f3b80011438aec12a1b08cfc5a38845e1c31b2e840f6e783b370f9efc9755
+    home: https://www.conduction.nl
+    icon: https://conductionnl.github.io/images/conduction_avatar_blue_on_transparant.svg
+    keywords:
+    - commonground
+    - haven
+    - nlx
+    - component
+    maintainers:
+    - email: ruben@conduction.nl
+      name: Ruben van der Linde
+    - email: info@conduction.nl
+      name: Conduction
     name: waardepapieren
+    sources:
+    - https://commonground.conduction.nl/
+    - https://www.commonground.nl/
     urls:
     - waardepapieren-0.1.0.tgz
     version: 0.1.0
-generated: "2021-02-03T10:41:08.5182937Z"
+generated: "2021-02-19T06:48:16.4157544Z"
