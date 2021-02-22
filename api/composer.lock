@@ -720,12 +720,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ConductionNL/CommonGroundBundle.git",
-                "reference": "c106ca645136cda1a87c9658ccc47f0c4c7294b1"
+                "reference": "30ce8b7034d87a9b76f3a96f84ba59880a49d329"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ConductionNL/CommonGroundBundle/zipball/c106ca645136cda1a87c9658ccc47f0c4c7294b1",
-                "reference": "c106ca645136cda1a87c9658ccc47f0c4c7294b1",
+                "url": "https://api.github.com/repos/ConductionNL/CommonGroundBundle/zipball/30ce8b7034d87a9b76f3a96f84ba59880a49d329",
+                "reference": "30ce8b7034d87a9b76f3a96f84ba59880a49d329",
                 "shasum": ""
             },
             "require": {
@@ -803,7 +803,12 @@
                 "postcode",
                 "rsin"
             ],
-            "time": "2021-02-18T16:40:43+00:00"
+            "support": {
+                "email": "ruben@conduction.nl",
+                "issues": "https://github.com/ConductionNL/ConductionCommonGroundBundle/issues",
+                "source": "https://github.com/ConductionNL/ConductionCommonGroundBundle"
+            },
+            "time": "2021-02-19T12:06:13+00:00"
         },
         {
             "name": "dasprid/enum",
@@ -13156,5 +13161,5 @@
         "ext-iconv": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "1.1.0"
+    "plugin-api-version": "2.0.0"
 }
