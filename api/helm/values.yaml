@@ -61,10 +61,10 @@ redis:
   redisPort: 6379
 
 commonground:
-    eherkenning:
-        location: https://waardepapieren-gemeentehoorn.commonground.nu/eherkenning
-    digispoof:
-        location: https://waardepapieren-gemeentehoorn.commonground.nu/digispoof
+  eherkenning:
+    location: https://waardepapieren-gemeentehoorn.commonground.nu/eherkenning
+  digispoof:
+    location: https://waardepapieren-gemeentehoorn.commonground.nu/digispoof
 
 varnish:
   enabled: true
