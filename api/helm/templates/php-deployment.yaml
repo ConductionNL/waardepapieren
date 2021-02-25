@@ -138,16 +138,6 @@ spec:
                 configMapKeyRef:
                   name: {{ template "fullname" . }}
                   key: app-subpath
-            - name: REDIS_HOST
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ template "fullname" . }}
-                  key: redis-host
-            - name: REDIS_PORT
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ template "fullname" . }}
-                  key: redis-port
             
             # bla bla      
             - name: DATABASE_URL
@@ -174,7 +164,17 @@ spec:
               {{- else }}
               value: https://{{ $.Values.settings.env }}.{{ $.Values.settings.domain }}
               {{- end }}
-        resources:
+            - name: REDIS_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ template "fullname" . }}
+                  key: redis-host
+            - name: REDIS_PORT
+              valueFrom:
+               configMapKeyRef:
+                  name: {{ template "fullname" . }}
+                  key: redis-port
+          resources:
 {{ toYaml .Values.resources | indent 12 }}
     {{- if .Values.nodeSelector }}
       nodeSelector:
