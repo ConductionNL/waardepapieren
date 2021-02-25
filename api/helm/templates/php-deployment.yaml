@@ -138,6 +138,26 @@ spec:
                 configMapKeyRef:
                   name: {{ template "fullname" . }}
                   key: app-subpath
+            - name: REDIS_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ template "fullname" . }}
+                  key: redis-host
+            - name: REDIS_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ template "fullname" . }}
+                  key: redis-port
+            - name: APP_DIGISPOOF_LOCATION
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ template "fullname" . }}
+                  key: digispoof-location
+            - name: APP_EHERKENNING_LOCATION
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ template "fullname" . }}
+                  key: eherkenning-location
             
             # bla bla      
             - name: DATABASE_URL
@@ -164,26 +184,6 @@ spec:
               {{- else }}
               value: https://{{ $.Values.settings.env }}.{{ $.Values.settings.domain }}
               {{- end }}
-            - name: REDIS_HOST
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ template "fullname" . }}
-                  key: redis-host
-            - name: REDIS_PORT
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ template "fullname" . }}
-                  key: redis-port
-            - name: APP_DIGISPOOF_LOCATION
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ template "fullname" . }}
-                  key: digispoof-location    
-            - name: APP_EHERKENNING_LOCATION
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ template "fullname" . }}
-                  key: eherkenning-location
         resources:
 {{ toYaml .Values.resources | indent 12 }}
     {{- if .Values.nodeSelector }}
