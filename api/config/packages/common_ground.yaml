@@ -52,6 +52,7 @@ parameters:
     env(ARTIFACTHUB_ID): ""
     env(ARTIFACTHUB_USER): ""
     env(HELM_REPOSITORY): ""
+    env(APP_MAJOR_VERSION): "v1"
 
     app_env: "%env(APP_ENV)%"
     app_container: "%env(APP_CONTAINER)%"
@@ -61,6 +62,7 @@ parameters:
     app_audittrail: "%env(AUDITTRAIL_ENABLED)%"
     app_notification: "%env(NOTIFICATION_ENABLED)%"
     app_version: "%env(APP_VERSION)%"
+    app_major_version: "%env(APP_MAJOR_VERSION)%"
     app_name: "%env(APP_NAME)%"
     app_name_technical: "%env(APP_NAME_TECHNICAL)%"
     app_description: "%env(APP_DESCRIPTION)%"
@@ -289,6 +291,7 @@ twig:
         app_audittrail: "%env(AUDITTRAIL_ENABLED)%"
         app_notification: "%env(NOTIFICATION_ENABLED)%"
         app_version: "%env(APP_VERSION)%"
+        app_major_version: "%env(APP_MAJOR_VERSION)%"
         app_name: "%env(APP_NAME)%"
         app_name_technical: "%env(APP_NAME_TECHNICAL)%"
         app_description: "%env(APP_DESCRIPTION)%"
