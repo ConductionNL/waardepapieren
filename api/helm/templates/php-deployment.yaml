@@ -177,13 +177,13 @@ spec:
             - name: APP_DIGISPOOF_LOCATION
               valueFrom:
                configMapKeyRef:
-                  name: { { template "fullname" . } }
+                  name: {{ template "fullname" . }}
                   key: digispoof-location    
             - name: APP_EHERKENNING_LOCATION
               valueFrom:
-                  configMapKeyRef:
-                      name: { { template "fullname" . } }
-                      key: eherkenning-location
+                configMapKeyRef:
+                  name: {{ template "fullname" . }}
+                  key: eherkenning-location
         resources:
 {{ toYaml .Values.resources | indent 12 }}
     {{- if .Values.nodeSelector }}
