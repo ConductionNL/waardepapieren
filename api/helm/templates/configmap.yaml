@@ -1,3 +1,4 @@
+{{- $redisServiceName := include "redis.fullname" . -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -35,3 +36,6 @@ data:
   trusted-proxies: {{ join "," .Values.settings.trustedProxies }}
   trusted-hosts: {{ .Values.settings.trustedHosts | quote }}
   php-service: {{ .Values.settings.name }}-{{ .Values.settings.env }}-php  
+
+  redis-host: {{ printf "%s-redis" $redisServiceName | quote }}
+  redis-port: {{ .Values.redis.redisPort | toString | quote }}

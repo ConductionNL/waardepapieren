@@ -1,15 +1,15 @@
 openapi: 3.0.2
 info:
-  title: Waardepapieren
+  title: ''
   version: V1.0
   description: |
     API Details
-    - Component: Waardepapieren
+    - Component: 
     - Reference: waardepapieren
     - Enviroment: dev
     - Version: V1.0
     - Repository: [online](https://github.com/ConductionNL/waardepapieren) / [zip](https://github.com/ConductionNL/waardepapieren/archive/master.zip)
-    - Docker Image: [online](https://hub.docker.com/repository/docker/conduction/waardepapieren-php) 
+    - Docker Image: [online]() 
     - Datamodel: [postman](schema/waardepapieren.postman_collection.json) / [oas](schema/openapi.yaml) / [pdf](schema/datamodel.pdf) / [modelio (zip)](schema/Datamodel_Modelio.zip) 
     
     Naast deze JSON rest API is er ook een [graphql](/graphql) interface beschikbaar.         
@@ -2439,12 +2439,12 @@ definitions:
         description: 'The moment this request was created'
         type: string
         format: date-time
-        example: '2021-02-17 11:08:52'
+        example: '2021-02-25 09:48:27'
       dateModified:
         description: 'The moment this request last Modified'
         type: string
         format: date-time
-        example: '2021-02-17 11:08:52'
+        example: '2021-02-25 09:48:27'
     required: []
   AuditTrail-write:
     properties:
@@ -2492,12 +2492,12 @@ definitions:
         description: 'The moment this request was created'
         type: string
         format: date-time
-        example: '2021-02-17 11:08:52'
+        example: '2021-02-25 09:48:27'
       dateModified:
         description: 'The moment this request last Modified'
         type: string
         format: date-time
-        example: '2021-02-17 11:08:52'
+        example: '2021-02-25 09:48:27'
     required: []
   ChangeLog-write:
     properties:

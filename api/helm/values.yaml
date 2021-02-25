@@ -14,7 +14,7 @@ settings:
   subdomain: waardepapieren
   subpath: waardepapieren
   subpathRouting: true
-  env: prod
+  env: dev
   web: false
   debug: 1
   cache: false
@@ -55,6 +55,10 @@ nginx:
   tag: latest
   pullPolicy: Always
   replicaCount: 2
+
+redis:
+  enabled: true
+  redisPort: 6379
 
 varnish:
   enabled: true
