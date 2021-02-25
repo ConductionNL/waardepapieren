@@ -42,7 +42,17 @@ parameters:
     env(IDIN_ID): ""
     env(IDIN_SECRET): ""
     env(APP_TYPE): "component"
-  
+    env(APP_NAME_TECHNICAL): ""
+    env(APP_BUILD): "prod"
+    env(APP_CHART): ""
+    env(APP_SESSION_DURATION): "900"
+    env(LICENCE_NAME): "EUPL"
+    env(OWNER_NAME): "Conduction"
+    env(OWNER_URL): "https://www.conduction.nl"
+    env(ARTIFACTHUB_ID): ""
+    env(ARTIFACTHUB_USER): ""
+    env(HELM_REPOSITORY): ""
+
     app_env: "%env(APP_ENV)%"
     app_container: "%env(APP_CONTAINER)%"
     app_debug: "%env(APP_DEBUG)%"

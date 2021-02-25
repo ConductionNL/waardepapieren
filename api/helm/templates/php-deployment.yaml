@@ -164,6 +164,7 @@ spec:
               {{- else }}
               value: https://{{ $.Values.settings.env }}.{{ $.Values.settings.domain }}
               {{- end }}
+           {{- if (eq $.Values.settings.type "application" ) }}
             - name: REDIS_HOST
               valueFrom:
                 configMapKeyRef:
@@ -176,14 +177,15 @@ spec:
                   key: redis-port
             - name: APP_DIGISPOOF_LOCATION
               valueFrom:
-                configMapKeyRef:
-                  name: {{ template "fullname" . }}
-                  key: digispoof-location
+                  configMapKeyRef:
+                      name: {{ template "fullname" . }}
+                      key: digispoof-location
             - name: APP_EHERKENNING_LOCATION
               valueFrom:
-                configMapKeyRef:
-                  name: {{ template "fullname" . }}
-                  key: eherkenning-location
+                  configMapKeyRef:
+                      name: {{ template "fullname" . }}
+                      key: eherkenning-location
+          {{-end }}
           resources:
 {{ toYaml .Values.resources | indent 12 }}
     {{- if .Values.nodeSelector }}
