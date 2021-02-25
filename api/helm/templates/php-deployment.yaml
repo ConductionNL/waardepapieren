@@ -148,16 +148,6 @@ spec:
                 configMapKeyRef:
                   name: {{ template "fullname" . }}
                   key: redis-port
-            - name: APP_DIGISPOOF_LOCATION
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ template "fullname" . }}
-                  key: digispoof-location
-            - name: APP_EHERKENNING_LOCATION
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ template "fullname" . }}
-                  key: eherkenning-location
             
             # bla bla      
             - name: DATABASE_URL
