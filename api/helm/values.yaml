@@ -12,7 +12,7 @@ settings:
     demo: dev.waardepapieren-gemeentehoorn.commonground.nu
     domain: waardepapieren-gemeentehoorn.commonground.nu
     subdomain: waardepapieren
-    subpath:
+    subpath: ""
     subpathRouting: true
     env: dev
     web: false
