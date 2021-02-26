@@ -5,7 +5,7 @@ entries:
       category: Database
     apiVersion: v2
     appVersion: 11.10.0
-    created: "2021-02-26T09:20:21.791777+01:00"
+    created: "2021-02-26T09:26:01.8813076+01:00"
     dependencies:
     - name: common
       repository: https://charts.bitnami.com/bitnami
@@ -39,7 +39,7 @@ entries:
       category: Database
     apiVersion: v2
     appVersion: 6.0.11
-    created: "2021-02-26T09:20:21.8048766+01:00"
+    created: "2021-02-26T09:26:01.895345+01:00"
     dependencies:
     - name: common
       repository: https://charts.bitnami.com/bitnami
@@ -71,10 +71,10 @@ entries:
   waardepapieren:
   - apiVersion: v1
     appVersion: V1.0
-    created: "2021-02-26T09:20:21.7806998+01:00"
+    created: "2021-02-26T09:26:01.8709309+01:00"
     description: Naast deze JSON rest API is er ook een [graphql](/graphql) interface
       beschikbaar.
-    digest: 7e7046dc693a0f37233f15450147da26f63936d3e9aa71cdb2a8367f9f89738f
+    digest: 3d0d7540432e00a8a5c153272cc822883d81313c7840053bacdd6daf2e19023d
     home: https://www.conduction.nl
     icon: https://conductionnl.github.io/images/conduction_avatar_blue_on_transparant.svg
     keywords:
@@ -94,4 +94,4 @@ entries:
     urls:
     - waardepapieren-0.1.0.tgz
     version: 0.1.0
-generated: "2021-02-26T09:20:21.7627882+01:00"
+generated: "2021-02-26T09:26:01.8514484+01:00"
