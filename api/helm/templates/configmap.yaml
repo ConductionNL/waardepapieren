@@ -42,4 +42,4 @@ data:
   redis-port: {{ .Values.redis.redisPort | toString | quote }}
   digispoof-location: { { .Values.commonground.digispoof.location } }
   eherkenning-location: { { .Values.commonground.eherkenning.location } }
-  {{-end }}
+  {{- end }}
