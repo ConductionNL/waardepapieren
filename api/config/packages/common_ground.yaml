@@ -35,6 +35,8 @@ parameters:
     env(APP_INTERNAL):
     env(APP_BUILD_ALL_FIXTURES):
     env(APP_URL): "http://localhost"
+    env(APP_DIGISPOOF_LOCATION): "https://zuid-drecht.nl/digispoof"
+    env(APP_EHERKENNING_LOCATION): "https://zuid-drecht.nl/eherkenning"
     env(FACEBOOK_ID): ""
     env(FACEBOOK_SECRET): ""
     env(GMAIL_ID): ""
@@ -220,6 +222,10 @@ parameters:
         rdw:
             location: "%env(APP_COMMONGROUND_RDW_LOCATION)%"
             apikey: "%env(APP_COMMONGROUND_RDW_APIKEY)%"
+        ds:
+            location: "%env(APP_DIGISPOOF_LOCATION)%"
+        eh:
+            location: "%env(APP_EHERKENNING_LOCATION)%"
 
     # Organisatie details
     env(GOOGLE_TAG_MANAGER_ID): ""
