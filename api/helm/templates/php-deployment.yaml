@@ -185,7 +185,7 @@ spec:
                   configMapKeyRef:
                       name: {{ template "fullname" . }}
                       key: eherkenning-location
-          {{-end }}
+          {{- end }}
           resources:
 {{ toYaml .Values.resources | indent 12 }}
     {{- if .Values.nodeSelector }}
