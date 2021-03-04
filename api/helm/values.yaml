@@ -19,7 +19,8 @@ settings:
   web: false
   debug: 1
   cache: false
-  type: application
+  type: component
+  id: 
   replicaCount: 1
   corsAllowOrigin: ['*']
   trustedHosts: '^.+$'
@@ -54,9 +55,9 @@ php:
 redis:
   cluster:
     enabled: false
-  usePassword: false
   redisPort: 6379
-
+  usePassword: false
+  enabled: false
 commonground:
   eherkenning:
     location: https://waardepapieren-gemeentehoorn.commonground.nu/eherkenning
