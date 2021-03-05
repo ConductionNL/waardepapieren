@@ -13,13 +13,13 @@ settings:
   demo: dev.waardepapieren-gemeentehoorn.commonground.nu
   domain: waardepapieren-gemeentehoorn.commonground.nu
   subdomain: waardepapieren
-  subpath: 
+  subpath: ''
   subpathRouting: true
   env: dev
   web: false
   debug: 1
   cache: false
-  type: component
+  type: application
   id: 
   replicaCount: 1
   corsAllowOrigin: ['*']
@@ -57,7 +57,7 @@ redis:
     enabled: false
   redisPort: 6379
   usePassword: false
-  enabled: false
+  enabled: true
 commonground:
   eherkenning:
     location: https://waardepapieren-gemeentehoorn.commonground.nu/eherkenning
