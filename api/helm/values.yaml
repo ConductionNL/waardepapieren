@@ -54,7 +54,7 @@ php:
 
 redis:
   cluster:
-    enabled: true
+    enabled: false
   redisPort: 6379
   usePassword: false
   enabled: true
