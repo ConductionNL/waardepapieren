@@ -31,7 +31,7 @@ data:
   app-notification: {{ .Values.settings.notificationEnabled | quote }}
 
   {{ if (eq $.Values.settings.type "application" ) }}
-  redis-host: {{ printf "%s-redis-headless" $redisServiceName | quote }}
+  redis-host: {{ printf "%s-headless" $redisServiceName | quote }}
   redis-port: {{ .Values.redis.redisPort | toString | quote }}
   digispoof-location: {{ .Values.commonground.digispoof.location }}
   eherkenning-location: {{ .Values.commonground.eherkenning.location }}
