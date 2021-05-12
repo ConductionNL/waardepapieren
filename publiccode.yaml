@@ -117,6 +117,13 @@ dependsOn:
         - name: Kubernetes
           versionMin: "1.15.5-do.1"
         - name: waardepapieren/waardepapieren
+        - name: contact-catalogus/contactcatalogus
+        - name: user-component/user-component
+        - name: waardepapieren-balie/waardepapieren-balie
+        - name: waardepapieren-register/waardepapieren-register
+        - name: waardepapieren-service/waardepapieren-service
+        - name: brpservice/brpservice
+        - name: digispoof-interface/digispoof-interface
 
 installations:
     - type: helm
