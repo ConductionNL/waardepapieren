@@ -17,6 +17,7 @@ hslavich_onelogin_saml:
             url: 'https://acc-waardepapieren.hoorn.nl/saml/logout'
             binding: 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect'
         privateKey: ''
+        x509cert: 'MIICwDCCAagCAQAwezELMAkGA1UEBhMCTkwxDjAMBgNVBAcMBUhvb3JuMRcwFQYDVQQKDA5HZW1lZW50ZSBIb29ybjEdMBsGA1UECwwUSUNBIC0gZ2VtZWVudGUgSG9vcm4xJDAiBgNVBAMMG2FjYy13YWFyZGVwYXBpZXJlbi5ob29ybi5ubDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMULFBlcprwvA6Mm/S9Fh86zODt3VmIikE+Oqh/D5e1PHHZsN5cGaDVMNoAIgS9KD2w7/y8B5KJc1zR6p7OcfJJUDC/edFgc0+TYpfGHqm9XqHAr6Pm58H6GuuXv3nTej2y+D7HY3E+caWAjCieJ3MslIi/wIlwKLFMMmHflc+Ey+s0kozNSbCzstlBBY1TxUZKnB/Dd/7rHI98c6QaAckBOUagSOk13bPTx1VhqfyheW9vsgWw5XwE6V8NbMKPhKP8gQalsJhEEBjlUKPgUssa66XH0LRBUM57qXdyloA8b/B/Mm1lcN3J0IRc/qxr8ggtK6f0OY89rRJX5PywTwRsCAwEAAaAAMA0GCSqGSIb3DQEBCwUAA4IBAQBPd1K+dqnGk4F9fLz6E+qmDVY3lnNYRpj5apzPJ3BZ6sKC7PN9hY7M9aCl9zNq4R/dm1qTg1syG/ALl+fSImAHlwQiFDzeUL9lidX5T9huw9LCjbu1t2TH2axU9zq5uJpVMdy125nOiq5K5kO3CZMyWRCCvWrUz4usN47fq4nKCmvvzA45XkyjGhzR41gRoNedfoCzeyy61sGbPcFsIdoioDr/wFSCTkjlX4elyBikVs2CMfWuYMIXCGguW0eXA7YT82npFmxVjR7JV8FFwf5i4MItjUiclwX40mX48W/8paodBHXWX0QHViiyJsJIa1+SMacBh2FTosCZ/qYXlfua'
     # Optional settings
     baseurl: 'https://acc-waardepapieren.hoorn.nl'
     strict: true
