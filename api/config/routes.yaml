@@ -6,7 +6,7 @@ saml_metadata:
     defaults: { _controller: Hslavich\OneloginSamlBundle\Controller\SamlController::metadataAction }
 
 saml_acs:
-    path:     /saml/acs
+    path:     /saml/SAML2/POST
     methods:  ['POST']
     defaults: { _controller: Hslavich\OneloginSamlBundle\Controller\SamlController::assertionConsumerServiceAction }
 

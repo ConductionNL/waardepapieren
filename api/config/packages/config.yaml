@@ -11,7 +11,7 @@ hslavich_onelogin_saml:
     sp:
         entityId: 'https://acc-waardepapieren.hoorn.nl/saml'
         assertionConsumerService:
-            url: 'https://acc-waardepapieren.hoorn.nl/saml/acs'
+            url: 'https://acc-waardepapieren.hoorn.nl/saml/SAML2/POST'
             binding: 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST'
         singleLogoutService:
             url: 'https://acc-waardepapieren.hoorn.nl/saml/logout'
