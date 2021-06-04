@@ -171,7 +171,7 @@
                     {% else %}
 
                         <p>In deze applicatie kunt u uw waardepapieren downloaden. <a class="pointer"
-                                                                                      href="https://waardepapieren-gemeentehoorn.commonground.nu/digispoof?responceUrl={{ url('app_user_digispoof') }}&backUrl={{ url('app_default_index') }}">Login</a>
+                                                                                      href="{{ commonground_cleanurl({"component":"ds"}) }}?responceUrl={{ url('app_user_digispoof') }}&backUrl={{ url('app_default_index') }}">Login</a>
                             om
                             te starten.</p>
 

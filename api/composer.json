@@ -9,6 +9,7 @@
         "conduction/commongroundbundle": "dev-symfony51",
         "dompdf/dompdf": "^0.8.5",
         "endroid/qr-code-bundle": "^3.4",
+        "hslavich/oneloginsaml-bundle": "2.1.4",
         "phpdocumentor/reflection-docblock": "^4.3",
         "phpoffice/phpword": "^0.17.0",
         "sensio/framework-extra-bundle": "^5.5",

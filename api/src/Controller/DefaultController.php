@@ -55,14 +55,14 @@ class DefaultController extends AbstractController
         ];
 
         if ($this->getUser() && $this->getUser()->getPerson()) {
-            $variables['certificates'] = $commonGroundService->getResourceList('https://waardepapieren-gemeentehoorn.commonground.nu/api/v1/wari/certificates', ['person' => $this->getUser()->getPerson()])['hydra:member'];
+            $variables['certificates'] = $commonGroundService->getResourceList(['component' => 'wari', 'type' => 'certificates'], ['person' => $this->getUser()->getPerson()])['hydra:member'];
 //            $variables['certificates'][] = array('type' => 'geboorte akte', 'created' => '17-09-2020', 'id' => '1');
         }
 
         if ($request->isMethod('POST')) {
             $variables['certificate'] = $request->request->all();
             $variables['certificate']['organization'] = '001516814';
-            $variables['certificate'] = $commonGroundService->createResource($variables['certificate'], 'https://waardepapieren-gemeentehoorn.commonground.nu/api/v1/waar/certificates');
+            $variables['certificate'] = $commonGroundService->createResource($variables['certificate'], ['component' => 'waar', 'type' => 'certificates']);
             $variables['certificate']['claim'] = base64_encode(json_encode($variables['certificate']['claim']));
         }
 

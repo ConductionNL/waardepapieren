@@ -7,18 +7,20 @@ settings:
   projectName: waardepapieren
   name: waardepapieren
   version: V1.0
+  majorVersion: v1
   description: 'Naast deze JSON rest API is er ook een [graphql](/graphql) interface beschikbaar.'
   repro: https://github.com/ConductionNL/waardepapieren
   demo: dev.waardepapieren-gemeentehoorn.commonground.nu
   domain: waardepapieren-gemeentehoorn.commonground.nu
   subdomain: waardepapieren
-  subpath: waardepapieren
+  subpath: 
   subpathRouting: true
   env: dev
   web: false
   debug: 1
   cache: false
-  type: component
+  type: application
+  id: 
   replicaCount: 1
   corsAllowOrigin: ['*']
   trustedHosts: '^.+$'
@@ -50,15 +52,23 @@ php:
   secret: ""
   replicaCount: 2
 
+redis:
+  cluster:
+    enabled: false
+  redisPort: 6379
+  usePassword: false
+  enabled: true
+commonground:
+  eherkenning:
+    location: https://waardepapieren-gemeentehoorn.commonground.nu/eherkenning
+  digispoof:
+    location: https://waardepapieren-gemeentehoorn.commonground.nu/digispoof
+
 nginx:
   repository: docker.io/conduction/protocomponent-nginx
   tag: latest
   pullPolicy: Always
   replicaCount: 2
-
-redis:
-  enabled: true
-  redisPort: 6379
 
 varnish:
   enabled: true

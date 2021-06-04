@@ -32,6 +32,7 @@ services:
       - DATABASE_URL=mysql://api-platform:!ChangeMe!@db/api?serverVersion=10.1
       - APP_ENV=${APP_ENV}
       - APP_CONTAINER=${APP_CONTAINER}
+      - APP_MAJOR_VERSION=${APP_MAJOR_VERSION}
       - APP_DEBUG=${APP_DEBUG}
       - APP_CACHE=${APP_CACHE}
       - APP_VERSION=${APP_VERSION}
@@ -54,6 +55,7 @@ services:
       - APP_INTERNAL=${APP_INTERNAL}
       - APP_URL=${APP_URL}
       - APP_CHART=${APP_CHART}
+      - APP_TYPE=${APP_TYPE}
       - HELM_REPOSITORY=${HELM_REPOSITORY}
       - ARTIFACTHUB_ID=${ARTIFACTHUB_ID}
       - ARTIFACTHUB_USER=${ARTIFACTHUB_USER}
