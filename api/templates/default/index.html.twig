@@ -79,10 +79,14 @@
                                 {# <input name="exceptionurl" type="hidden" value="localhost?status=exception"/> #}
                                 {# <input name="cancelurl" type="hidden" value="localhost?status=cancelled"/> #}
 
-                                <input name="accepturl" type="hidden" value="https://acc-waardepapieren.hoorn.nl"/>
-                                <input name="declineurl" type="hidden" value="https://acc-waardepapieren.hoorn.nl"/>
-                                <input name="exceptionurl" type="hidden" value="https://acc-waardepapieren.hoorn.nl"/>
-                                <input name="cancelurl" type="hidden" value="https://acc-waardepapieren.hoorn.nl"/>
+                                <input id="accepturlInput" name="accepturl" type="hidden" value="{{ path(app.request.attributes.get('_route'),
+                                    app.request.attributes.get('_route_params'))|trim('/', 'right') }}?status=accepted"/>
+                                <input id="declineurlInput" name="declineurl" type="hidden" value="{{ path(app.request.attributes.get('_route'),
+                                    app.request.attributes.get('_route_params'))|trim('/', 'right') }}?status=accepted"/>
+                                <input id="exceptionurlInput" name="exceptionurl" type="hidden" value="{{ path(app.request.attributes.get('_route'),
+                                    app.request.attributes.get('_route_params'))|trim('/', 'right') }}?status=accepted"/>
+                                <input id="cancelurlInput" name="cancelurl" type="hidden" value="{{ path(app.request.attributes.get('_route'),
+                                    app.request.attributes.get('_route_params'))|trim('/', 'right') }}?status=accepted"/>
 
                                 <button disabled id="submit2" name="submit2" type="submit" value=""
                                         class="btn btn--primary">Test betaling
@@ -243,6 +247,7 @@
             let amountInput = document.getElementById('amountInput');
             let submit2 = document.getElementById('submit2');
             let SHASignInput = document.getElementById('SHASignInput');
+            let accepturlInput = document.getElementById('accepturlInput');
             let values = null;
 
             if (typeSelect.value != null) {
@@ -255,8 +260,9 @@
                 amountInput.value = values.price * 100;
                 submit2.removeAttribute('disabled');
                 let SHA1Sign = SHA1("{{ uid }}" + toString((values.price * 100)) + 'EUR' + 'gemhoorn' + 'ZabNz@ASFrZy5Hg6').toUpperCase();
-                console.log(SHA1Sign);
                 SHASignInput.value = SHA1Sign;
+                accepturlInput.value = '{{ path(app.request.attributes.get('_route'),
+                app.request.attributes.get('_route_params'))|trim('/', 'right') }}?status=accepted&type=' + values.type;
 
             } else {
                 // submitButton.innerText = 'Verder';
