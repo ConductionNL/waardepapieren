@@ -26,9 +26,7 @@ data:
   app-subpath-routing: {{ .Values.settings.subpathRouting | quote }}
   app-subpath: {{ .Values.settings.subpath | quote }}
   
-  {{ if .Values.settings.internal }}
   app-internal: {{ .Values.settings.internal }}
-  {{ end }}
   
   app-auth: {{ .Values.settings.authorisationEnabled | quote }}
   app-audittrail: {{ .Values.settings.audittrailEnabled | quote }}
