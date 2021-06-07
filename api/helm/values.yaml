@@ -17,11 +17,11 @@ settings:
   subpathRouting: true
   env: dev
   web: false
-  internal: false
   debug: 1
   cache: false
   type: application
   id: 
+  internal: false
   replicaCount: 1
   corsAllowOrigin: ['*']
   trustedHosts: '^.+$'
@@ -59,7 +59,6 @@ redis:
   redisPort: 6379
   usePassword: false
   enabled: true
-
 commonground:
   eherkenning:
     location: https://waardepapieren-gemeentehoorn.commonground.nu/eherkenning
@@ -91,7 +90,7 @@ postgresql:
   # Persistent Volume Storage configuration.
   # ref: https://kubernetes.io/docs/user-guide/persistent-volumes
   persistence:
-    enabled: false
+    enabled: true
   pullPolicy: IfNotPresent
 #  image:
 #    repository: postgres

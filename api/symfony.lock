@@ -209,6 +209,9 @@
     "league/html-to-markdown": {
         "version": "4.8.1"
     },
+    "lightsaml/lightsaml": {
+        "version": "2.1.0"
+    },
     "michelf/php-markdown": {
         "version": "1.9.0"
     },

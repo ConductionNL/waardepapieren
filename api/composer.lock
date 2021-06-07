@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1fa89fdd6257500d9f14ce7c8db9a79a",
+    "content-hash": "d2fa2f3056ca29293eb5cdd775600c80",
     "packages": [
         {
             "name": "api-platform/api-pack",
@@ -3743,6 +3743,72 @@
                 }
             ],
             "time": "2020-07-01T00:34:03+00:00"
+        },
+        {
+            "name": "lightsaml/lightsaml",
+            "version": "2.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/lightSAML/lightSAML.git",
+                "reference": "db0a0ef1f4f968ad34b8a06a395f10eb4bf5a402"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/lightSAML/lightSAML/zipball/db0a0ef1f4f968ad34b8a06a395f10eb4bf5a402",
+                "reference": "db0a0ef1f4f968ad34b8a06a395f10eb4bf5a402",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2.5",
+                "robrichards/xmlseclibs": "~2.0|~3.0|~4.0",
+                "symfony/event-dispatcher": "~5.0",
+                "symfony/http-foundation": "~5.0"
+            },
+            "require-dev": {
+                "monolog/monolog": "^2.0.0",
+                "phpunit/phpunit": "^8.4",
+                "pimple/pimple": "~3.0",
+                "symfony/css-selector": "~5.0",
+                "symfony/dom-crawler": "~5.0"
+            },
+            "suggest": {
+                "lightsaml/sp-bundle": "Symfony 2 SP security bundle",
+                "lightsaml/symfony-bridge": "Symfony 2 build container bridge"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "LightSaml\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Milos Tomic",
+                    "email": "tmilos@gmail.com",
+                    "homepage": "https://github.com/tmilos/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Light SAML 2.0 PHP library",
+            "homepage": "https://www.lightsaml.com/",
+            "keywords": [
+                "SAML 2.0",
+                "Single Logout",
+                "Single SignOn",
+                "library",
+                "lightSAML",
+                "php"
+            ],
+            "support": {
+                "docs": "http://www.lightsaml.com/LightSAML-Core/",
+                "issues": "https://github.com/lightsaml/lightsaml/issues",
+                "source": "https://github.com/lightSAML/lightSAML"
+            },
+            "time": "2021-04-07T21:26:54+00:00"
         },
         {
             "name": "michelf/php-markdown",
