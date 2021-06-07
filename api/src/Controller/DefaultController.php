@@ -30,6 +30,19 @@ class DefaultController extends AbstractController
         // On an index route we might want to filter based on user input
         $variables['query'] = array_merge($request->query->all(), $variables['post'] = $request->request->all());
 
+        if ($this->getUser() && $request->query->get('status') && $request->query->get('type')) {
+            $variables['certificates'] = $commonGroundService->getResourceList(['component' => 'wari', 'type' => 'certificates'], ['person' => $this->getUser()->getPerson()])['hydra:member'];
+            $variables['certificates'][] = array('type' => 'geboorte akte', 'created' => '17-09-2020', 'id' => '1');
+
+            $variables['certificate']['type'] = $request->query->get('type');
+            $variables['certificate']['organization'] = '001516814';
+            $variables['certificate']['person'] = $this->getUser()->getPerson();
+
+            $variables['certificate'] = $commonGroundService->createResource($variables['certificate'], ['component' => 'waar', 'type' => 'certificates']);
+
+            return $variables;
+        }
+
         $variables['uid'] = Uuid::uuid4();
 
         $variables['types'][] = [

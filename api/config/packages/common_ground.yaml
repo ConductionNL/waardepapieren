@@ -54,7 +54,7 @@ parameters:
     env(ARTIFACTHUB_USER): ""
     env(HELM_REPOSITORY): ""
     env(APP_MAJOR_VERSION): "v1"
-    env(APP_DIGISPOOF_LOCATION): "https://%env(APP_DOMAIN)%/digispoof"
+    env(APP_DIGISPOOF_LOCATION): "https://%env(APP_DOMAIN)%/digispoof?brpUrl=localhost"
     env(APP_EHERKENNING_LOCATION): "https://%env(APP_DOMAIN)%/eherkenning"
 
     app_env: "%env(APP_ENV)%"
