@@ -186,6 +186,11 @@ spec:
               {{- else }}
               value: https://{{ $.Values.settings.env }}.{{ $.Values.settings.domain }}
               {{- end }}
+            - name: APP_INTERNAL
+              valueFrom:
+                configMapKeyRef:
+                  key: app-internal
+                  name: {{ template "fullname" . }}
           resources:
 {{ toYaml .Values.resources | indent 12 }}
     {{- if .Values.nodeSelector }}

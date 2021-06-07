@@ -240,6 +240,10 @@
                     "type": "boolean",
                     "description": ""
                 },
+                "internal": {
+                  "type": "boolean",
+                  "description": "Whether or not the application should use internal requests"
+                },
                 "loadbalancerEnabled": {
                     "type": "boolean",
                     "description": ""
