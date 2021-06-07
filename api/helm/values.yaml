@@ -17,6 +17,7 @@ settings:
   subpathRouting: true
   env: dev
   web: false
+  internal: false
   debug: 1
   cache: false
   type: application
@@ -58,6 +59,7 @@ redis:
   redisPort: 6379
   usePassword: false
   enabled: true
+
 commonground:
   eherkenning:
     location: https://waardepapieren-gemeentehoorn.commonground.nu/eherkenning
