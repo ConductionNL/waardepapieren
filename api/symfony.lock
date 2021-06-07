@@ -188,6 +188,9 @@
     "guzzlehttp/psr7": {
         "version": "1.5.2"
     },
+    "hslavich/oneloginsaml-bundle": {
+        "version": "v2.1.4"
+    },
     "khanamiryan/qrcode-detector-decoder": {
         "version": "1.0.4"
     },
@@ -241,6 +244,9 @@
     },
     "ocramius/proxy-manager": {
         "version": "2.8.0"
+    },
+    "onelogin/php-saml": {
+        "version": "3.6.1"
     },
     "pclzip/pclzip": {
         "version": "2.8.2"
@@ -354,6 +360,9 @@
         "files": [
             "config/packages/ramsey_uuid_doctrine.yaml"
         ]
+    },
+    "robrichards/xmlseclibs": {
+        "version": "3.1.1"
     },
     "sabberworm/php-css-parser": {
         "version": "8.3.1"
