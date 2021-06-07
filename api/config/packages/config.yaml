@@ -1,23 +1,38 @@
 hslavich_onelogin_saml:
     idp:
-        entityId: 'https://was-preprod1.digid.nl/saml/idp/metadata'
+        entityId: 'https://samltest.id/saml/idp'
         singleSignOnService:
-            url: 'https://preprod1.digid.nl/saml/idp/request_authentication'
+            url: 'https://samltest.id/idp/profile/SAML2/Redirect/SSO'
             binding: 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect'
         singleLogoutService:
-            url: 'https://preprod1.digid.nl/saml/idp/request_logout'
+            url: 'https://samltest.id/idp/profile/SAML2/POST/SSO'
             binding: 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect'
-        x509cert: 'MIIGgDCCBGigAwIBAgIUeaJCHN5WYpAYm3Ob95K++wuUKF4wDQYJKoZIhvcN AQELBQAwUzELMAkGA1UEBhMCTkwxETAPBgNVBAoMCEtQTiBCLlYuMTEwLwYD VQQDDChLUE4gUEtJb3ZlcmhlaWQgUHJpdmF0ZSBTZXJ2aWNlcyBDQSAtIEcx MB4XDTIwMTEwNDE1MDUxMFoXDTIzMTEwNDE1MDUxMFowgYYxCzAJBgNVBAYT Ak5MMREwDwYDVQQHDAhEZW4gSGFhZzEPMA0GA1UECgwGTG9naXVzMRMwEQYD VQQLDApBZmQuIERpZ2lEMR0wGwYDVQQFExQwMDAwMDAwNDE2NjkwOTkxMzAw MDEfMB0GA1UEAwwWc2FtbC1zaWduLnBwMS5kaWdpZC5ubDCCASIwDQYJKoZI hvcNAQEBBQADggEPADCCAQoCggEBAMj8kKdoo1t07NFi+DMP+84EoRg9skqf oiApb+8IwRIpVjeCu6tY9Yso/Jc9lmPlzLdRDKTOjKc7/taswCLv1k+iUvNa h5y0Mh3MDoTWp3+QcUqim0eLn6dUMNyMqP0MQLqIXThzETU5FynbbTv27vxW tqJdWPilv9E9+N19+vpRMgbiZ5mIarfhAuveii1+mGA9YZF2jMsDmfanJ4L0 pL4MJR44FCbs2ce1n96YNhZiZ1Xht5Y46jXXvpQkHFxWDbAGakkmnCi8z9D0 BBEYQ2MceYz2dBwqwDtYFgWq89XfMXOk8NZ7r65xu9GJ56O2v3lcHqvwDPXf gzYV1gX6pr0CAwEAAaOCAhYwggISMAwGA1UdEwEB/wQCMAAwHwYDVR0jBBgw FoAUuNRMn6hbbtolp2iO74xGGv4fU2UwOAYIKwYBBQUHAQEELDAqMCgGCCsG AQUFBzABhhxodHRwOi8vcHJvY3NwLm1hbmFnZWRwa2kuY29tMCEGA1UdEQQa MBiCFnNhbWwtc2lnbi5wcDEuZGlnaWQubmwwgdcGA1UdIASBzzCBzDCByQYK YIQQAYdrAQIIBjCBujBCBggrBgEFBQcCARY2aHR0cHM6Ly9jZXJ0aWZpY2Fh dC5rcG4uY29tL2VsZWt0cm9uaXNjaGUtb3BzbGFncGxhYXRzMHQGCCsGAQUF BwICMGgMZk9wIGRpdCBjZXJ0aWZpY2FhdCBpcyBoZXQgQ1BTIFBLSW92ZXJo ZWlkIFByaXZhdGUgU2VydmljZXMgU2VydmVyIGNlcnRpZmljYXRlbiB2YW4g S1BOIHZhbiB0b2VwYXNzaW5nLjAdBgNVHSUEFjAUBggrBgEFBQcDAgYIKwYB BQUHAwEwXAYDVR0fBFUwUzBRoE+gTYZLaHR0cDovL2NybC5tYW5hZ2VkcGtp LmNvbS9LUE5CVlBLSW92ZXJoZWlkUHJpdmF0ZVNlcnZpY2VzQ0FHMS9MYXRl c3RDUkwuY3JsMB0GA1UdDgQWBBSdgnprzvDHfAbX9iI6dbAjPVlZNjAOBgNV HQ8BAf8EBAMCBaAwDQYJKoZIhvcNAQELBQADggIBABsXIARBHjAnx5u8S1Wc 7rmt18lzdvd1BdQRogSmCv2rVoRryJvKs3j2XaFJFLvz/JaHI1vThna31/2x jGlITG8e1Xx4pDftXYpumbWpRq3UAV+ZcvP8Ua1vLYON1RY+a9EmaQA8ITXO K3av5RMnv3uDoHtCdBvsBOCZmZaWTDf4gn8jXWiryalkweGEerb01QpaOa2w Bc6rTenVHA9GK8Rb1CKVneq8pJdS8Na7WFBjU1Zzq28Lor4dERJXTG5QKTNW C4B58stokDiogwkVhjb27Uy0sCJn5wN97OmUR2YbQHFJ9dm/kpNF+Pv3KQzA r4FBLf1F332ZUUExh9LhwPdmjQr8vHpP5cLf6WHsEFAZj7s7SLMn+rl9vXzu MKUp0EauB5cB1TPwnrUJE3BoKzi/FUF23TGoTWfqjlVfgCeGc2/RRcpZUlrL SgpfDpE5p2NImUJ6jqPsm4/tLYG6gP1cGD3rNlEZxEuFeOFHx/gOUTcCDxcg NdolrfD+efWpdq+ZMRugvi5Edj1QADa4d4ehrwx/EIQAAghaqlJNsvKxG/1B ryrlzDrJ3xrVuXTJEWfq3Ea+M13dEDXvnc5nhQt7gPY0S0ybzB/MHlmjBfFL fXq+euhQtIZDK4bWhNknB91MyNInX/LC2NywV47TPfltF9MnqOa+XuExXCXh ta+D'
+        x509cert: 'MIIDEjCCAfqgAwIBAgIVAMECQ1tjghafm5OxWDh9hwZfxthWMA0GCSqGSIb3DQEB
+                   CwUAMBYxFDASBgNVBAMMC3NhbWx0ZXN0LmlkMB4XDTE4MDgyNDIxMTQwOVoXDTM4
+                   MDgyNDIxMTQwOVowFjEUMBIGA1UEAwwLc2FtbHRlc3QuaWQwggEiMA0GCSqGSIb3
+                   DQEBAQUAA4IBDwAwggEKAoIBAQC0Z4QX1NFKs71ufbQwoQoW7qkNAJRIANGA4iM0
+                   ThYghul3pC+FwrGv37aTxWXfA1UG9njKbbDreiDAZKngCgyjxj0uJ4lArgkr4AOE
+                   jj5zXA81uGHARfUBctvQcsZpBIxDOvUUImAl+3NqLgMGF2fktxMG7kX3GEVNc1kl
+                   bN3dfYsaw5dUrw25DheL9np7G/+28GwHPvLb4aptOiONbCaVvh9UMHEA9F7c0zfF
+                   /cL5fOpdVa54wTI0u12CsFKt78h6lEGG5jUs/qX9clZncJM7EFkN3imPPy+0HC8n
+                   spXiH/MZW8o2cqWRkrw3MzBZW3Ojk5nQj40V6NUbjb7kfejzAgMBAAGjVzBVMB0G
+                   A1UdDgQWBBQT6Y9J3Tw/hOGc8PNV7JEE4k2ZNTA0BgNVHREELTArggtzYW1sdGVz
+                   dC5pZIYcaHR0cHM6Ly9zYW1sdGVzdC5pZC9zYW1sL2lkcDANBgkqhkiG9w0BAQsF
+                   AAOCAQEASk3guKfTkVhEaIVvxEPNR2w3vWt3fwmwJCccW98XXLWgNbu3YaMb2RSn
+                   7Th4p3h+mfyk2don6au7Uyzc1Jd39RNv80TG5iQoxfCgphy1FYmmdaSfO8wvDtHT
+                   TNiLArAxOYtzfYbzb5QrNNH/gQEN8RJaEf/g/1GTw9x/103dSMK0RXtl+fRs2nbl
+                   D1JJKSQ3AdhxK/weP3aUPtLxVVJ9wMOQOfcy02l+hHMb6uAjsPOpOVKqi3M8XmcU
+                   ZOpx4swtgGdeoSpeRyrtMvRwdcciNBp9UZome44qZAYH1iqrpmmjsfI9pJItsgWu
+                   3kXPjhSfj1AJGR1l9JGvJrHki1iHTA=='
     sp:
-        entityId: 'https://acc-waardepapieren.hoorn.nl/saml'
+        entityId: 'https://acc-waardepapieren.hoorn.nl/saml/metadata'
         assertionConsumerService:
-            url: 'https://acc-waardepapieren.hoorn.nl/saml/SAML2/POST'
+            url: 'https://acc-waardepapieren.hoorn.nl/saml/acs'
             binding: 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST'
         singleLogoutService:
             url: 'https://acc-waardepapieren.hoorn.nl/saml/logout'
             binding: 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect'
         privateKey: ''
-        x509cert: 'MIICwDCCAagCAQAwezELMAkGA1UEBhMCTkwxDjAMBgNVBAcMBUhvb3JuMRcwFQYDVQQKDA5HZW1lZW50ZSBIb29ybjEdMBsGA1UECwwUSUNBIC0gZ2VtZWVudGUgSG9vcm4xJDAiBgNVBAMMG2FjYy13YWFyZGVwYXBpZXJlbi5ob29ybi5ubDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMULFBlcprwvA6Mm/S9Fh86zODt3VmIikE+Oqh/D5e1PHHZsN5cGaDVMNoAIgS9KD2w7/y8B5KJc1zR6p7OcfJJUDC/edFgc0+TYpfGHqm9XqHAr6Pm58H6GuuXv3nTej2y+D7HY3E+caWAjCieJ3MslIi/wIlwKLFMMmHflc+Ey+s0kozNSbCzstlBBY1TxUZKnB/Dd/7rHI98c6QaAckBOUagSOk13bPTx1VhqfyheW9vsgWw5XwE6V8NbMKPhKP8gQalsJhEEBjlUKPgUssa66XH0LRBUM57qXdyloA8b/B/Mm1lcN3J0IRc/qxr8ggtK6f0OY89rRJX5PywTwRsCAwEAAaAAMA0GCSqGSIb3DQEBCwUAA4IBAQBPd1K+dqnGk4F9fLz6E+qmDVY3lnNYRpj5apzPJ3BZ6sKC7PN9hY7M9aCl9zNq4R/dm1qTg1syG/ALl+fSImAHlwQiFDzeUL9lidX5T9huw9LCjbu1t2TH2axU9zq5uJpVMdy125nOiq5K5kO3CZMyWRCCvWrUz4usN47fq4nKCmvvzA45XkyjGhzR41gRoNedfoCzeyy61sGbPcFsIdoioDr/wFSCTkjlX4elyBikVs2CMfWuYMIXCGguW0eXA7YT82npFmxVjR7JV8FFwf5i4MItjUiclwX40mX48W/8paodBHXWX0QHViiyJsJIa1+SMacBh2FTosCZ/qYXlfua'
     # Optional settings
     baseurl: 'https://acc-waardepapieren.hoorn.nl'
     strict: true

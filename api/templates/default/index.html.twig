@@ -16,29 +16,77 @@
 
                         {% if not certificate|default %}
 
-                            <form class="mb4" action="{{ url('app_default_index') }}" method="post">
+                            <form id="form" class="mb4" action="{{ url('app_default_index') }}" method="post">
                                 <div class="input">
-                                    {#                                <label class="input__label" for="person">Uw brp:</label>#}
-                                    <input name="person" type="hidden" id="person"
-                                           class="input__control input__control--xl input__control--text"
-                                           value="{{ app.user.person }}">
+                                    {# <label class="input__label" for="person">Uw brp:</label> #}
+                                     <input name="person" type="hidden" id="person"
+                                     class="input__control input__control--xl input__control--text"
+                                     value="{{ app.user.person }}">
 
                                 </div>
                                 <div class="input">
-                                    <label class="input__label" for="type">Kies een waardepapier om te op te
+                                    <label class="input__label" for="typeSelect">Kies een waardepapier om te op te
                                         halen:</label>
-                                    <select id="type" name="type"
+                                    <select onchange="checkIfTypeHasPrice()" id="typeSelect" name="typeinfo"
                                             class="input__control input__control--xl input__control--select" required>
-                                        <option value="" style="color: lightgrey;">Maak een keuze</option>
+                                        <option value="{}" style="color: lightgrey;">Maak een keuze</option>
                                         {% for type in types %}
-                                            <option value="{{ type.type }}">{{ type.name }}</option>
+                                            <option
+                                                value='{"type":"{{ type.type }}"{% if type.price|default %},"price":"{{ type.price }}"{% endif %}}'>{{ type.name }} {% if type.price|default %}&euro; {{ type.price }}{% endif %}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
 
+
                                 <div class="input">
-                                    <button type="submit" class="btn btn--primary">Verder</button>
+                                    {# <button id="submitButton" type="submit" class="btn btn--primary">Verder</button> #}
                                 </div>
+                            </form>
+                            <form action="https://secure.ogone.com/ncol/test/orderstandard.asp" id="form1" method="post"
+                                  name="form1">
+                                <!-- algemene parameters -->
+                                <input name="PSPID" type="hidden" value="gemhoorn"/>
+                                <input name="orderID" type="hidden" value="{{ uid }}"/>
+                                <input name="amount" id="amountInput" type="hidden"/>
+                                <input name="currency" type="hidden" value="EUR"/>
+                                <input name="language" type="hidden" value="nl_NL"/>
+                                <input name="CN" type="hidden" value="Barry"/>
+                                <input name="EMAIL" type="hidden" value="barry@conduction.nl"/>
+                                {# <input name="ownerZIP" type="hidden" value="" /> #}
+                                {# <input name="owneraddress" type="hidden" value="" /> #}
+                                {# <input name="ownercty" type="hidden" value="" /> #}
+                                {# <input name="ownertown" type="hidden" value="" /> #}
+                                {# <input name="ownertelno" type="hidden" value="" /> #}
+
+                                <!-- controle voor de betaling-->
+                                <input name="SHASign" id="SHASignInput" type="hidden"/>
+
+                                <!-- layout informatie-->
+                                <input name="TITLE" type="hidden" value="Certificate"/>
+                                <input name="BGCOLOR" type="hidden" value="white"/>
+                                <input name="TXTCOLOR" type="hidden" value="black"/>
+                                <input name="TBLBGCOLOR" type="hidden" value="white"/>
+                                <input name="TBLTXTCOLOR" type="hidden" value="black"/>
+                                <input name="BUTTONBGCOLOR" type="hidden" value="white"/>
+                                <input name="BUTTONTXTCOLOR" type="hidden" value="black"/>
+                                <input name="LOGO" type="hidden" value="http://localhost/images/logo-hoorn.svg"/>
+                                <input name="FONTTYPE" type="hidden" value="Verdana"/>
+
+
+                                <!-- feedback na de betaling-->
+                                {# <input name="accepturl" type="hidden" value="localhost?status=accepted"/> #}
+                                {# <input name="declineurl" type="hidden" value="localhost?status=declined"/> #}
+                                {# <input name="exceptionurl" type="hidden" value="localhost?status=exception"/> #}
+                                {# <input name="cancelurl" type="hidden" value="localhost?status=cancelled"/> #}
+
+                                <input name="accepturl" type="hidden" value="https://acc-waardepapieren.hoorn.nl"/>
+                                <input name="declineurl" type="hidden" value="https://acc-waardepapieren.hoorn.nl"/>
+                                <input name="exceptionurl" type="hidden" value="https://acc-waardepapieren.hoorn.nl"/>
+                                <input name="cancelurl" type="hidden" value="https://acc-waardepapieren.hoorn.nl"/>
+
+                                <button disabled id="submit2" name="submit2" type="submit" value=""
+                                        class="btn btn--primary">Test betaling
+                                </button>
                             </form>
 
                         {% else %}
@@ -98,6 +146,7 @@
                         {% endif %}
 
                         <br>
+                        <br>
 
                         <h3>Uw bestaande waardepapieren</h3>
 
@@ -115,7 +164,11 @@
                                 {% for cert in certificates %}
                                     <tr>
                                         <th scope="row">{{ cert.id|capitalize }}</th>
-                                        <td>{{ cert.dateCreated|date('d-m-Y') }}</td>
+                                        {% if cert.dateCreated|default %}
+                                            <td>{{ cert.dateCreated|date('d-m-Y') }}</td>
+                                        {% else %}
+                                            <td></td>
+                                        {% endif %}
                                         <td>                {% if cert.image|default %}
                                                 <a href="{{ cert.image }}" download>
                                                     <i class="fa fa-image"></i>
@@ -126,13 +179,13 @@
                                                     <i class="fa fa-file-pdf"></i>
                                                 </a>
                                             {% endif %}</td>
-                                        {#                                        <td class="text-right">#}
-                                        {#                                            <form action="{{ path('app_waardepapieren_certificate') }}" method="post">#}
-                                        {#                                                <input name="type" value="{{ cert.type }}" hidden>#}
-                                        {#                                                <input name="person" value="{{ app.user.person }}" hidden>#}
-                                        {#                                                <button type="submit" class="pointer">Bekijken</button>#}
-                                        {#                                            </form>#}
-                                        {#                                        </td>#}
+                                        <td class="text-right">
+                                            <form action="{{ path('app_waardepapieren_certificate') }}" method="post">
+                                                <input name="type" value="{{ cert.type }}" hidden>
+                                                <input name="person" value="{{ app.user.person }}" hidden>
+                                                <button type="submit" class="pointer">Bekijken</button>
+                                            </form>
+                                        </td>
                                     </tr>
                                 {% endfor %}
                             {% else %}
@@ -147,28 +200,28 @@
                         </table>
 
 
-                        {#                    {% if certificates|default %}#}
-                        {#                        {% for cert in certificates %}#}
+                        {# {% if certificates|default %} #}
+                        {# {% for cert in certificates %} #}
 
-                        {#                        {% include 'waardepapieren/widgets/download_modal.html.twig' with {#}
-                        {#                            'item': cert,#}
-                        {#                        } %}#}
+                        {# {% include 'waardepapieren/widgets/download_modal.html.twig' with { #}
+                        {# 'item': cert, #}
+                        {# } %} #}
 
-                        {#                        <script>#}
-                        {#                            var downCert{{ cert.id|slice(0, 8) }}Modal;#}
-                        {#                            // Load modal component#}
-                        {#                            System.import('/uno/components/modal/modal.js').then(function (module) {#}
-                        {#                                downCert{{ cert.id|slice(0, 8) }}Modal = new module.Modal(document.getElementById('downCert{{ cert.id }}Modal'));#}
-                        {#                            });#}
+                        {# <script> #}
+                        {# var downCert{{ cert.id|slice(0, 8) }}Modal; #}
+                        {# // Load modal component #}
+                        {# System.import('/uno/components/modal/modal.js').then(function (module) { #}
+                        {# downCert{{ cert.id|slice(0, 8) }}Modal = new module.Modal(document.getElementById('downCert{{ cert.id }}Modal')); #}
+                        {# }); #}
 
-                        {#                            // Called when the user clicks the button#}
-                        {#                            function openCert{{ cert.id|slice(0, 8) }}Modal() {#}
-                        {#                                downCert{{ cert.id|slice(0, 8) }}Modal.open();#}
-                        {#                            }#}
-                        {#                        </script>#}
+                        {# // Called when the user clicks the button #}
+                        {# function openCert{{ cert.id|slice(0, 8) }}Modal() { #}
+                        {# downCert{{ cert.id|slice(0, 8) }}Modal.open(); #}
+                        {# } #}
+                        {# </script> #}
 
-                        {#                        {% endfor %}#}
-                        {#                    {% endif %}#}
+                        {# {% endfor %} #}
+                        {# {% endif %} #}
 
                     {% else %}
                         <p>In deze applicatie kunt u uw waardepapieren downloaden. <a class="pointer"
@@ -182,5 +235,174 @@
             </div><!-- /.content-background -->
         </div><!-- /.col -->
     </div>
+
+    <script>
+        function checkIfTypeHasPrice() {
+            // let submitButton = document.getElementById('submitButton');
+            let typeSelect = document.getElementById('typeSelect');
+            let amountInput = document.getElementById('amountInput');
+            let submit2 = document.getElementById('submit2');
+            let SHASignInput = document.getElementById('SHASignInput');
+            let values = null;
+
+            if (typeSelect.value != null) {
+                values = JSON.parse(document.getElementById('typeSelect').value)
+            }
+            // let form = document.getElementById('form');
+            if (values != null && values.price != null && values.price !== '' && values.price !== 0) {
+                //    Change path
+                // submitButton.innerText = 'Afrekenen';
+                amountInput.value = values.price * 100;
+                submit2.removeAttribute('disabled');
+                let SHA1Sign = SHA1("{{ uid }}" + toString((values.price * 100)) + 'EUR' + 'gemhoorn' + 'ZabNz@ASFrZy5Hg6').toUpperCase();
+                console.log(SHA1Sign);
+                SHASignInput.value = SHA1Sign;
+
+            } else {
+                // submitButton.innerText = 'Verder';
+                submit2.disabled = 'disabled';
+            }
+        }
+
+        /**
+         * Secure Hash Algorithm (SHA1)
+         * http://www.webtoolkit.info/
+         **/
+        function SHA1(msg) {
+            function rotate_left(n, s) {
+                var t4 = (n << s) | (n >>> (32 - s));
+                return t4;
+            };
+
+            function lsb_hex(val) {
+                var str = '';
+                var i;
+                var vh;
+                var vl;
+                for (i = 0; i <= 6; i += 2) {
+                    vh = (val >>> (i * 4 + 4)) & 0x0f;
+                    vl = (val >>> (i * 4)) & 0x0f;
+                    str += vh.toString(16) + vl.toString(16);
+                }
+                return str;
+            };
+
+            function cvt_hex(val) {
+                var str = '';
+                var i;
+                var v;
+                for (i = 7; i >= 0; i--) {
+                    v = (val >>> (i * 4)) & 0x0f;
+                    str += v.toString(16);
+                }
+                return str;
+            };
+
+            function Utf8Encode(string) {
+                string = string.replace(/\r\n/g, '\n');
+                var utftext = '';
+                for (var n = 0; n < string.length; n++) {
+                    var c = string.charCodeAt(n);
+                    if (c < 128) {
+                        utftext += String.fromCharCode(c);
+                    } else if ((c > 127) && (c < 2048)) {
+                        utftext += String.fromCharCode((c >> 6) | 192);
+                        utftext += String.fromCharCode((c & 63) | 128);
+                    } else {
+                        utftext += String.fromCharCode((c >> 12) | 224);
+                        utftext += String.fromCharCode(((c >> 6) & 63) | 128);
+                        utftext += String.fromCharCode((c & 63) | 128);
+                    }
+                }
+                return utftext;
+            };
+            var blockstart;
+            var i, j;
+            var W = new Array(80);
+            var H0 = 0x67452301;
+            var H1 = 0xEFCDAB89;
+            var H2 = 0x98BADCFE;
+            var H3 = 0x10325476;
+            var H4 = 0xC3D2E1F0;
+            var A, B, C, D, E;
+            var temp;
+            msg = Utf8Encode(msg);
+            var msg_len = msg.length;
+            var word_array = new Array();
+            for (i = 0; i < msg_len - 3; i += 4) {
+                j = msg.charCodeAt(i) << 24 | msg.charCodeAt(i + 1) << 16 |
+                    msg.charCodeAt(i + 2) << 8 | msg.charCodeAt(i + 3);
+                word_array.push(j);
+            }
+            switch (msg_len % 4) {
+                case 0:
+                    i = 0x080000000;
+                    break;
+                case 1:
+                    i = msg.charCodeAt(msg_len - 1) << 24 | 0x0800000;
+                    break;
+                case 2:
+                    i = msg.charCodeAt(msg_len - 2) << 24 | msg.charCodeAt(msg_len - 1) << 16 | 0x08000;
+                    break;
+                case 3:
+                    i = msg.charCodeAt(msg_len - 3) << 24 | msg.charCodeAt(msg_len - 2) << 16 | msg.charCodeAt(msg_len - 1) << 8 | 0x80;
+                    break;
+            }
+            word_array.push(i);
+            while ((word_array.length % 16) != 14) word_array.push(0);
+            word_array.push(msg_len >>> 29);
+            word_array.push((msg_len << 3) & 0x0ffffffff);
+            for (blockstart = 0; blockstart < word_array.length; blockstart += 16) {
+                for (i = 0; i < 16; i++) W[i] = word_array[blockstart + i];
+                for (i = 16; i <= 79; i++) W[i] = rotate_left(W[i - 3] ^ W[i - 8] ^ W[i - 14] ^ W[i - 16], 1);
+                A = H0;
+                B = H1;
+                C = H2;
+                D = H3;
+                E = H4;
+                for (i = 0; i <= 19; i++) {
+                    temp = (rotate_left(A, 5) + ((B & C) | (~B & D)) + E + W[i] + 0x5A827999) & 0x0ffffffff;
+                    E = D;
+                    D = C;
+                    C = rotate_left(B, 30);
+                    B = A;
+                    A = temp;
+                }
+                for (i = 20; i <= 39; i++) {
+                    temp = (rotate_left(A, 5) + (B ^ C ^ D) + E + W[i] + 0x6ED9EBA1) & 0x0ffffffff;
+                    E = D;
+                    D = C;
+                    C = rotate_left(B, 30);
+                    B = A;
+                    A = temp;
+                }
+                for (i = 40; i <= 59; i++) {
+                    temp = (rotate_left(A, 5) + ((B & C) | (B & D) | (C & D)) + E + W[i] + 0x8F1BBCDC) & 0x0ffffffff;
+                    E = D;
+                    D = C;
+                    C = rotate_left(B, 30);
+                    B = A;
+                    A = temp;
+                }
+                for (i = 60; i <= 79; i++) {
+                    temp = (rotate_left(A, 5) + (B ^ C ^ D) + E + W[i] + 0xCA62C1D6) & 0x0ffffffff;
+                    E = D;
+                    D = C;
+                    C = rotate_left(B, 30);
+                    B = A;
+                    A = temp;
+                }
+                H0 = (H0 + A) & 0x0ffffffff;
+                H1 = (H1 + B) & 0x0ffffffff;
+                H2 = (H2 + C) & 0x0ffffffff;
+                H3 = (H3 + D) & 0x0ffffffff;
+                H4 = (H4 + E) & 0x0ffffffff;
+            }
+            var temp = cvt_hex(H0) + cvt_hex(H1) + cvt_hex(H2) + cvt_hex(H3) + cvt_hex(H4);
+
+            return temp.toLowerCase();
+        }
+
+    </script>
 
 {% endblock %}
