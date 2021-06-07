@@ -19,9 +19,9 @@
                             <form id="form" class="mb4" action="{{ url('app_default_index') }}" method="post">
                                 <div class="input">
                                     {# <label class="input__label" for="person">Uw brp:</label> #}
-                                     <input name="person" type="hidden" id="person"
-                                     class="input__control input__control--xl input__control--text"
-                                     value="{{ app.user.person }}">
+                                    <input name="person" type="hidden" id="person"
+                                           class="input__control input__control--xl input__control--text"
+                                           value="{{ app.user.person }}">
 
                                 </div>
                                 <div class="input">
@@ -79,14 +79,18 @@
                                 {# <input name="exceptionurl" type="hidden" value="localhost?status=exception"/> #}
                                 {# <input name="cancelurl" type="hidden" value="localhost?status=cancelled"/> #}
 
-                                <input id="accepturlInput" name="accepturl" type="hidden" value="{{ path(app.request.attributes.get('_route'),
-                                    app.request.attributes.get('_route_params'))|trim('/', 'right') }}?status=accepted"/>
-                                <input id="declineurlInput" name="declineurl" type="hidden" value="{{ path(app.request.attributes.get('_route'),
-                                    app.request.attributes.get('_route_params'))|trim('/', 'right') }}?status=accepted"/>
-                                <input id="exceptionurlInput" name="exceptionurl" type="hidden" value="{{ path(app.request.attributes.get('_route'),
-                                    app.request.attributes.get('_route_params'))|trim('/', 'right') }}?status=accepted"/>
-                                <input id="cancelurlInput" name="cancelurl" type="hidden" value="{{ path(app.request.attributes.get('_route'),
-                                    app.request.attributes.get('_route_params'))|trim('/', 'right') }}?status=accepted"/>
+                                <input id="accepturlInput" name="accepturl" type="hidden"
+                                       value="{{ path(app.request.attributes.get('_route'),
+                                           app.request.attributes.get('_route_params'))|trim('/', 'right') }}?status=accepted"/>
+                                <input id="declineurlInput" name="declineurl" type="hidden"
+                                       value="{{ path(app.request.attributes.get('_route'),
+                                           app.request.attributes.get('_route_params'))|trim('/', 'right') }}?status=accepted"/>
+                                <input id="exceptionurlInput" name="exceptionurl" type="hidden"
+                                       value="{{ path(app.request.attributes.get('_route'),
+                                           app.request.attributes.get('_route_params'))|trim('/', 'right') }}?status=accepted"/>
+                                <input id="cancelurlInput" name="cancelurl" type="hidden"
+                                       value="{{ path(app.request.attributes.get('_route'),
+                                           app.request.attributes.get('_route_params'))|trim('/', 'right') }}?status=accepted"/>
 
                                 <button disabled id="submit2" name="submit2" type="submit" value=""
                                         class="btn btn--primary">Test betaling
@@ -94,6 +98,12 @@
                             </form>
 
                         {% else %}
+
+                            {% if app.request.get('status')|default and app.request.get('status') == 'accepted' and app.request.get('type')|default %}
+
+                                <p>Uw betaling is geslaagd!</p>
+
+                            {% endif %}
 
                             {% if certificate.type|default %}
                                 <h2>{{ certificate.type|capitalize }}</h2>
@@ -262,7 +272,7 @@
                 let SHA1Sign = SHA1("{{ uid }}" + toString((values.price * 100)) + 'EUR' + 'gemhoorn' + 'ZabNz@ASFrZy5Hg6').toUpperCase();
                 SHASignInput.value = SHA1Sign;
                 accepturlInput.value = '{{ path(app.request.attributes.get('_route'),
-                app.request.attributes.get('_route_params'))|trim('/', 'right') }}?status=accepted&type=' + values.type;
+                    app.request.attributes.get('_route_params'))|trim('/', 'right') }}?status=accepted&type=' + values.type;
 
             } else {
                 // submitButton.innerText = 'Verder';
