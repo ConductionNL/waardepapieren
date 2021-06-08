@@ -1,156 +1,74 @@
 {% extends "content.html.twig" %}
 
 {% block content %}
+
+
     <div class="row">
-
         <div class="col-md-offset-1 col-md-10 col-sm-12">
-
             <div class="content-background">
                 <div class="content">
 
-                    <h2>Waardepapieren</h2>
+                    {% if hashResult|default and hashResult == 'success' %}
+                        <p>Returned data is correct</p>
 
-                    {% if certificate|default %}
-
-                        {% if certificate.type|default %}
-                            <h2>{{ certificate.type|capitalize }}</h2>
+                        {% if paramsArray['STATUS']|default and paramsArray['STATUS'] == '9' %}
+                            <p>Your payment has been accepted. <i class="fa fa-check" style="color: limegreen"></i></p>
+                        {% elseif paramsArray['STATUS']|default and paramsArray['STATUS'] == '5' %}
+                            <p>Your payment has been authorized. <i class="fa fa-check" style="color: limegreen"></i>
+                            </p>
+                        {% elseif paramsArray['STATUS']|default and (paramsArray['STATUS'] == '51' or paramsArray['STATUS'] == '91') %}
+                            <p>Your payment is in queue awaiting acceptance. <i class="fa fa-hourglass"
+                                                                                style="color: lightskyblue"></i></p>
+                        {% elseif paramsArray['STATUS']|default and paramsArray['STATUS'] == '2' %}
+                            <p>The authorizer has refused connection after too many faults. <b style="color: red">X</b>
+                            </p>
+                        {% elseif paramsArray['STATUS']|default and (paramsArray['STATUS'] == '52' or paramsArray['STATUS'] == '92') %}
+                            <p>The result of your payment is unsure. <b style="color: red">X</b></p>
+                        {% elseif paramsArray['STATUS']|default and paramsArray['STATUS'] == '1' %}
+                            <p>The payment has been cancelled. <b style="color: red">X</b></p>
                         {% endif %}
 
-                        {% if certificate.image|default or certificate.document|default %}
-                            <p>Download hier uw waardepapier:</p>
+
+
+                        {% if certificate|default %}
+
+                            {% include '/widgets/certificate.html.twig' with {
+                                'certificate': certificate
+                            } %}
+
                         {% endif %}
 
-                        {% if certificate.image|default %}
-                            <a href="{{ certificate.image }}" download>
-                                <div class="file">
-                                    <i class="file__icon icon icon-document" role="presentation"></i>
-                                    <div class="file__data">
-                                        <div class="file__filename">
-                                            <strong class="file__title break-all">PNG</strong>
-                                            <span class="meta">Foto</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        {% endif %}
 
-                        {% if certificate.document|default %}
-                            <br>
-                            <a href="{{ certificate.document }}" download>
-                                <div class="file">
-                                    <i class="file__icon icon icon-document" role="presentation"></i>
-                                    <div class="file__data">
-                                        <div class="file__filename">
-                                            <strong class="file__title break-all">PDF</strong>
-                                            <span class="meta">Document</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        {% endif %}
 
-                    {% endif %}
-
-                    {% if certificate.claim|default %}
-                        <br>
-                        <a href="data:application/json;base64,{{ certificate.claim }}" download>
-                            <div class="file">
-                                <i class="file__icon icon icon-document" role="presentation"></i>
-                                <div class="file__data">
-                                    <div class="file__filename">
-                                        <strong class="file__title break-all">JSON</strong>
-                                        <span class="meta">Claim</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    {% endif %}
-
-                    <br>
-
-                    <h3>Uw bestaande waardepapieren</h3>
-
-                    <table class="table table-responsive" aria-describedby="tabelbeschrijving">
-                        <thead>
-                        <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">Aangemaakt op</th>
-                            <th class="center">PNG</th>
-                            <th>PDF</th>
-                        </tr>
-                        </thead>
-                        <tbody>
                         {% if certificates|default %}
-                            {% for cert in certificates %}
-                                <tr>
-                                    <th scope="row">{{ cert.id|capitalize }}</th>
-                                    <td>{{ cert.dateCreated|date('d-m-Y') }}</td>
-                                    <td>                {% if cert.image|default %}
-                                            <a href="{{ cert.image }}" download>
-                                                <i class="fa fa-image"></i>
-                                            </a>
-                                        {% endif %}</td>
-                                    <td>                {% if cert.document|default %}
-                                            <a href="{{ cert.document }}" download>
-                                                <i class="fa fa-file-pdf"></i>
-                                            </a>
-                                        {% endif %}</td>
-                                    {# <td class="text-right"> #}
-                                    {# <form action="{{ path('app_waardepapieren_certificate') }}" method="post"> #}
-                                    {# <input name="type" value="{{ cert.type }}" hidden> #}
-                                    {# <input name="person" value="{{ app.user.person }}" hidden> #}
-                                    {# <button type="submit" class="pointer">Bekijken</button> #}
-                                    {# </form> #}
-                                    {# </td> #}
-                                </tr>
-                            {% endfor %}
-                        {% else %}
-                            <tr>
-                                <th scope="row" style="color: lightgrey">U heeft nog geen waardepapieren</th>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
+                            {% include '/widgets/certificates.html.twig' with {
+                                'certificates': certificates
+                            } %}
                         {% endif %}
-                        </tbody>
-                    </table>
 
+                    {% elseif hashResult|default and hashResult == 'failed' %}
+                        <p>Returned data is incorrect</p>
+                    {% elseif status|default and paymentArray|default %}
+                        <form action="https://secure.ogone.com/ncol/{{ status }}/orderstandard.asp" id="form1"
+                              name="form" method="post"
+                              name="form1">
+                            {% for key, value in paymentArray %}
+                                <input type="hidden" name="{{ key }}" value="{{ value }}">
+                            {% endfor %}
+                            {# <input id="submit" name="submit" type="submit" value="ga door naar betalen"/> #}
+                        </form>
 
-                    {# {% if certificates|default %} #}
-                    {# {% for cert in certificates %} #}
+                    {% endif %}
 
-                    {# {% include 'waardepapieren/widgets/download_modal.html.twig' with { #}
-                    {# 'item': cert, #}
-                    {# } %} #}
-
-                    {# <script> #}
-                    {# var downCert{{ cert.id|slice(0, 8) }}Modal; #}
-                    {# // Load modal component #}
-                    {# System.import('/uno/components/modal/modal.js').then(function (module) { #}
-                    {# downCert{{ cert.id|slice(0, 8) }}Modal = new module.Modal(document.getElementById('downCert{{ cert.id }}Modal')); #}
-                    {# }); #}
-
-                    {# // Called when the user clicks the button #}
-                    {# function openCert{{ cert.id|slice(0, 8) }}Modal() { #}
-                    {# downCert{{ cert.id|slice(0, 8) }}Modal.open(); #}
-                    {# } #}
-                    {# </script> #}
-
-                    {# {% endfor %} #}
-                    {# {% endif %} #}
-
-                    {# {% else %} #}
-
-                    {# <p>In deze applicatie kunt u uw waardepapieren downloaden. <a class="pointer" #}
-                    {# href="{{ commonground_cleanurl({"component":"ds"}) }}?responceUrl={{ url('app_user_digispoof') }}&backUrl={{ url('app_default_index') }}">Login</a> #}
-                    {# om #}
-                    {# te starten.</p> #}
-
-                    {# {% endif %} #}
-
-                </div><!-- /.content -->
-            </div><!-- /.content-background -->
-        </div><!-- /.col -->
+                </div>
+            </div>
+        </div>
     </div>
+
+    <script>
+        window.onload = function () {
+            document.forms['form'].submit();
+        }
+    </script>
 
 {% endblock %}

@@ -1,51 +1,54 @@
-{% if certificate.type|default %}
-    <h2>{{ certificate.type|capitalize }}</h2>
-{% endif %}
+<br>
+<br>
 
-{% if certificate.image|default or certificate.document|default %}
-    <p>Download hier uw waardepapier:</p>
-{% endif %}
+<h3>Uw bestaande waardepapieren</h3>
 
-{% if certificate.image|default %}
-    <a href="{{ certificate.image }}" download>
-        <div class="file">
-            <i class="file__icon icon icon-document" role="presentation"></i>
-            <div class="file__data">
-                <div class="file__filename">
-                    <strong class="file__title break-all">PNG</strong>
-                    <span class="meta">Foto</span>
-                </div>
-            </div>
-        </div>
-    </a>
-{% endif %}
-
-{% if certificate.document|default %}
-    <br>
-    <a href="{{ certificate.document }}" download>
-        <div class="file">
-            <i class="file__icon icon icon-document" role="presentation"></i>
-            <div class="file__data">
-                <div class="file__filename">
-                    <strong class="file__title break-all">PDF</strong>
-                    <span class="meta">Document</span>
-                </div>
-            </div>
-        </div>
-    </a>
-{% endif %}
-
-{% if certificate.claim|default %}
-    <br>
-    <a href="data:application/json;base64,{{ certificate.claim }}" download>
-        <div class="file">
-            <i class="file__icon icon icon-document" role="presentation"></i>
-            <div class="file__data">
-                <div class="file__filename">
-                    <strong class="file__title break-all">JSON</strong>
-                    <span class="meta">Claim</span>
-                </div>
-            </div>
-        </div>
-    </a>
-{% endif %}
+<table class="table table-responsive" aria-describedby="tabelbeschrijving">
+    <thead>
+    <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Aangemaakt op</th>
+        <th class="center">PNG</th>
+        <th>PDF</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% if certificates|default %}
+        {% for cert in certificates %}
+            <tr>
+                <th scope="row">{{ cert.id|capitalize }}</th>
+                {% if cert.dateCreated|default %}
+                    <td>{{ cert.dateCreated|date('d-m-Y') }}</td>
+                {% else %}
+                    <td></td>
+                {% endif %}
+                <td>                {% if cert.image|default %}
+                        <a href="{{ cert.image }}" download>
+                            <i class="fa fa-image"></i>
+                        </a>
+                    {% endif %}</td>
+                <td>                {% if cert.document|default %}
+                        <a href="{{ cert.document }}" download>
+                            <i class="fa fa-file-pdf"></i>
+                        </a>
+                    {% endif %}</td>
+                <td class="text-right">
+                    <form action="{{ path('app_waardepapieren_certificate') }}" method="post">
+                        <input name="type" value="{{ cert.type }}" hidden>
+                        <input name="person" value="{{ app.user.person }}" hidden>
+                        <button type="submit" class="pointer">Bekijken</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+    {% else %}
+        <tr>
+            <th scope="row" style="color: lightgrey">U heeft nog geen waardepapieren</th>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    {% endif %}
+    </tbody>
+</table>
