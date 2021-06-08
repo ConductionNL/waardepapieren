@@ -22,10 +22,13 @@
                         {% elseif paramsArray['STATUS']|default and paramsArray['STATUS'] == '2' %}
                             <p>The authorizer has refused connection after too many faults. <b style="color: red">X</b>
                             </p>
+                            <a href="{{ path('app_default_index') }}" class="btn btn--primary">Back to home</a>
                         {% elseif paramsArray['STATUS']|default and (paramsArray['STATUS'] == '52' or paramsArray['STATUS'] == '92') %}
                             <p>The result of your payment is unsure. <b style="color: red">X</b></p>
+                            <a href="{{ path('app_default_index') }}" class="btn btn--primary">Back to home</a>
                         {% elseif paramsArray['STATUS']|default and paramsArray['STATUS'] == '1' %}
                             <p>The payment has been cancelled. <b style="color: red">X</b></p>
+                            <a href="{{ path('app_default_index') }}" class="btn btn--primary">Back to home</a>
                         {% endif %}
 
 

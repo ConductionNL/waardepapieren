@@ -32,79 +32,23 @@
 
 
                                 <div class="input">
-                                     <button id="submitButton" type="submit" class="btn btn--primary">Verder</button>
+                                    <button id="submitButton" type="submit" class="btn btn--primary">Verder</button>
                                 </div>
                             </form>
-{#                            <form action="https://secure.ogone.com/ncol/test/orderstandard.asp" id="form1" method="post"#}
-{#                                  name="form1">#}
-{#                                <!-- algemene parameters -->#}
-{#                                <input name="PSPID" type="hidden" value="gemhoorn" />#}
-{#                                <input name="orderID" type="hidden" value="{{ uid }}" />#}
-{#                                <input name="amount" id="amountInput" type="hidden" />#}
-{#                                <input name="currency" type="hidden" value="EUR" />#}
-{#                                <input name="language" type="hidden" value="nl_NL" />#}
-{#                                <input name="CN" type="hidden" value="Barry" />#}
-{#                                <input name="EMAIL" type="hidden" value="barry@conduction.nl" />#}
-                                {# <input name="ownerZIP" type="hidden" value="" /> #}
-                                {# <input name="owneraddress" type="hidden" value="" /> #}
-                                {# <input name="ownercty" type="hidden" value="" /> #}
-                                {# <input name="ownertown" type="hidden" value="" /> #}
-                                {# <input name="ownertelno" type="hidden" value="" /> #}
 
-{#                                <!-- controle voor de betaling-->#}
-{#                                <input name="SHASign" id="SHASignInput" type="hidden"/>#}
+                        {% endif %}
 
-{#                                <!-- layout informatie-->#}
-{#                                <input name="TITLE" type="hidden" value="Certificate"/>#}
-{#                                <input name="BGCOLOR" type="hidden" value="white"/>#}
-{#                                <input name="TXTCOLOR" type="hidden" value="black"/>#}
-{#                                <input name="TBLBGCOLOR" type="hidden" value="white"/>#}
-{#                                <input name="TBLTXTCOLOR" type="hidden" value="black"/>#}
-{#                                <input name="BUTTONBGCOLOR" type="hidden" value="white"/>#}
-{#                                <input name="BUTTONTXTCOLOR" type="hidden" value="black"/>#}
-{#                                <input name="LOGO" type="hidden" value="http://localhost/images/logo-hoorn.svg"/>#}
-{#                                <input name="FONTTYPE" type="hidden" value="Verdana"/>#}
+                        {% if certificate|default %}
+                            {% include '/widgets/certificate.html.twig' with {
+                                'certificate': certificate
+                            } %}
+                        {% endif %}
 
-
-{#                                <!-- feedback na de betaling-->#}
-                                {# <input name="accepturl" type="hidden" value="localhost?status=accepted"/> #}
-                                {# <input name="declineurl" type="hidden" value="localhost?status=declined"/> #}
-                                {# <input name="exceptionurl" type="hidden" value="localhost?status=exception"/> #}
-                                {# <input name="cancelurl" type="hidden" value="localhost?status=cancelled"/> #}
-
-{#                                <input id="accepturlInput" name="accepturl" type="hidden"#}
-{#                                       value="{{ path(app.request.attributes.get('_route'),#}
-{#                                           app.request.attributes.get('_route_params'))|trim('/', 'right') }}?status=accepted" />#}
-{#                                <input id="declineurlInput" name="declineurl" type="hidden"#}
-{#                                       value="{{ path(app.request.attributes.get('_route'),#}
-{#                                           app.request.attributes.get('_route_params'))|trim('/', 'right') }}?status=accepted" />#}
-{#                                <input id="exceptionurlInput" name="exceptionurl" type="hidden"#}
-{#                                       value="{{ path(app.request.attributes.get('_route'),#}
-{#                                           app.request.attributes.get('_route_params'))|trim('/', 'right') }}?status=accepted" />#}
-{#                                <input id="cancelurlInput" name="cancelurl" type="hidden"#}
-{#                                       value="{{ path(app.request.attributes.get('_route'),#}
-{#                                           app.request.attributes.get('_route_params'))|trim('/', 'right') }}?status=accepted" />#}
-
-{#                                <button disabled id="submit2" name="submit2" type="submit" value=""#}
-{#                                        class="btn btn--primary">Test betaling#}
-{#                                </button>#}
-{#                            </form>#}
-
-                        {% else %}
-
-                            {% if certificate|default %}
-                                {% include '/widgets/certificate.html.twig' with {
-                                    'certificate': certificate
-                                } %}
-                            {% endif %}
-
-                            {% if certificates|default %}
-                                {% include '/widgets/certificates.html.twig' with {
-                                    'certificates': certificates
-                                } %}
-                            {% endif %}
-
-
+                        {% if certificates|default %}
+                            {% include '/widgets/certificates.html.twig' with {
+                                'certificates': certificates
+                            } %}
+                        {% endif %}
 
 
                         {# {% if certificates|default %} #}

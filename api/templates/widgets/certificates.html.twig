@@ -33,13 +33,13 @@
                             <i class="fa fa-file-pdf"></i>
                         </a>
                     {% endif %}</td>
-                <td class="text-right">
-                    <form action="{{ path('app_waardepapieren_certificate') }}" method="post">
-                        <input name="type" value="{{ cert.type }}" hidden>
-                        <input name="person" value="{{ app.user.person }}" hidden>
-                        <button type="submit" class="pointer">Bekijken</button>
-                    </form>
-                </td>
+{#                <td class="text-right">#}
+{#                    <form action="{{ path('app_waardepapieren_certificate') }}" method="post">#}
+{#                        <input name="type" value="{{ cert.type }}" hidden>#}
+{#                        <input name="person" value="{{ app.user.person }}" hidden>#}
+{#                        <button type="submit" class="pointer">Bekijken</button>#}
+{#                    </form>#}
+{#                </td>#}
             </tr>
         {% endfor %}
     {% else %}
@@ -47,7 +47,7 @@
             <th scope="row" style="color: lightgrey">U heeft nog geen waardepapieren</th>
             <td></td>
             <td></td>
-            <td></td>
+{#            <td></td>#}
         </tr>
     {% endif %}
     </tbody>
