@@ -6,31 +6,22 @@ settings:
   registryBase: docker.io/conduction
   projectName: waardepapieren
   name: waardepapieren
-  title: Waardepapieren
   version: V1.0
   majorVersion: v1
-  id: aae458e7-dd33-494c-a99c-383a7b1658a0
   description: 'Naast deze JSON rest API is er ook een [graphql](/graphql) interface beschikbaar.'
-  type: application
   repro: https://github.com/ConductionNL/waardepapieren
   demo: dev.waardepapieren-gemeentehoorn.commonground.nu
-  container: https://hub.docker.com/repository/docker/conduction/waardepapieren-php
-  domain: waardepapieren-gemeentehoorn.commonground.nu
-  subdomain: false
+  domain: acc-waardepapieren.hoorn.nl
+  subdomain: waardepapieren
   subpath: 
   subpathRouting: true
-  organisationName: Conduction
-  email: info@conduction.nl
-  country: Netherlands
-  state: Noord-Holland
-  locality: Amsterdam
-  unit: Common-Ground
   env: dev
   web: false
   internal: false
   debug: 1
-  cache: 1
-  sessionDuration: 900
+  cache: false
+  type: application
+  id: 
   replicaCount: 1
   corsAllowOrigin: ['*']
   trustedHosts: '^.+$'
@@ -40,11 +31,9 @@ settings:
     - 10.0.0.0/8
     - 172.16.0.0/12
     - 192.168.0.0/16
-  # If you are runnig a single component on a kubernetes cluster you can just easaliy enable the load balancer, if not you need to set up a multi component load balancer
+  # If you are running a single component on a kubernetes cluster you can just easily enable the load balancer, if not you need to set up a multi component load balancer
   loadbalancerEnabled: false
-  # If you want to enable NLX you are requered to add the appropreate certificates to you nlx-settings folder (located in the /api folder)
-  nlxInwayEnabled: false
-  # If you are runnig a single component on a kubernetes cluster you can just easaliy enable the load balancer, if not you need to set up a multi component load balancer
+  # If you are running a single component on a kubernetes cluster you can just easily enable the load balancer, if not you need to set up a multi component load balancer
   notificationEnabled: false
   audittrailEnabled: false
   authorisationEnabled: false
@@ -52,12 +41,7 @@ settings:
   archiveEnabled: false
 
 security:
-  commongroundId: "aae458e7-dd33-494c-a99c-383a7b1658a0"
-  commongroundKey: "47e971de-2272-4e09-a141-134612e46a22"
-  applicationKey: "47e971de-2272-4e09-a141-134612e46a22"
-  userKey: "47e971de-2272-4e09-a141-134612e46a22"
-  authorisationProviderUser: https://uc.zuid-drecht.nl
-  authorisationProviderApplication: https://openzaak.dev.zuid-drecht.nl/authorizaties/api/v1
+  applicationKey: "a78828b4-f577-4425-a17c-c217980409e9"
 
 
 php:
@@ -68,6 +52,19 @@ php:
   env: prod
   secret: ""
   replicaCount: 2
+
+redis:
+  cluster:
+    enabled: false
+  redisPort: 6379
+  usePassword: false
+  enabled: true
+
+commonground:
+  eherkenning:
+    location: https://acc-waardepapieren.hoorn.nl/eherkenning
+  digispoof:
+    location: https://acc-waardepapieren.hoorn.nl/digispoof
 
 nginx:
   repository: docker.io/conduction/protocomponent-nginx
@@ -110,15 +107,6 @@ mercure:
   service:
     type: NodePort
     port: 80
-
-redis:
-    port: 6379
-    version: 5.0
-    memory: 100Mi
-    cpu: 100m
-    limits:
-        memory: 200Mi
-        cpu: 250m
 
 ingress:
   annotations:

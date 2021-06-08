@@ -18,10 +18,10 @@ services:
         exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
 
     # controllers are imported separately to make sure services can be injected
-    # as action arguments even if you don't extend any base test class
+    # as action arguments even if you don't extend any base controller class
     App\Controller\:
         resource: '../src/Controller'
-        tags: ['test.service_arguments']
+        tags: ['controller.service_arguments']
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
@@ -41,12 +41,12 @@ services:
                 arguments:
                     - '%env(REDIS_HOST)%'
                     - '%env(int:REDIS_PORT)%'
-#            # If you need key prefix, uncomment line belows
-#            # - method: setOption
-#            #   arguments:
-#            #       - !php/const Redis::OPT_PREFIX
-#            #       - 'my_prefix'
-#
+            # If you need key prefix, uncomment line belows
+            # - method: setOption
+            #   arguments:
+            #       - !php/const Redis::OPT_PREFIX
+            #       - 'my_prefix'
+
     Symfony\Component\HttpFoundation\Session\Storage\Handler\RedisSessionHandler:
         arguments:
             - '@Redis'

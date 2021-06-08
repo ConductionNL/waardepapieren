@@ -68,8 +68,9 @@
 
                 {# onderstaande is nu bij wijze van hotfix, de ventigid het coole rechts zwevende menu item #}
                 {% if not app.user %}
+                    {% set digispoof = commonground_cleanurl({"component":"ds"}) %}
                     <li class="navigation__item">
-                        <a class="navigation__link pointer" href="https://waardepapieren-gemeentehoorn.commonground.nu/digispoof?responceUrl={{ url('app_user_digispoof') }}&backUrl={{ url('app_default_index') }}"><i
+                        <a class="navigation__link pointer" href="{{ digispoof }}{% if '?' in digispoof %}&{% else %}?{% endif %}responceUrl={{ url('app_user_digispoof') }}&backUrl={{ url('app_default_index') }}"><i
                                 style="margin-right: 10px" class="fas fa-lock"></i> {{ 'login'|trans|capitalize }}
                         </a>
                     </li>

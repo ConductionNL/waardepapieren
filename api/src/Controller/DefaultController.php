@@ -5,12 +5,13 @@
 namespace App\Controller;
 
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
+use GuzzleHttp\Client;
+use Ramsey\Uuid\Uuid;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-
 /**
  * The Procces test handles any calls that have not been picked up by another test, and wel try to handle the slug based against the wrc.
  *
@@ -29,68 +30,114 @@ class DefaultController extends AbstractController
         // On an index route we might want to filter based on user input
         $variables['query'] = array_merge($request->query->all(), $variables['post'] = $request->request->all());
 
+        if ($this->getUser() && $request->query->get('status') && $request->query->get('type')) {
+            $variables['certificates'] = $commonGroundService->getResourceList(['component' => 'wari', 'type' => 'certificates'], ['person' => $this->getUser()->getPerson()])['hydra:member'];
+            $variables['certificates'][] = array('type' => 'geboorte akte', 'created' => '17-09-2020', 'id' => '1');
+
+            $variables['certificate']['type'] = $request->query->get('type');
+            $variables['certificate']['organization'] = '001516814';
+            $variables['certificate']['person'] = $this->getUser()->getPerson();
+
+            $variables['certificate'] = $commonGroundService->createResource($variables['certificate'], ['component' => 'waar', 'type' => 'certificates']);
+
+            return $variables;
+        }
+
+        $variables['uid'] = Uuid::uuid4();
+
         $variables['types'][] = [
-            'name'=> 'Akte van geboorte',
-            'type'=> 'akte_van_geboorte',
+            'name' => 'Akte van geboorte',
+            'type' => 'akte_van_geboorte',
+            'price' => '14'
         ];
+//        $variables['types'][] = [
+//            'name'=> 'Akte van overlijden',
+//            'type'=> 'akte_van_overlijden',
+//        ];
         $variables['types'][] = [
-            'name'=> 'Akte van huwelijk',
-            'type'=> 'akte_van_huwelijk',
+            'name' => 'Verklaring van in leven zijn',
+            'type' => 'verklaring_van_in_leven_zijn',
+            'price' => '14'
         ];
+//        $variables['types'][] = [
+//            'name'=> 'Verklaring van Nederlanderschap',
+//            'type'=> 'verklaring_van_nederlanderschap',
+//        ];
+//        $variables['types'][] = [
+//            'name'=> 'Uittreksel basis registratie personen',
+//            'type'=> 'uittreksel_basis_registratie_personen',
+//        ];
         $variables['types'][] = [
-            'name'=> 'Akte van overlijden',
-            'type'=> 'akte_van_overlijden',
-        ];
-        $variables['types'][] = [
-            'name'=> 'Akte van registratie van een partnerschap',
-            'type'=> 'akte_van_registratie_van_een_parterschap',
-        ];
-        $variables['types'][] = [
-            'name'=> 'Akte van omzetting van een huwelijk in een registratie van een partnerschap',
-            'type'=> 'akte_van_omzetting_van_een_huwelijk_in_een_registratie_van_een_partnerschap',
-        ];
-        $variables['types'][] = [
-            'name'=> 'Akte van omzetting van een registratie van een partnerschap',
-            'type'=> 'akte_van_omzetting_van_een_registratie_van_een_partnerschap',
-        ];
-        $variables['types'][] = [
-            'name'=> 'Verklaring van huwelijksbevoegdheid',
-            'type'=> 'verklaring_van_huwelijksbevoegdheid',
-        ];
-        $variables['types'][] = [
-            'name'=> 'Verklaring van in leven zijn',
-            'type'=> 'verklaring_van_in_leven_zijn',
-        ];
-        $variables['types'][] = [
-            'name'=> 'Verklaring van Nederlanderschap',
-            'type'=> 'verklaring_van_nederlanderschap',
-        ];
-        $variables['types'][] = [
-            'name'=> 'Uittreksel basis registratie personen',
-            'type'=> 'uittreksel_basis_registratie_personen',
-        ];
-        $variables['types'][] = [
-            'name'=> 'Uittreksel registratie niet ingezetenen',
-            'type'=> 'uittreksel_registratie_niet_ingezetenen',
-        ];
-        $variables['types'][] = [
-            'name'=> 'Historisch uittreksel basis registratie personen',
-            'type'=> 'historisch_uittreksel_basis_registratie_personen',
+            'name' => 'Historisch uittreksel basis registratie personen',
+            'type' => 'historisch_uittreksel_basis_registratie_personen',
+            'price' => '14'
         ];
 
         if ($this->getUser() && $this->getUser()->getPerson()) {
-            $variables['certificates'] = $commonGroundService->getResourceList('https://waardepapieren-gemeentehoorn.commonground.nu/api/v1/wari/certificates', ['person' => $this->getUser()->getPerson()])['hydra:member'];
-//            $variables['certificates'][] = array('type' => 'geboorte akte', 'created' => '17-09-2020', 'id' => '1');
+            $variables['certificates'] = $commonGroundService->getResourceList(['component' => 'wari', 'type' => 'certificates'], ['person' => $this->getUser()->getPerson()])['hydra:member'];
+            $variables['certificates'][] = array('type' => 'geboorte akte', 'created' => '17-09-2020', 'id' => '1');
         }
 
         if ($request->isMethod('POST')) {
             $variables['certificate'] = $request->request->all();
-            $variables['certificate'] = $commonGroundService->createResource($variables['certificate'], 'https://waardepapieren-gemeentehoorn.commonground.nu/api/v1/waar/certificates');
-            $variables['certificate']['claim'] = base64_encode(json_encode($variables['certificate']['claim']));
+            $typeinfo = json_decode($variables['certificate']['typeinfo']);
+            $variables['certificate']['type'] = $typeinfo->type;
+            $variables['certificate']['organization'] = '001516814';
+//            $variables['certificate']['person'] = 'testpersoonbarry';
+
+//            Re enable
+//            $variables['certificate'] = $commonGroundService->createResource($variables['certificate'], ['component' => 'waar', 'type' => 'certificates']);
+
+//            $variables['certificate']['claim'] = base64_encode(json_encode($variables['certificate']['claim']));
+//            if (isset($typeinfo->price)) {
+//                $variables['certificate']['price'] = $typeinfo->price;
+//                Guzzle call to ... ?
+//                $headers = [
+//                    'Accept'        => 'application/ld+json',
+//                    'Content-Type'  => 'application/json',
+//                    'PSPID' => 'gemhoorn',
+//                    'shaSignature' => 'ZabNz@ASFrZy5Hg6',
+//                    'signatureHashAlgorithm' => 'Sha256',
+//                    'signatureMethod' => 'AllParameters'
+//                ];
+//
+//                $client = new Client([
+//                    'headers'  => $headers,
+//                    'timeout'  => 30.0,
+//                ]);
+//
+//                $body = [
+//                    'price' => $variables['certificate']['price']
+//                ];
+//
+//                $response = $client->request('POST', 'https://secure.ogone.com/ncol/test/orderstandard.asp', [
+//                    'json'         => $body,
+//                ]);
+//
+//                $response = json_decode($response->getBody()->getContents(), true);
+//
+//                var_dump($response);die;
+//
+//                header("Location: " + $response['paymentUrl?']);
+//                exit;
+//            }
         }
 
 //        $variables['claim'] = base64_encode(json_encode(array("Peter"=>35, "Ben"=>37, "Joe"=>43)));
 
         return $variables;
     }
+
+    /**
+     * @Route("/certificate/{id}")
+     * @Template
+     */
+    public function certificateAction(CommonGroundService $commonGroundService, Request $request, ParameterBagInterface $params, $id)
+    {
+        $variables['certificate'] = $commonGroundService->getResource(['component' => 'waar', 'type' => 'certificates', 'id' => $id]);
+
+
+        return $variables;
+    }
+
 }

@@ -414,7 +414,7 @@ paths:
           in: header
         -
           name: X-NLX-Request-Process-Id
-          description: 'A ptc id for purpose registration (doelbinding)'
+          description: 'A process id for purpose registration (doelbinding)'
           in: header
         -
           name: X-NLX-Request-Data-Elements
@@ -588,7 +588,7 @@ paths:
           in: header
         -
           name: X-NLX-Request-Process-Id
-          description: 'A ptc id for purpose registration (doelbinding)'
+          description: 'A process id for purpose registration (doelbinding)'
           in: header
         -
           name: X-NLX-Request-Data-Elements
@@ -630,7 +630,7 @@ paths:
           in: header
         -
           name: X-NLX-Request-Process-Id
-          description: 'A ptc id for purpose registration (doelbinding)'
+          description: 'A process id for purpose registration (doelbinding)'
           in: header
         -
           name: X-NLX-Request-Data-Elements
@@ -765,7 +765,7 @@ paths:
           in: header
         -
           name: X-NLX-Request-Process-Id
-          description: 'A ptc id for purpose registration (doelbinding)'
+          description: 'A process id for purpose registration (doelbinding)'
           in: header
         -
           name: X-NLX-Request-Data-Elements
@@ -806,7 +806,7 @@ paths:
           in: header
         -
           name: X-NLX-Request-Process-Id
-          description: 'A ptc id for purpose registration (doelbinding)'
+          description: 'A process id for purpose registration (doelbinding)'
           in: header
         -
           name: X-NLX-Request-Data-Elements
@@ -936,7 +936,7 @@ paths:
           in: header
         -
           name: X-NLX-Request-Process-Id
-          description: 'A ptc id for purpose registration (doelbinding)'
+          description: 'A process id for purpose registration (doelbinding)'
           in: header
         -
           name: X-NLX-Request-Data-Elements
@@ -1311,7 +1311,7 @@ paths:
           in: header
         -
           name: X-NLX-Request-Process-Id
-          description: 'A ptc id for purpose registration (doelbinding)'
+          description: 'A process id for purpose registration (doelbinding)'
           in: header
         -
           name: X-NLX-Request-Data-Elements
@@ -1485,7 +1485,7 @@ paths:
           in: header
         -
           name: X-NLX-Request-Process-Id
-          description: 'A ptc id for purpose registration (doelbinding)'
+          description: 'A process id for purpose registration (doelbinding)'
           in: header
         -
           name: X-NLX-Request-Data-Elements
@@ -1527,7 +1527,7 @@ paths:
           in: header
         -
           name: X-NLX-Request-Process-Id
-          description: 'A ptc id for purpose registration (doelbinding)'
+          description: 'A process id for purpose registration (doelbinding)'
           in: header
         -
           name: X-NLX-Request-Data-Elements
@@ -1662,7 +1662,7 @@ paths:
           in: header
         -
           name: X-NLX-Request-Process-Id
-          description: 'A ptc id for purpose registration (doelbinding)'
+          description: 'A process id for purpose registration (doelbinding)'
           in: header
         -
           name: X-NLX-Request-Data-Elements
@@ -1703,7 +1703,7 @@ paths:
           in: header
         -
           name: X-NLX-Request-Process-Id
-          description: 'A ptc id for purpose registration (doelbinding)'
+          description: 'A process id for purpose registration (doelbinding)'
           in: header
         -
           name: X-NLX-Request-Data-Elements
@@ -1833,7 +1833,7 @@ paths:
           in: header
         -
           name: X-NLX-Request-Process-Id
-          description: 'A ptc id for purpose registration (doelbinding)'
+          description: 'A process id for purpose registration (doelbinding)'
           in: header
         -
           name: X-NLX-Request-Data-Elements
