@@ -33,19 +33,6 @@ class DefaultController extends AbstractController
         // On an index route we might want to filter based on user input
         $variables['query'] = array_merge($request->query->all(), $variables['post'] = $request->request->all());
 
-//        if ($this->getUser() && $request->query->get('status') && $request->query->get('type')) {
-//            $variables['certificates'] = $commonGroundService->getResourceList(['component' => 'wari', 'type' => 'certificates'], ['person' => $this->getUser()->getPerson()])['hydra:member'];
-//            $variables['certificates'][] = array('type' => 'geboorte akte', 'created' => '17-09-2020', 'id' => '1');
-//
-//            $variables['certificate']['type'] = $request->query->get('type');
-//            $variables['certificate']['organization'] = '001516814';
-//            $variables['certificate']['person'] = $this->getUser()->getPerson();
-//
-//            $variables['certificate'] = $commonGroundService->createResource($variables['certificate'], ['component' => 'waar', 'type' => 'certificates']);
-//
-//            return $variables;
-//        }
-
         $variables['types'][] = [
             'name' => 'Akte van geboorte',
             'type' => 'akte_van_geboorte',
@@ -76,26 +63,8 @@ class DefaultController extends AbstractController
 
         if ($this->getUser() && $this->getUser()->getPerson()) {
             $variables['certificates'] = $commonGroundService->getResourceList(['component' => 'wari', 'type' => 'certificates'], ['person' => $this->getUser()->getPerson()])['hydra:member'];
-            $variables['certificates'][] = array('type' => 'geboorte akte', 'created' => '17-09-2020', 'id' => '1');
+//            $variables['certificates'][] = array('type' => 'geboorte akte', 'created' => '17-09-2020', 'id' => '1');
         }
-
-        if ($this->getUser() && $request->isMethod('POST')) {
-            $variables['values'] = $request->request->all();
-//            $typeinfo = json_decode($variables['values']);
-
-
-//            $variables['certificate']['type'] = $typeinfo->type;
-//            $variables['certificate']['organization'] = '001516814';
-//            $variables['certificate']['person'] = 'testpersoonbarry';
-
-//            Re enable
-//            $variables['certificate'] = $commonGroundService->createResource($variables['certificate'], ['component' => 'waar', 'type' => 'certificates']);
-
-//            $variables['certificate']['claim'] = base64_encode(json_encode($variables['certificate']['claim']));
-
-        }
-
-//        $variables['claim'] = base64_encode(json_encode(array("Peter"=>35, "Ben"=>37, "Joe"=>43)));
 
         return $variables;
     }
@@ -141,9 +110,11 @@ class DefaultController extends AbstractController
                 $variables['hashResult'] = 'failed';
             }
 
+            $receivedOrderId = $request->query->get('orderID');
+            $orderId = $session->get('orderId');
             if (isset($variables['paramsArray']['STATUS']) && ($variables['paramsArray']['STATUS'] == '5' ||
                     $variables['paramsArray']['STATUS'] == '9' || $variables['paramsArray']['STATUS'] == '51' ||
-                    $variables['paramsArray']['STATUS'] == '91')) {
+                    $variables['paramsArray']['STATUS'] == '91') && isset($orderId) && isset($receivedOrderId) && $orderId == $receivedOrderId) {
 
 //                Create certificate if type is in session
                 if ($session->get('type')) {
@@ -156,23 +127,25 @@ class DefaultController extends AbstractController
                     $variables['certificates'] = $commonGroundService->getResourceList(['component' => 'wari', 'type' => 'certificates'], ['person' => $this->getUser()->getPerson()])['hydra:member'];
                 }
 
+            } elseif (isset($variables['paramsArray']['STATUS'])) {
+                $session->set('type', null);
+                $session->set('orderId', null);
             }
 
-//            var_dump($hashedSign);
-//            var_dump($request->query->get('SHASIGN'));
-//            die;
         } else if (isset($shaSignature) && $request->isMethod('POST') && $this->getUser()) {
             $variables['values'] = $request->request->all();
             $typeinfo = json_decode($variables['values']['typeinfo']);
 
+            $orderId = (string)Uuid::uuid4();
             if (isset($typeinfo)) {
                 $session->set('type', $typeinfo->type);
+                $session->set('orderId', $orderId);
             }
 
             $variables['paymentArray'] = [];
             $variables['paymentArray'] = [
                 'PSPID' => 'gemhoorn',
-                'orderid' => (string)Uuid::uuid4(),
+                'orderid' => $orderId,
                 'amount' => $typeinfo->price * 100,
                 'currency' => 'EUR',
                 'language' => 'nl_NL',
@@ -212,15 +185,8 @@ class DefaultController extends AbstractController
                         die;*/
             $variables['status'] = 'test';
 
-//            $variables['certificate']['type'] = $typeinfo->type;
-//            $variables['certificate']['organization'] = '001516814';
-//            $variables['certificate']['person'] = 'testpersoonbarry';
-
-//            Re enable
-//            $variables['certificate'] = $commonGroundService->createResource($variables['certificate'], ['component' => 'waar', 'type' => 'certificates']);
-
-//            $variables['certificate']['claim'] = base64_encode(json_encode($variables['certificate']['claim']));
-
+        } else {
+            return $this->redirectToRoute('app_default_index');
         }
 
         return $variables;
