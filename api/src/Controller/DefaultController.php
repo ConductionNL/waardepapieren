@@ -150,7 +150,6 @@ class DefaultController extends AbstractController
                 'currency' => 'EUR',
                 'language' => 'nl_NL',
                 'CN' => $this->getUser()->getName(),
-                'EMAIL' => 'barry@conduction.nl',
                 'TITLE' => 'Certificate',
                 'BGCOLOR' => 'white',
                 'TXTCOLOR' => 'black',
