@@ -34,14 +34,10 @@
 
 
                         {% if certificate|default %}
-
                             {% include '/widgets/certificate.html.twig' with {
                                 'certificate': certificate
                             } %}
-
                         {% endif %}
-
-
 
                         {% if certificates|default %}
                             {% include '/widgets/certificates.html.twig' with {
@@ -51,6 +47,7 @@
 
                     {% elseif hashResult|default and hashResult == 'failed' %}
                         <p>Returned data is incorrect</p>
+                        <a href="{{ path('app_default_index') }}" class="btn btn--primary">Back to home</a>
                     {% elseif status|default and paymentArray|default %}
                         <form action="https://secure.ogone.com/ncol/{{ status }}/orderstandard.asp" id="form1"
                               name="form" method="post"
