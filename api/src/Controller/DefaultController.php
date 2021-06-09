@@ -45,14 +45,14 @@ class DefaultController extends AbstractController
 //            'name'=> 'Verklaring van Nederlanderschap',
 //            'type'=> 'verklaring_van_nederlanderschap',
 //        ];
-//        $variables['types'][] = [
-//            'name'=> 'Uittreksel basis registratie personen',
-//            'type'=> 'uittreksel_basis_registratie_personen',
-//        ];
         $variables['types'][] = [
-            'name'=> 'Historisch uittreksel basis registratie personen',
-            'type'=> 'historisch_uittreksel_basis_registratie_personen',
+            'name'=> 'Uittreksel basis registratie personen',
+            'type'=> 'uittreksel_basis_registratie_personen',
         ];
+//        $variables['types'][] = [
+//            'name'=> 'Historisch uittreksel basis registratie personen',
+//            'type'=> 'historisch_uittreksel_basis_registratie_personen',
+//        ];
 
         if ($this->getUser() && $this->getUser()->getPerson()) {
             $variables['certificates'] = $commonGroundService->getResourceList(['component' => 'wari', 'type' => 'certificates'], ['person' => $this->getUser()->getPerson()])['hydra:member'];
