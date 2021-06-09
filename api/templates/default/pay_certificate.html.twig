@@ -1,0 +1,74 @@
+{% extends "content.html.twig" %}
+
+{% block content %}
+
+
+    <div class="row">
+        <div class="col-md-offset-1 col-md-10 col-sm-12">
+            <div class="content-background">
+                <div class="content">
+
+                    {% if hashResult|default and hashResult == 'success' %}
+                        <p>Returned data is correct</p>
+
+                        {% if paramsArray['STATUS']|default and paramsArray['STATUS'] == '9' %}
+                            <p>Your payment has been accepted. <i class="fa fa-check" style="color: limegreen"></i></p>
+                        {% elseif paramsArray['STATUS']|default and paramsArray['STATUS'] == '5' %}
+                            <p>Your payment has been authorized. <i class="fa fa-check" style="color: limegreen"></i>
+                            </p>
+                        {% elseif paramsArray['STATUS']|default and (paramsArray['STATUS'] == '51' or paramsArray['STATUS'] == '91') %}
+                            <p>Your payment is in queue awaiting acceptance. <i class="fa fa-hourglass"
+                                                                                style="color: lightskyblue"></i></p>
+                        {% elseif paramsArray['STATUS']|default and paramsArray['STATUS'] == '2' %}
+                            <p>The authorizer has refused connection after too many faults. <b style="color: red">X</b>
+                            </p>
+                            <a href="{{ path('app_default_index') }}" class="btn btn--primary">Back to home</a>
+                        {% elseif paramsArray['STATUS']|default and (paramsArray['STATUS'] == '52' or paramsArray['STATUS'] == '92') %}
+                            <p>The result of your payment is unsure. <b style="color: red">X</b></p>
+                            <a href="{{ path('app_default_index') }}" class="btn btn--primary">Back to home</a>
+                        {% elseif paramsArray['STATUS']|default and paramsArray['STATUS'] == '1' %}
+                            <p>The payment has been cancelled. <b style="color: red">X</b></p>
+                            <a href="{{ path('app_default_index') }}" class="btn btn--primary">Back to home</a>
+                        {% endif %}
+
+
+
+                        {% if certificate|default %}
+                            {% include '/widgets/certificate.html.twig' with {
+                                'certificate': certificate
+                            } %}
+                        {% endif %}
+
+                        {% if certificates|default %}
+                            {% include '/widgets/certificates.html.twig' with {
+                                'certificates': certificates
+                            } %}
+                        {% endif %}
+
+                    {% elseif hashResult|default and hashResult == 'failed' %}
+                        <p>Returned data is incorrect</p>
+                        <a href="{{ path('app_default_index') }}" class="btn btn--primary">Back to home</a>
+                    {% elseif status|default and paymentArray|default %}
+                        <form action="https://secure.ogone.com/ncol/{{ status }}/orderstandard.asp" id="form1"
+                              name="form" method="post"
+                              name="form1">
+                            {% for key, value in paymentArray %}
+                                <input type="hidden" name="{{ key }}" value="{{ value }}">
+                            {% endfor %}
+                            {# <input id="submit" name="submit" type="submit" value="ga door naar betalen"/> #}
+                        </form>
+
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.onload = function () {
+            document.forms['form'].submit();
+        }
+    </script>
+
+{% endblock %}

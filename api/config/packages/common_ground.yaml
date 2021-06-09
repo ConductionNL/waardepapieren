@@ -8,6 +8,9 @@ parameters:
     env(APP_COMMONGROUND_ID): "d4bb1810-8358-4372-98db-6c7bd2fb370c"
     env(APP_COMMONGROUND_KEY): "d4bb1810-8358-4372-98db-6c7bd2fb370c"
     env(APP_COMMONGROUND_SECRET): ""
+    
+    env(APP_SHASIGN): "%env(APP_SHASIGN)%"
+    app_shasign: "%env(APP_SHASIGN)%"
 
     common_ground.app.id: "%env(APP_COMMONGROUND_ID)%"
     app_commonground_id: "%env(APP_COMMONGROUND_ID)%"
@@ -54,8 +57,8 @@ parameters:
     env(ARTIFACTHUB_USER): ""
     env(HELM_REPOSITORY): ""
     env(APP_MAJOR_VERSION): "v1"
-    env(APP_DIGISPOOF_LOCATION): "https://zuid-drecht.nl/digispoof"
-    env(APP_EHERKENNING_LOCATION): "https://zuid-drecht.nl/eherkenning"
+    env(APP_DIGISPOOF_LOCATION): "https://%env(APP_DOMAIN)%/digispoof?brpUrl=localhost"
+    env(APP_EHERKENNING_LOCATION): "https://%env(APP_DOMAIN)%/eherkenning"
 
     app_env: "%env(APP_ENV)%"
     app_container: "%env(APP_CONTAINER)%"
