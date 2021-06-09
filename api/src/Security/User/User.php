@@ -25,7 +25,7 @@ class User implements SamlUserInterface
     /* Always true */
     private $isActive;
 
-    public function __construct(string $username = '',  string $name = '', string $salt = null, $roles = [], $password = '')
+    public function __construct(string $username = '', string $name = '', string $salt = null, $roles = [], $password = '')
     {
         $this->username = $username;
         $this->name = $name;
@@ -33,7 +33,6 @@ class User implements SamlUserInterface
         $this->isActive = true;
         $this->password = $password;
         $this->roles = $roles;
-
     }
 
     public function __toString()
@@ -66,7 +65,6 @@ class User implements SamlUserInterface
         return $this->name;
     }
 
-
     public function isEnabled()
     {
         return $this->isActive;
@@ -80,7 +78,7 @@ class User implements SamlUserInterface
     public function serialize()
     {
         return serialize([
-            $this->username
+            $this->username,
             // see section on salt below
             // $this->salt,
         ]);

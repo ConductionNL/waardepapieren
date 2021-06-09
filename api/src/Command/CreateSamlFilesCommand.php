@@ -40,8 +40,7 @@ class CreateSamlFilesCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
         /** @var string $version */
-
-        $fileSystem = New Filesystem();
+        $fileSystem = new Filesystem();
 
         $output->writeln('Generating config.yaml');
         $config = $this->twig->render('saml/config.yaml.twig');
