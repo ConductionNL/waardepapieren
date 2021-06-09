@@ -5,15 +5,14 @@
 namespace App\Controller;
 
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
-use GuzzleHttp\Client;
 use Ramsey\Uuid\Uuid;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\UrlHelper;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\UrlHelper;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * The Procces test handles any calls that have not been picked up by another test, and wel try to handle the slug based against the wrc.
@@ -34,32 +33,32 @@ class DefaultController extends AbstractController
         $variables['query'] = array_merge($request->query->all(), $variables['post'] = $request->request->all());
 
         $variables['types'][] = [
-            'name' => 'Akte van geboorte',
-            'type' => 'akte_van_geboorte',
-            'price' => '14'
+            'name'  => 'Akte van geboorte',
+            'type'  => 'akte_van_geboorte',
+            'price' => '14',
         ];
 //        $variables['types'][] = [
 //            'name'=> 'Akte van overlijden',
 //            'type'=> 'akte_van_overlijden',
 //        ];
         $variables['types'][] = [
-            'name' => 'Verklaring van in leven zijn',
-            'type' => 'verklaring_van_in_leven_zijn',
-            'price' => '14'
+            'name'  => 'Verklaring van in leven zijn',
+            'type'  => 'verklaring_van_in_leven_zijn',
+            'price' => '14',
         ];
 //        $variables['types'][] = [
 //            'name'=> 'Verklaring van Nederlanderschap',
 //            'type'=> 'verklaring_van_nederlanderschap',
 //        ];
-//        $variables['types'][] = [
-//            'name'=> 'Uittreksel basis registratie personen',
-//            'type'=> 'uittreksel_basis_registratie_personen',
-//        ];
         $variables['types'][] = [
-            'name' => 'Historisch uittreksel basis registratie personen',
-            'type' => 'historisch_uittreksel_basis_registratie_personen',
-            'price' => '14'
+            'name'  => 'Uittreksel basis registratie personen',
+            'type'  => 'uittreksel_basis_registratie_personen',
+            'price' => '14',
         ];
+//        $variables['types'][] = [
+//            'name'=> 'Historisch uittreksel basis registratie personen',
+//            'type'=> 'historisch_uittreksel_basis_registratie_personen',
+//        ];
 
         if ($this->getUser() && $this->getUser()->getPerson()) {
             $variables['certificates'] = $commonGroundService->getResourceList(['component' => 'wari', 'type' => 'certificates'], ['person' => $this->getUser()->getPerson()])['hydra:member'];
@@ -73,15 +72,13 @@ class DefaultController extends AbstractController
      * @Route("/pay-certificate")
      * @Template
      */
-    public function payCertificateAction
-    (
+    public function payCertificateAction(
         CommonGroundService $commonGroundService,
         Request $request,
         ParameterBagInterface $params,
         UrlHelper $urlHelper,
         Session $session
-    )
-    {
+    ) {
         $variables = [];
 
         $shaSignature = $params->get('app_shasign');
@@ -100,7 +97,7 @@ class DefaultController extends AbstractController
 
             $signature = [];
             foreach ($keyArray as $key => $value) {
-                $signature[] = $key . "=" . $value . $shaSignature;
+                $signature[] = $key.'='.$value.$shaSignature;
             }
             $hashedSign = strtoupper(hash('sha256', implode('', $signature)));
 
@@ -126,17 +123,15 @@ class DefaultController extends AbstractController
 
                     $variables['certificates'] = $commonGroundService->getResourceList(['component' => 'wari', 'type' => 'certificates'], ['person' => $this->getUser()->getPerson()])['hydra:member'];
                 }
-
             } elseif (isset($variables['paramsArray']['STATUS'])) {
                 $session->set('type', null);
                 $session->set('orderId', null);
             }
-
-        } else if (isset($shaSignature) && $request->isMethod('POST') && $this->getUser()) {
+        } elseif (isset($shaSignature) && $request->isMethod('POST') && $this->getUser()) {
             $variables['values'] = $request->request->all();
             $typeinfo = json_decode($variables['values']['typeinfo']);
 
-            $orderId = (string)Uuid::uuid4();
+            $orderId = (string) Uuid::uuid4();
             if (isset($typeinfo)) {
                 $session->set('type', $typeinfo->type);
                 $session->set('orderId', $orderId);
@@ -144,24 +139,24 @@ class DefaultController extends AbstractController
 
             $variables['paymentArray'] = [];
             $variables['paymentArray'] = [
-                'PSPID' => 'gemhoorn',
-                'orderid' => $orderId,
-                'amount' => $typeinfo->price * 100,
-                'currency' => 'EUR',
-                'language' => 'nl_NL',
-                'CN' => $this->getUser()->getName(),
-                'TITLE' => 'Certificate',
-                'BGCOLOR' => 'white',
-                'TXTCOLOR' => 'black',
-                'TBLBGCOLOR' => 'white',
-                'TBLTXTCOLOR' => 'black',
-                'BUTTONBGCOLOR' => 'white',
+                'PSPID'          => 'gemhoorn',
+                'orderid'        => $orderId,
+                'amount'         => $typeinfo->price * 100,
+                'currency'       => 'EUR',
+                'language'       => 'nl_NL',
+                'CN'             => $this->getUser()->getName(),
+                'TITLE'          => 'Certificate',
+                'BGCOLOR'        => 'white',
+                'TXTCOLOR'       => 'black',
+                'TBLBGCOLOR'     => 'white',
+                'TBLTXTCOLOR'    => 'black',
+                'BUTTONBGCOLOR'  => 'white',
                 'BUTTONTXTCOLOR' => 'black',
-                'FONTTYPE' => 'Verdana',
-                'ACCEPTURL' => $urlHelper->getAbsoluteUrl('/pay-certificate'),
-                'EXCEPTIONURL' => $urlHelper->getAbsoluteUrl('/pay-certificate'),
-                'DECLINEURL' => $urlHelper->getAbsoluteUrl('/pay-certificate'),
-                'CANCELURL' => $urlHelper->getAbsoluteUrl('/pay-certificate')
+                'FONTTYPE'       => 'Verdana',
+                'ACCEPTURL'      => $urlHelper->getAbsoluteUrl('/pay-certificate'),
+                'EXCEPTIONURL'   => $urlHelper->getAbsoluteUrl('/pay-certificate'),
+                'DECLINEURL'     => $urlHelper->getAbsoluteUrl('/pay-certificate'),
+                'CANCELURL'      => $urlHelper->getAbsoluteUrl('/pay-certificate'),
             ];
             $variables['keyArray'] = [];
 
@@ -174,7 +169,7 @@ class DefaultController extends AbstractController
             $variables['signature'] = [];
 
             foreach ($variables['keyArray'] as $key => $value) {
-                $variables['signature'][] = $key . "=" . $value . $shaSignature;
+                $variables['signature'][] = $key.'='.$value.$shaSignature;
             }
 //            var_dump(implode('?', $variables['signature']));
 //            var_dump($variables['signature']);
@@ -183,7 +178,6 @@ class DefaultController extends AbstractController
             /*            var_dump($variables['paymentArray']['SHASign']);
                         die;*/
             $variables['status'] = 'test';
-
         } else {
             return $this->redirectToRoute('app_default_index');
         }
@@ -199,8 +193,6 @@ class DefaultController extends AbstractController
     {
         $variables['certificate'] = $commonGroundService->getResource(['component' => 'waar', 'type' => 'certificates', 'id' => $id]);
 
-
         return $variables;
     }
-
 }
