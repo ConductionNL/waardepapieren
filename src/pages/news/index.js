@@ -18,13 +18,13 @@ const IndexPage = ({
 }) => (
   <Layout>
     <SEO title="Demodam - Nieuws" />
-    <Background backgroundColor="#cbce1c">
+    <Background className={"primary-colors"}>
       <Container>
         <Navigation as="nav" location={location} />
       </Container>
     </Background>
 
-    <Container>
+    <Container className={"secondary-colors"}>
           <h2>Laatste nieuws</h2>
           <p>{
             edges.filter(edge => !!edge.node.frontmatter.date) // You can filter your posts based on some criteria
