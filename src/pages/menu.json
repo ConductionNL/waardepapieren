@@ -1,0 +1,36 @@
+{
+  "nl": [
+    {
+      "title": "Demo",
+      "link": "/news/",
+      "partiallyActive": false
+    },
+    {
+      "title": "Installatie",
+      "link": "/join",
+      "partiallyActive": true
+    },
+    {
+      "title": "Contact",
+      "link": "/contact",
+      "partiallyActive": true
+    }
+  ],
+  "en": [
+    {
+    "title": "Demo",
+    "link": "/en/news/",
+    "partiallyActive": false
+    },
+    {
+      "title": "Installation",
+      "link": "/en/join",
+      "partiallyActive": true
+    },
+    {
+      "title": "Contact",
+      "link": "/en/contact",
+      "partiallyActive": true
+    }
+  ]
+}
