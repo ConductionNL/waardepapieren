@@ -1,15 +1,15 @@
 var plugins = [{
-      plugin: require('C:/Users/Mark Bout/Documents/Github repository/waardepapieren/node_modules/gatsby-plugin-styled-components/gatsby-ssr'),
+      plugin: require('C:/Users/ruben/Documents/Repros/waardepapieren/node_modules/gatsby-plugin-styled-components/gatsby-ssr'),
       options: {"plugins":[]},
     },{
-      plugin: require('C:/Users/Mark Bout/Documents/Github repository/waardepapieren/node_modules/gatsby-plugin-react-helmet/gatsby-ssr'),
+      plugin: require('C:/Users/ruben/Documents/Repros/waardepapieren/node_modules/gatsby-plugin-react-helmet/gatsby-ssr'),
       options: {"plugins":[]},
     },{
-      plugin: require('C:/Users/Mark Bout/Documents/Github repository/waardepapieren/node_modules/gatsby-plugin-plausible/gatsby-ssr'),
+      plugin: require('C:/Users/ruben/Documents/Repros/waardepapieren/node_modules/gatsby-plugin-plausible/gatsby-ssr'),
       options: {"plugins":[],"domain":"demodam.org"},
     },{
-      plugin: require('C:/Users/Mark Bout/Documents/Github repository/waardepapieren/node_modules/gatsby-plugin-manifest/gatsby-ssr'),
-      options: {"plugins":[],"name":"Demodam","short_name":"demodam","start_url":"/","display":"standalone","icon":"src/images/demodam_logo.svg","cache_busting_mode":"query","include_favicon":true,"legacy":true,"theme_color_in_head":true,"cacheDigest":"c05f35cac5c02ff22834b4b31787de4e"},
+      plugin: require('C:/Users/ruben/Documents/Repros/waardepapieren/node_modules/gatsby-plugin-manifest/gatsby-ssr'),
+      options: {"plugins":[],"name":"Demodam","short_name":"demodam","start_url":"/","display":"standalone","icon":"src/images/demodam_logo.svg","cache_busting_mode":"query","include_favicon":true,"legacy":true,"theme_color_in_head":true,"cacheDigest":"f99812984892f949518bdb47ef46ae47"},
     }]
 // During bootstrap, we write requires at top of this file which looks like:
 // var plugins = [
