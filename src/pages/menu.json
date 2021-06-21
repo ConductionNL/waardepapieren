@@ -1,28 +1,13 @@
 {
   "nl": [
     {
-      "title": "Nieuws",
+      "title": "Demo",
       "link": "/news/",
       "partiallyActive": false
     },
     {
-      "title": "Sluit je aan",
+      "title": "Installatie",
       "link": "/join",
-      "partiallyActive": true
-    },
-    {
-      "title": "Organisaties",
-      "link": "/organizations",
-      "partiallyActive": false
-    },
-    {
-      "title": "Ambassadeurs",
-      "link": "/ambassadors",
-      "partiallyActive": true
-    },
-    {
-      "title": "Governance",
-      "link": "/governance",
       "partiallyActive": true
     },
     {
@@ -33,28 +18,13 @@
   ],
   "en": [
     {
-    "title": "News",
+    "title": "Demo",
     "link": "/en/news/",
     "partiallyActive": false
     },
     {
-      "title": "Join Demodam",
+      "title": "Installation",
       "link": "/en/join",
-      "partiallyActive": true
-    },
-    {
-      "title": "Organizations",
-      "link": "/en/organizations",
-      "partiallyActive": false
-    },
-    {
-      "title": "Ambassadors",
-      "link": "/en/ambassadors",
-      "partiallyActive": true
-    },
-    {
-      "title": "Governance",
-      "link": "/en/governance",
       "partiallyActive": true
     },
     {

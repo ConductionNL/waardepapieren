@@ -2,25 +2,21 @@
 template: "default"
 ---
 
-## TODO: Contact
+# Contact
 
-@@TODO Voeg informatie toe voor de contact pagina. Hieronder is een kopie van de openzaak website
+## Product Owner
+Gemeente Hoorn <br>
+Nieuwe Steen 1
+1625 HV HOORN
+Contact gegevens van die gemeente
 
-### Vertegenwoordigers van Demodam kerngroep
+## Technische realisatie
+[Conduction b.v.](https://www.conduction.nl/)
 
+[info@conduction.nl](mailto:info@conduction.nl)
 
-### Vertegenwoordigers van de gemeentelijke deelnemers
-
-
-### Vertegenwoordigers van Demodam leveranciers
-
-
-
-## Kom in contact met de Demodam Community
-
-
-### Maandelijkse Technical Steering call
-
-
-
-### Maandelijkse Product Steering call
+[+31 (0)85 3036840](tel:+31(0)853036840)<br><br>
+Lauriergracht 14h<br>
+1016 RL Amsterdam<br>
+CoC: 76741850<br>
+Vat: NL860784241B01

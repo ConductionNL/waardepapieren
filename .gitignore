@@ -10,3 +10,9 @@ api/helm/kubeconfig.yaml
 api/helm/*-kubeconfig.yaml
 api/helm/kubeconfig*
 api/helm/huwelijksplanner-kubeconfig.yaml
+
+.cache/
+node_modules/
+public/
+.DS_Store
+npm-debug.log

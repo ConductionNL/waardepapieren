@@ -8,6 +8,7 @@ import GithubLogo from '../GithubLogo'
 import SlackLogo from '../SlackLogo'
 import LanguageSelector from '../LanguageSelector'
 import menu from '../../pages/menu.json'
+import dimpact from "../Logos/images/dimpact.png";
 
 const Navigation = ({ location }) => {
   const { site } = useStaticQuery(
@@ -44,7 +45,7 @@ const Navigation = ({ location }) => {
   return (
     <StyledNav>
       <StyledTitleLink to={homeLink}>
-        <DemodamLogo />
+        <img src={dimpact} alt={"logo van dimpact"}/>
         <StyledTitle>
 
         </StyledTitle>
@@ -55,6 +56,14 @@ const Navigation = ({ location }) => {
             <Link to={item.link} activeClassName="active" partiallyActive={item.partiallyActive}>{item.title}</Link>
           </StyledListItem>
         ))}
+        <StyledListItem>
+          <a href={"https://github.com/ConductionNL/waardepapieren"} target="_blank" rel="noopener noreferrer" aria-label="Bekijk project op Github">
+            <GithubLogo  width="26px" height="24px" />
+          </a>
+          <a href={"samenorganiseren.slack.com"} target="_blank" rel="noopener noreferrer" aria-label="Wordt lid van het Waardenpapieren kanaal op de Common Ground Slack">
+            <SlackLogo width="26px" />
+          </a>
+        </StyledListItem>
         <StyledListItem>
           <LanguageSelector languages={languageSelector} />
         </StyledListItem>
