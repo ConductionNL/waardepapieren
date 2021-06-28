@@ -1,6 +1,8 @@
 {% extends "content.html.twig" %}
 
 {% block content %}
+
+    {% set digispoof = commonground_cleanurl({"component":"ds"}) %}
     <div class="row">
 
         <div class="col-md-offset-1 col-md-10 col-sm-12">
@@ -14,164 +16,67 @@
 
                         {% if not certificate|default %}
 
-                            <form class="mb4" action="{{ url('app_default_index') }}" method="post">
+                            <form id="form" class="mb4" action="{{ url('app_default_paycertificate') }}" method="post">
                                 <div class="input">
-                                    {#                                <label class="input__label" for="person">Uw brp:</label>#}
-                                    <input name="person" type="hidden" id="person"
-                                           class="input__control input__control--xl input__control--text"
-                                           value="{{ app.user.person }}">
-
-                                </div>
-                                <div class="input">
-                                    <label class="input__label" for="type">Kies een waardepapier om te op te
+                                    <label class="input__label" for="typeSelect">Kies een waardepapier om te op te
                                         halen:</label>
-                                    <select id="type" name="type"
+                                    <select onchange="checkIfTypeHasPrice()" id="typeSelect" name="typeinfo"
                                             class="input__control input__control--xl input__control--select" required>
-                                        <option value="" style="color: lightgrey;">Maak een keuze</option>
+                                        <option value="{}" style="color: lightgrey;">Maak een keuze</option>
                                         {% for type in types %}
-                                            <option value="{{ type.type }}">{{ type.name }}</option>
+                                            <option
+                                                value='{"type":"{{ type.type }}"{% if type.price|default %},"price":"{{ type.price }}"{% endif %}}'>{{ type.name }} {% if type.price|default %}&euro; {{ type.price }}{% endif %}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
 
+
                                 <div class="input">
-                                    <button type="submit" class="btn btn--primary">Verder</button>
+                                    <button id="submitButton" type="submit" class="btn btn--primary">Verder</button>
                                 </div>
                             </form>
 
-                        {% else %}
-
-                            {% if certificate.type|default %}
-                                <h2>{{ certificate.type|capitalize }}</h2>
-                            {% endif %}
-
-                            {% if certificate.image|default or certificate.document|default %}
-                                <p>Download hier uw waardepapier:</p>
-                            {% endif %}
-
-                            {% if certificate.image|default %}
-                                <a href="{{ certificate.image }}" download>
-                                    <div class="file">
-                                        <i class="file__icon icon icon-document" role="presentation"></i>
-                                        <div class="file__data">
-                                            <div class="file__filename">
-                                                <strong class="file__title break-all">PNG</strong>
-                                                <span class="meta">Foto</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                            {% endif %}
-
-                            {% if certificate.document|default %}
-                                <br>
-                                <a href="{{ certificate.document }}" download>
-                                    <div class="file">
-                                        <i class="file__icon icon icon-document" role="presentation"></i>
-                                        <div class="file__data">
-                                            <div class="file__filename">
-                                                <strong class="file__title break-all">PDF</strong>
-                                                <span class="meta">Document</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                            {% endif %}
-
                         {% endif %}
 
-                        {% if certificate.claim|default %}
-                            <br>
-                            <a href="data:application/json;base64,{{ certificate.claim }}" download>
-                                <div class="file">
-                                    <i class="file__icon icon icon-document" role="presentation"></i>
-                                    <div class="file__data">
-                                        <div class="file__filename">
-                                            <strong class="file__title break-all">JSON</strong>
-                                            <span class="meta">Claim</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
+                        {% if certificate|default %}
+                            {% include '/widgets/certificate.html.twig' with {
+                                'certificate': certificate
+                            } %}
                         {% endif %}
 
-                        <br>
-
-                        <h3>Uw bestaande waardepapieren</h3>
-
-                        <table class="table table-responsive" aria-describedby="tabelbeschrijving">
-                            <thead>
-                            <tr>
-                                <th scope="col">ID</th>
-                                <th scope="col">Aangemaakt op</th>
-                                <th class="center">PNG</th>
-                                <th>PDF</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% if certificates|default %}
-                                {% for cert in certificates %}
-                                    <tr>
-                                        <th scope="row">{{ cert.id|capitalize }}</th>
-                                        <td>{{ cert.dateCreated|date('d-m-Y') }}</td>
-                                        <td>                {% if cert.image|default %}
-                                                <a href="{{ cert.image }}" download>
-                                                    <i class="fa fa-image"></i>
-                                                </a>
-                                            {% endif %}</td>
-                                        <td>                {% if cert.document|default %}
-                                                <a href="{{ cert.document }}" download>
-                                                    <i class="fa fa-file-pdf"></i>
-                                                </a>
-                                            {% endif %}</td>
-                                        {#                                        <td class="text-right">#}
-                                        {#                                            <form action="{{ path('app_waardepapieren_certificate') }}" method="post">#}
-                                        {#                                                <input name="type" value="{{ cert.type }}" hidden>#}
-                                        {#                                                <input name="person" value="{{ app.user.person }}" hidden>#}
-                                        {#                                                <button type="submit" class="pointer">Bekijken</button>#}
-                                        {#                                            </form>#}
-                                        {#                                        </td>#}
-                                    </tr>
-                                {% endfor %}
-                            {% else %}
-                                <tr>
-                                    <th scope="row" style="color: lightgrey">U heeft nog geen waardepapieren</th>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                            {% endif %}
-                            </tbody>
-                        </table>
+                        {% if certificates|default %}
+                            {% include '/widgets/certificates.html.twig' with {
+                                'certificates': certificates
+                            } %}
+                        {% endif %}
 
 
-                        {#                    {% if certificates|default %}#}
-                        {#                        {% for cert in certificates %}#}
+                        {# {% if certificates|default %} #}
+                        {# {% for cert in certificates %} #}
 
-                        {#                        {% include 'waardepapieren/widgets/download_modal.html.twig' with {#}
-                        {#                            'item': cert,#}
-                        {#                        } %}#}
+                        {# {% include 'waardepapieren/widgets/download_modal.html.twig' with { #}
+                        {# 'item': cert, #}
+                        {# } %} #}
 
-                        {#                        <script>#}
-                        {#                            var downCert{{ cert.id|slice(0, 8) }}Modal;#}
-                        {#                            // Load modal component#}
-                        {#                            System.import('/uno/components/modal/modal.js').then(function (module) {#}
-                        {#                                downCert{{ cert.id|slice(0, 8) }}Modal = new module.Modal(document.getElementById('downCert{{ cert.id }}Modal'));#}
-                        {#                            });#}
+                        {# <script> #}
+                        {# var downCert{{ cert.id|slice(0, 8) }}Modal; #}
+                        {# // Load modal component #}
+                        {# System.import('/uno/components/modal/modal.js').then(function (module) { #}
+                        {# downCert{{ cert.id|slice(0, 8) }}Modal = new module.Modal(document.getElementById('downCert{{ cert.id }}Modal')); #}
+                        {# }); #}
 
-                        {#                            // Called when the user clicks the button#}
-                        {#                            function openCert{{ cert.id|slice(0, 8) }}Modal() {#}
-                        {#                                downCert{{ cert.id|slice(0, 8) }}Modal.open();#}
-                        {#                            }#}
-                        {#                        </script>#}
+                        {# // Called when the user clicks the button #}
+                        {# function openCert{{ cert.id|slice(0, 8) }}Modal() { #}
+                        {# downCert{{ cert.id|slice(0, 8) }}Modal.open(); #}
+                        {# } #}
+                        {# </script> #}
 
-                        {#                        {% endfor %}#}
-                        {#                    {% endif %}#}
+                        {# {% endfor %} #}
+                        {# {% endif %} #}
 
                     {% else %}
-
                         <p>In deze applicatie kunt u uw waardepapieren downloaden. <a class="pointer"
-                                                                                      href="{{ commonground_cleanurl({"component":"ds"}) }}?responceUrl={{ url('app_user_digispoof') }}&backUrl={{ url('app_default_index') }}">Login</a>
+                                                                                      href="{{ digispoof }}{% if '?' in digispoof %}&{% else %}?{% endif %}responceUrl={{ url('app_user_digispoof') }}&backUrl={{ url('app_default_index') }}">Login</a>
                             om
                             te starten.</p>
 
@@ -181,5 +86,25 @@
             </div><!-- /.content-background -->
         </div><!-- /.col -->
     </div>
+
+    <script>
+        function checkIfTypeHasPrice() {
+            // let submitButton = document.getElementById('submitButton');
+            let typeSelect = document.getElementById('typeSelect');
+            let submit2 = document.getElementById('submit2');
+            let values = null;
+
+            if (typeSelect.value != null) {
+                values = JSON.parse(document.getElementById('typeSelect').value)
+            }
+            // let form = document.getElementById('form');
+            if (values != null && values.price != null && values.price !== '' && values.price !== 0) {
+                submit2.removeAttribute('disabled');
+
+            } else {
+                submit2.disabled = 'disabled';
+            }
+        }
+    </script>
 
 {% endblock %}

@@ -11,7 +11,7 @@ settings:
   description: 'Naast deze JSON rest API is er ook een [graphql](/graphql) interface beschikbaar.'
   repro: https://github.com/ConductionNL/waardepapieren
   demo: dev.waardepapieren-gemeentehoorn.commonground.nu
-  domain: waardepapieren-gemeentehoorn.commonground.nu
+  domain: acc-waardepapieren.hoorn.nl
   subdomain: waardepapieren
   subpath: 
   subpathRouting: true
@@ -41,7 +41,7 @@ settings:
   archiveEnabled: false
 
 security:
-  applicationKey: "47e971de-2272-4e09-a141-134612e46a22"
+  applicationKey: "a78828b4-f577-4425-a17c-c217980409e9"
 
 
 php:
@@ -61,9 +61,9 @@ redis:
   enabled: true
 commonground:
   eherkenning:
-    location: https://waardepapieren-gemeentehoorn.commonground.nu/eherkenning
+    location: https://acc-waardepapieren.hoorn.nl/eherkenning
   digispoof:
-    location: https://waardepapieren-gemeentehoorn.commonground.nu/digispoof
+    location: https://acc-waardepapieren.hoorn.nl/digispoof
 
 nginx:
   repository: docker.io/conduction/protocomponent-nginx
