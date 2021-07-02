@@ -44,6 +44,7 @@ security:
   applicationKey: "a78828b4-f577-4425-a17c-c217980409e9"
   samlPrivateKey: "%example%"
   samlX509Cert: "%example%"
+  shasign: "%example%"
 
 php:
   repository: docker.io/conduction/protocomponent-php
