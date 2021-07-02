@@ -59,6 +59,8 @@ parameters:
     env(APP_MAJOR_VERSION): "v1"
     env(APP_DIGISPOOF_LOCATION): "https://%env(APP_DOMAIN)%/digispoof?brpUrl=localhost"
     env(APP_EHERKENNING_LOCATION): "https://%env(APP_DOMAIN)%/eherkenning"
+    env(SAML_PRIVATE_KEY): ""
+    env(SAML_X509_CERT): ""
 
     app_env: "%env(APP_ENV)%"
     app_container: "%env(APP_CONTAINER)%"
@@ -99,6 +101,8 @@ parameters:
     gmail_secret: "%env(GMAIL_SECRET)%"
     idin_id: "%env(IDIN_ID)%"
     idin_secret: "%env(IDIN_SECRET)%"
+    saml_private_key: "%env(SAML_PRIVATE_KEY)%"
+    saml_x509_cert: "%env(SAML_X509_CERT)%"
 
     # Busnes Engine
     env(APP_COMMONGROUND_BE_LOCATION): "https://ac.%env(APP_DOMAIN)%"
@@ -335,6 +339,8 @@ twig:
         idin_id: "%env(IDIN_ID)%"
         idin_secret: "%env(IDIN_SECRET)%"
         app_type: "%env(APP_TYPE)%"
+        saml_private_key: "%env(SAML_PRIVATE_KEY)%"
+        saml_x509_cert: "%env(SAML_X509_CERT)%"
 
         # Security Details
         app_commonground_id: "%env(APP_COMMONGROUND_ID)%"
