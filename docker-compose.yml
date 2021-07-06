@@ -31,9 +31,7 @@ services:
       #- DATABASE_URL=postgres://api-platform:!ChangeMe!@db/api?serverVersion=10.1
       - DATABASE_URL=mysql://api-platform:!ChangeMe!@db/api?serverVersion=10.1
       - APP_ENV=${APP_ENV}
-      - APP_SHASIGN=${APP_SHASIGN}
       - APP_CONTAINER=${APP_CONTAINER}
-      - APP_MAJOR_VERSION=${APP_MAJOR_VERSION}
       - APP_DEBUG=${APP_DEBUG}
       - APP_CACHE=${APP_CACHE}
       - APP_VERSION=${APP_VERSION}
@@ -52,11 +50,11 @@ services:
       - APP_APPLICATION_KEY=${APP_APPLICATION_KEY}
       - APP_BUILD_ALL_FIXTURES=${APP_BUILD_ALL_FIXTURES}
       - APP_WEB=${APP_WEB}
+      - BADGES=${BADGES}
       - APP_BUILD=${APP_BUILD}
       - APP_INTERNAL=${APP_INTERNAL}
       - APP_URL=${APP_URL}
       - APP_CHART=${APP_CHART}
-      - APP_TYPE=${APP_TYPE}
       - HELM_REPOSITORY=${HELM_REPOSITORY}
       - ARTIFACTHUB_ID=${ARTIFACTHUB_ID}
       - ARTIFACTHUB_USER=${ARTIFACTHUB_USER}
@@ -69,8 +67,6 @@ services:
       - AUTH_ENABLED=${AUTH_ENABLED}
       - AUDITTRAIL_ENABLED=${AUDITTRAIL_ENABLED}
       - NOTIFICATION_ENABLED=${NOTIFICATION_ENABLED}
-      - SAML_PRIVATE_KEY=${SAML_PRIVATE_KEY}
-      - SAML_X509_CERT=${SAML_X509_CERT}
       - REDIS_HOST=redis
       - REDIS_PORT=6379
     ports:
@@ -82,6 +78,7 @@ services:
     build:
       context: ./api
       target: api_platform_nginx
+      dockerfile: Dockerfile-nginx
       <<: *cache
     depends_on:
       - php
@@ -96,25 +93,6 @@ services:
       - "80:80"
     environment:
       - NGINX_HOST=php
-
-  cache-proxy:
-    &varnish
-    image: ${CONTAINER_REGISTRY_BASE}/${CONTAINER_PROJECT_NAME}-varnish:${APP_ENV}
-    build:
-      context: ./api
-      target: api_platform_varnish
-      <<: *cache
-    depends_on:
-      - api
-      - php
-    volumes:
-      - ./api/docker/varnish/conf:/usr/local/etc/varnish:rw,cached
-    tmpfs:
-      - /usr/local/var/varnish:exec
-    ports:
-      - "81:80"
-    environment:
-      - BACKENDS=php
 
         # nlx-outway:
         #   image: ${CONTAINER_REGISTRY_BASE}/${CONTAINER_PROJECT_NAME}-nlx-outway:${APP_ENV}
