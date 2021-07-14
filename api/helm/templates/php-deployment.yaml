@@ -104,6 +104,21 @@ spec:
                 configMapKeyRef:
                   key: url
                   name: {{ template "fullname" . }}
+            -   name: APP_SHASIGN
+                valueFrom:
+                    secretKeyRef:
+                        name: {{ template "fullname" . }}
+                        key: app_shasign
+            -   name: SAML_PRIVATE_KEY
+                valueFrom:
+                    secretKeyRef:
+                        name: {{ template "fullname" . }}
+                        key: saml_private_key
+            -   name: SAML_X509_CERT
+                valueFrom:
+                    secretKeyRef:
+                        name: {{ template "fullname" . }}
+                        key: saml_x509_cert
           resources:
 {{ toYaml .Values.resources | indent 12 }}
     {{- if .Values.nodeSelector }}

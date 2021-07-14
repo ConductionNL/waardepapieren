@@ -5,12 +5,13 @@ entries:
       category: Database
     apiVersion: v2
     appVersion: 11.10.0
-    created: "2021-07-07T08:43:43.8114218+02:00"
+    created: "2021-07-14T14:19:58.2742624Z"
     dependencies:
     - name: common
       repository: https://charts.bitnami.com/bitnami
       version: 1.x.x
-    description: Chart for PostgreSQL, an object-relational database management system (ORDBMS) with an emphasis on extensibility and on standards-compliance.
+    description: Chart for PostgreSQL, an object-relational database management system
+      (ORDBMS) with an emphasis on extensibility and on standards-compliance.
     digest: eebe8f456cf98d5927a35666d1d899174dc4d3e09f26788033f761527bc90749
     home: https://github.com/bitnami/charts/tree/master/bitnami/postgresql
     icon: https://bitnami.com/assets/stacks/postgresql/img/postgresql-stack-110x117.png
@@ -38,14 +39,16 @@ entries:
       category: Database
     apiVersion: v2
     appVersion: 6.0.11
-    created: "2021-07-07T08:43:43.8144223+02:00"
+    created: "2021-07-14T14:19:58.3110452Z"
     dependencies:
     - name: common
       repository: https://charts.bitnami.com/bitnami
       tags:
       - bitnami-common
       version: 1.x.x
-    description: Open source, advanced key-value store. It is often referred to as a data structure server since keys can contain strings, hashes, lists, sets and sorted sets.
+    description: Open source, advanced key-value store. It is often referred to as
+      a data structure server since keys can contain strings, hashes, lists, sets
+      and sorted sets.
     digest: 2d70861d16fc410ed6d6c818b97f7b0d519031147e5c7b42c5691d4c38742c44
     home: https://github.com/bitnami/charts/tree/master/bitnami/redis
     icon: https://bitnami.com/assets/stacks/redis/img/redis-stack-220x234.png
@@ -70,7 +73,7 @@ entries:
       artifacthub.io/containsSecurityUpdates: "true"
     apiVersion: v2
     appVersion: V1.0
-    created: "2021-07-07T08:43:43.807423+02:00"
+    created: "2021-07-14T14:19:58.2231865Z"
     dependencies:
     - condition: postgresql.enabled
       name: postgresql
@@ -80,8 +83,9 @@ entries:
       name: redis
       repository: https://charts.bitnami.com/bitnami
       version: 12.7.7
-    description: Naast deze JSON rest API is er ook een [graphql](/graphql) interface beschikbaar.
-    digest: d207058bfe98480f3cf3eefddc8ec349ad5379b363b7a148d76b55b8c6f398e4
+    description: Naast deze JSON rest API is er ook een [graphql](/graphql) interface
+      beschikbaar.
+    digest: ef9f6ab003a76e35b5eb2bdd611fcda4489da9e2b33b4f933f6f6ae2eac46a77
     home: https://www.conduction.nl
     icon: https://conductionnl.github.io/images/conduction_avatar_blue_on_transparant.svg
     keywords:
@@ -103,8 +107,9 @@ entries:
     version: 1.0.0
   - apiVersion: v1
     appVersion: V1.0
-    created: "2021-07-07T08:43:43.7994208+02:00"
-    description: Naast deze JSON rest API is er ook een [graphql](/graphql) interface beschikbaar.
+    created: "2021-07-14T14:19:58.1834949Z"
+    description: Naast deze JSON rest API is er ook een [graphql](/graphql) interface
+      beschikbaar.
     digest: c648c37b594b400f01e87a947323a17d7a5aa7288d70367e53ebac426319e00d
     home: https://www.conduction.nl
     icon: https://conductionnl.github.io/images/conduction_avatar_blue_on_transparant.svg
@@ -125,4 +130,4 @@ entries:
     urls:
     - waardepapieren-0.1.0.tgz
     version: 0.1.0
-generated: "2021-07-07T08:43:43.7894377+02:00"
+generated: "2021-07-14T14:19:58.0909099Z"
