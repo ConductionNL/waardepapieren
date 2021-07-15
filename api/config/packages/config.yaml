@@ -11,8 +11,8 @@ hslavich_onelogin_saml:
     sp:
         entityId: 'https://acc-waardepapieren.hoorn.nl/saml'
         assertionConsumerService:
-            url: 'https://acc-waardepapieren.hoorn.nl/saml/SAML2/POST'
-            binding: 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST'
+            url: 'https://acc-waardepapieren.hoorn.nl/saml/SLO/Artifact'
+            binding: 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact'
         singleLogoutService:
             url: 'https://acc-waardepapieren.hoorn.nl/saml/logout'
             binding: 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect'
@@ -30,7 +30,8 @@ hslavich_onelogin_saml:
         wantMessagesSigned:    false
         wantAssertionsSigned:  false
         wantNameIdEncrypted:   false
-        requestedAuthnContext: false
+        requestedAuthnContext: 
+            - 'urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport'
         signMetadata: true
         wantXMLValidation: true
         signatureAlgorithm: 'http://www.w3.org/2001/04/xmldsig-more#rsa-sha256'
