@@ -1,333 +1,785 @@
 {
-    "$schema": "http://json-schema.org/schema#",
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "http://example.com/example.json",
     "type": "object",
-    "properties": {
-        "ingress": {
-            "type": "object",
-            "properties": {
-                "annotations": {
-                    "type": "null"
-                },
-                "hosts": {
-                    "type": "object",
-                    "properties": {
-                        "api": {
-                            "type": "object",
-                            "properties": {
-                                "host": {
-                                    "type": "string",
-                                    "description": ""
-                                },
-                                "serviceName": {
-                                    "type": "string",
-                                    "description": ""
-                                }
-                            }
-                        },
-                        "mercure": {
-                            "type": "object",
-                            "properties": {
-                                "host": {
-                                    "type": "string",
-                                    "description": ""
-                                },
-                                "serviceName": {
-                                    "type": "string",
-                                    "description": ""
-                                }
-                            }
-                        }
-                    }
-                },
-                "tls": {
-                    "type": "null",
-                    "description": ""
+    "title": "The root schema",
+    "description": "The root schema comprises the entire JSON document.",
+    "default": {},
+    "examples": [
+        {
+            "config": {
+                "version": "V1.0",
+                "debug": 0,
+                "cache": true,
+                "internal": false
+            },
+            "security": {
+                "applicationKey": "45c1a4b6-59d3-4a6e-86bf-88a872f35845",
+                "secret": "",
+                "jwt": {
+                    "id": "",
+                    "privateKey": ""
                 }
-            }
-        },
-        "mercure": {
-            "type": "object",
-            "properties": {
-                "acmeHosts": {
-                    "type": "string",
-                    "description": ""
+            },
+            "php": {
+                "repository": "docker.io/conduction/protocomponent-php",
+                "image": "docker.io/conduction/contactcatalogus-php",
+                "tag": "latest",
+                "env": "prod",
+                "replicaCount": 2,
+                "pullPolicy": "Always",
+                "trustedHosts": "^.+$",
+                "corsAllowOrigin": [
+                    "*"
+                ],
+                "trustedProxies": [
+                    "10.0.0.0/8",
+                    "172.16.0.0/12",
+                    "192.168.0.0/16"
+                ]
+            },
+            "redis": {
+                "cluster": {
+                    "enabled": false
                 },
-                "allowAnonymous": {
-                    "type": "string",
-                    "description": ""
-                },
-                "corsAllowedOrigins": {
-                    "type": "string",
-                    "description": ""
-                },
-                "enabled": {
-                    "type": "boolean",
-                    "description": ""
-                },
-                "publishUrl": {
-                    "type": "string",
-                    "description": ""
-                },
-                "service": {
-                    "type": "object",
-                    "properties": {
-                        "port": {
-                            "type": "integer"
-                        },
-                        "type": {
-                            "type": "string"
-                        }
-                    }
-                },
-                "subscribeUrl": {
-                    "type": "string",
-                    "description": ""
-                }
-            }
-        },
-        "nginx": {
-            "type": "object",
-            "properties": {
-                "pullPolicy": {
-                    "type": "string",
-                    "description": ""
-                },
-                "replicaCount": {
-                    "type": "integer",
-                    "description": ""
-                },
-                "repository": {
-                    "type": "string",
-                    "description": ""
-                },
-                "tag": {
-                    "type": "string",
-                    "description": ""
-                }
-            }
-        },
-        "php": {
-            "type": "object",
-            "properties": {
-                "env": {
-                    "type": "string",
-                    "description": ""
-                },
-                "mercure": {
-                    "type": "object",
-                    "properties": {
-                        "jwtSecret": {
-                            "type": "string"
-                        }
-                    },
-                    "description": ""
-                },
-                "replicaCount": {
-                    "type": "integer",
-                    "description": ""
-                },
-                "repository": {
-                    "type": "string",
-                    "description": ""
-                },
-                "secret": {
-                    "type": "string",
-                    "description": ""
-                },
-                "tag": {
-                    "type": "string",
-                    "description": ""
-                }
-            }
-        },
-        "postgresql": {
-            "type": "object",
-            "properties": {
-                "enabled": {
-                    "type": "boolean",
-                    "description": ""
-                },
-                "imageTag": {
-                    "type": "string",
-                    "description": ""
-                },
+                "redisPort": 6379,
+                "usePassword": false,
+                "enabled": false,
+                "pullPolicy": "IfNotPresent"
+            },
+            "nginx": {
+                "repository": "docker.io/conduction/protocomponent-nginx",
+                "image": "docker.io/conduction/contactcatalogus-nginx",
+                "tag": "latest",
+                "pullPolicy": "Always",
+                "replicaCount": 2
+            },
+            "postgresql": {
+                "enabled": true,
+                "imageTag": "10-alpine",
+                "url": "",
+                "postgresqlUsername": "example",
+                "postgresqlPassword": "!ChangeMe!",
+                "postgresqlDatabase": "api",
                 "persistence": {
-                    "type": "object",
-                    "properties": {
-                        "enabled": {
-                            "type": "boolean"
-                        }
-                    },
-                    "description": ""
+                    "enabled": true
                 },
-                "postgresqlDatabase": {
-                    "type": "string",
-                    "description": ""
-                },
-                "postgresqlPassword": {
-                    "type": "string",
-                    "description": ""
-                },
-                "postgresqlUsername": {
-                    "type": "string",
-                    "description": ""
-                },
-                "pullPolicy": {
-                    "type": "string",
-                    "description": ""
-                }
-            }
-        },
-        "resources": {
-            "type": "object"
-        },
-        "security": {
+                "pullPolicy": "IfNotPresent"
+            },
+            "ingress": {
+                "enabled": false,
+                "hostname": "contactcatalogus.local",
+                "path": "/",
+                "annotations": null,
+                "tls": null
+            },
+            "resources": {}
+        }
+    ],
+    "required": [
+        "config",
+        "security",
+        "php",
+        "redis",
+        "nginx",
+        "postgresql",
+        "ingress",
+        "resources"
+    ],
+    "properties": {
+        "config": {
+            "$id": "#/properties/config",
             "type": "object",
-            "properties": {
-                "applicationKey": {
-                    "type": "string",
-                    "description": ""
+            "title": "The config schema",
+            "description": "",
+            "default": {},
+            "examples": [
+                {
+                    "version": "V1.0",
+                    "debug": 0,
+                    "cache": true,
+                    "internal": false
                 }
-            }
-        },
-        "settings": {
-            "type": "object",
+            ],
+            "required": [
+                "version",
+                "debug",
+                "cache",
+                "internal"
+            ],
             "properties": {
-                "archiveEnabled": {
-                    "type": "boolean",
-                    "description": ""
-                },
-                "audittrailEnabled": {
-                    "type": "boolean",
-                    "description": ""
-                },
-                "authorisationEnabled": {
-                    "type": "boolean",
-                    "description": ""
-                },
-                "cache": {
-                    "type": "boolean",
-                    "description": ""
-                },
-                "corsAllowOrigin": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "description": ""
+                "version": {
+                    "$id": "#/properties/config/properties/version",
+                    "type": "string",
+                    "title": "The version schema",
+                    "description": "",
+                    "default": "",
+                    "examples": [
+                        "V1.0"
+                    ]
                 },
                 "debug": {
+                    "$id": "#/properties/config/properties/debug",
                     "type": "integer",
-                    "description": ""
+                    "title": "The debug schema",
+                    "description": "",
+                    "default": 0,
+                    "examples": [
+                        0
+                    ]
                 },
-                "demo": {
-                    "type": "string",
-                    "description": ""
-                },
-                "description": {
-                    "type": "string",
-                    "description": ""
-                },
-                "domain": {
-                    "type": "string",
-                    "description": ""
-                },
-                "env": {
-                    "type": "string",
-                    "description": ""
-                },
-                "healthEnabled": {
+                "cache": {
+                    "$id": "#/properties/config/properties/cache",
                     "type": "boolean",
-                    "description": ""
+                    "title": "The cache schema",
+                    "description": "",
+                    "default": false,
+                    "examples": [
+                        true
+                    ]
                 },
-                "loadbalancerEnabled": {
+                "internal": {
+                    "$id": "#/properties/config/properties/internal",
                     "type": "boolean",
-                    "description": ""
-                },
-                "name": {
-                    "type": "string",
-                    "description": ""
-                },
-                "notificationEnabled": {
-                    "type": "boolean",
-                    "description": ""
-                },
-                "projectName": {
-                    "type": "string",
-                    "description": ""
-                },
-                "pullPolicy": {
-                    "type": "string",
-                    "description": ""
-                },
-                "registryBase": {
-                    "type": "string",
-                    "description": ""
-                },
-                "replicaCount": {
-                    "type": "integer",
-                    "description": ""
-                },
-                "repro": {
-                    "type": "string",
-                    "description": ""
-                },
-                "subdomain": {
-                    "type": "string",
-                    "description": ""
-                },
-                "subpath": {
-                    "type": "string",
-                    "description": ""
-                },
-                "subpathRouting": {
-                    "type": "boolean",
-                    "description": ""
-                },
-                "trustedHosts": {
-                    "type": "string",
-                    "description": ""
-                },
-                "trustedProxies": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "version": {
-                    "type": "string",
-                    "description": ""
-                },
-                "web": {
-                    "type": "boolean",
-                    "description": ""
+                    "title": "The internal schema",
+                    "description": "",
+                    "default": false,
+                    "examples": [
+                        false
+                    ]
                 }
-            }
+            },
+            "additionalProperties": true
         },
-        "varnish": {
+        "security": {
+            "$id": "#/properties/security",
             "type": "object",
+            "title": "The security schema",
+            "description": "",
+            "default": {},
+            "examples": [
+                {
+                    "applicationKey": "45c1a4b6-59d3-4a6e-86bf-88a872f35845",
+                    "secret": "",
+                    "jwt": {
+                        "id": null,
+                        "privateKey": null
+                    }
+                }
+            ],
+            "required": [],
             "properties": {
-                "enabled": {
-                    "type": "boolean",
-                    "description": ""
-                },
-                "pullPolicy": {
+                "applicationKey": {
+                    "$id": "#/properties/security/properties/applicationKey",
                     "type": "string",
-                    "description": ""
+                    "title": "The applicationKey schema",
+                    "description": "",
+                    "default": "",
+                    "examples": [
+                        "45c1a4b6-59d3-4a6e-86bf-88a872f35845"
+                    ]
                 },
-                "replicaCount": {
-                    "type": "integer",
-                    "description": ""
+                "secret": {
+                    "$id": "#/properties/security/properties/secret",
+                    "type": "string",
+                    "title": "The secret schema",
+                    "description": "",
+                    "default": "",
+                    "examples": [
+                        ""
+                    ]
                 },
+                "jwt": {
+                    "$id": "#/properties/security/properties/jwt",
+                    "type": "object",
+                    "title": "The jwt schema",
+                    "description": "",
+                    "default": {},
+                    "examples": [
+                        {
+                            "id": null,
+                            "privateKey": null
+                        }
+                    ],
+                    "required": [],
+                    "properties": {
+                        "id": {
+                            "$id": "#/properties/security/properties/jwt/properties/id",
+                            "title": "The id schema",
+                            "description": "",
+                            "default": "",
+                            "examples": [
+                                ""
+                            ]
+                        },
+                        "privateKey": {
+                            "$id": "#/properties/security/properties/jwt/properties/privateKey",
+                            "title": "The privateKey schema",
+                            "description": "",
+                            "default": "",
+                            "examples": [
+                                ""
+                            ]
+                        }
+                    },
+                    "additionalProperties": true
+                }
+            },
+            "additionalProperties": true
+        },
+        "php": {
+            "$id": "#/properties/php",
+            "type": "object",
+            "title": "The php schema",
+            "description": "",
+            "default": {},
+            "examples": [
+                {
+                    "repository": "docker.io/conduction/protocomponent-php",
+                    "image": "docker.io/conduction/contactcatalogus-php",
+                    "tag": "latest",
+                    "env": "prod",
+                    "replicaCount": 2,
+                    "pullPolicy": "Always",
+                    "trustedHosts": "^.+$",
+                    "corsAllowOrigin": [
+                        "*"
+                    ],
+                    "trustedProxies": [
+                        "10.0.0.0/8",
+                        "172.16.0.0/12",
+                        "192.168.0.0/16"
+                    ]
+                }
+            ],
+            "required": [
+                "repository",
+                "image",
+                "tag",
+                "env",
+                "replicaCount",
+                "pullPolicy",
+                "trustedHosts",
+                "corsAllowOrigin",
+                "trustedProxies"
+            ],
+            "properties": {
                 "repository": {
+                    "$id": "#/properties/php/properties/repository",
                     "type": "string",
-                    "description": ""
+                    "title": "The repository schema",
+                    "description": "",
+                    "default": "",
+                    "examples": [
+                        "docker.io/conduction/protocomponent-php"
+                    ]
+                },
+                "image": {
+                    "$id": "#/properties/php/properties/image",
+                    "type": "string",
+                    "title": "The image schema",
+                    "description": "",
+                    "default": "",
+                    "examples": [
+                        "docker.io/conduction/contactcatalogus-php"
+                    ]
                 },
                 "tag": {
+                    "$id": "#/properties/php/properties/tag",
                     "type": "string",
-                    "description": ""
+                    "title": "The tag schema",
+                    "description": "",
+                    "default": "",
+                    "examples": [
+                        "latest"
+                    ]
+                },
+                "env": {
+                    "$id": "#/properties/php/properties/env",
+                    "type": "string",
+                    "title": "The env schema",
+                    "description": "",
+                    "default": "",
+                    "examples": [
+                        "prod"
+                    ]
+                },
+                "replicaCount": {
+                    "$id": "#/properties/php/properties/replicaCount",
+                    "type": "integer",
+                    "title": "The replicaCount schema",
+                    "description": "",
+                    "default": 0,
+                    "examples": [
+                        2
+                    ]
+                },
+                "pullPolicy": {
+                    "$id": "#/properties/php/properties/pullPolicy",
+                    "type": "string",
+                    "title": "The pullPolicy schema",
+                    "description": "",
+                    "default": "",
+                    "examples": [
+                        "Always"
+                    ]
+                },
+                "trustedHosts": {
+                    "$id": "#/properties/php/properties/trustedHosts",
+                    "type": "string",
+                    "title": "The trustedHosts schema",
+                    "description": "",
+                    "default": "",
+                    "examples": [
+                        "^.+$"
+                    ]
+                },
+                "corsAllowOrigin": {
+                    "$id": "#/properties/php/properties/corsAllowOrigin",
+                    "type": "array",
+                    "title": "The corsAllowOrigin schema",
+                    "description": "",
+                    "default": [],
+                    "examples": [
+                        [
+                            "*"
+                        ]
+                    ],
+                    "additionalItems": true,
+                    "items": {
+                        "$id": "#/properties/php/properties/corsAllowOrigin/items",
+                        "anyOf": [
+                            {
+                                "$id": "#/properties/php/properties/corsAllowOrigin/items/anyOf/0",
+                                "type": "string",
+                                "title": "The first anyOf schema",
+                                "description": "",
+                                "default": "",
+                                "examples": [
+                                    "*"
+                                ]
+                            }
+                        ]
+                    }
+                },
+                "trustedProxies": {
+                    "$id": "#/properties/php/properties/trustedProxies",
+                    "type": "array",
+                    "title": "The trustedProxies schema",
+                    "description": "",
+                    "default": [],
+                    "examples": [
+                        [
+                            "10.0.0.0/8",
+                            "172.16.0.0/12"
+                        ]
+                    ],
+                    "additionalItems": true,
+                    "items": {
+                        "$id": "#/properties/php/properties/trustedProxies/items",
+                        "anyOf": [
+                            {
+                                "$id": "#/properties/php/properties/trustedProxies/items/anyOf/0",
+                                "type": "string",
+                                "title": "The first anyOf schema",
+                                "description": "",
+                                "default": "",
+                                "examples": [
+                                    "10.0.0.0/8",
+                                    "172.16.0.0/12"
+                                ]
+                            }
+                        ]
+                    }
                 }
-            }
+            },
+            "additionalProperties": true
+        },
+        "redis": {
+            "$id": "#/properties/redis",
+            "type": "object",
+            "title": "The redis schema",
+            "description": "",
+            "default": {},
+            "examples": [
+                {
+                    "cluster": {
+                        "enabled": false
+                    },
+                    "redisPort": 6379,
+                    "usePassword": false,
+                    "enabled": false,
+                    "pullPolicy": "IfNotPresent"
+                }
+            ],
+            "required": [
+                "cluster",
+                "redisPort",
+                "usePassword",
+                "enabled",
+                "pullPolicy"
+            ],
+            "properties": {
+                "cluster": {
+                    "$id": "#/properties/redis/properties/cluster",
+                    "type": "object",
+                    "title": "The cluster schema",
+                    "description": "",
+                    "default": {},
+                    "examples": [
+                        {
+                            "enabled": false
+                        }
+                    ],
+                    "required": [
+                        "enabled"
+                    ],
+                    "properties": {
+                        "enabled": {
+                            "$id": "#/properties/redis/properties/cluster/properties/enabled",
+                            "type": "boolean",
+                            "title": "The enabled schema",
+                            "description": "",
+                            "default": false,
+                            "examples": [
+                                false
+                            ]
+                        }
+                    },
+                    "additionalProperties": true
+                },
+                "redisPort": {
+                    "$id": "#/properties/redis/properties/redisPort",
+                    "type": "integer",
+                    "title": "The redisPort schema",
+                    "description": "",
+                    "default": 0,
+                    "examples": [
+                        6379
+                    ]
+                },
+                "usePassword": {
+                    "$id": "#/properties/redis/properties/usePassword",
+                    "type": "boolean",
+                    "title": "The usePassword schema",
+                    "description": "",
+                    "default": false,
+                    "examples": [
+                        false
+                    ]
+                },
+                "enabled": {
+                    "$id": "#/properties/redis/properties/enabled",
+                    "type": "boolean",
+                    "title": "The enabled schema",
+                    "description": "",
+                    "default": false,
+                    "examples": [
+                        false
+                    ]
+                },
+                "pullPolicy": {
+                    "$id": "#/properties/redis/properties/pullPolicy",
+                    "type": "string",
+                    "title": "The pullPolicy schema",
+                    "description": "",
+                    "default": "",
+                    "examples": [
+                        "IfNotPresent"
+                    ]
+                }
+            },
+            "additionalProperties": true
+        },
+        "nginx": {
+            "$id": "#/properties/nginx",
+            "type": "object",
+            "title": "The nginx schema",
+            "description": "",
+            "default": {},
+            "examples": [
+                {
+                    "repository": "docker.io/conduction/protocomponent-nginx",
+                    "image": "docker.io/conduction/contactcatalogus-nginx",
+                    "tag": "latest",
+                    "pullPolicy": "Always",
+                    "replicaCount": 2
+                }
+            ],
+            "required": [
+                "repository",
+                "image",
+                "tag",
+                "pullPolicy",
+                "replicaCount"
+            ],
+            "properties": {
+                "repository": {
+                    "$id": "#/properties/nginx/properties/repository",
+                    "type": "string",
+                    "title": "The repository schema",
+                    "description": "",
+                    "default": "",
+                    "examples": [
+                        "docker.io/conduction/protocomponent-nginx"
+                    ]
+                },
+                "image": {
+                    "$id": "#/properties/nginx/properties/image",
+                    "type": "string",
+                    "title": "The image schema",
+                    "description": "",
+                    "default": "",
+                    "examples": [
+                        "docker.io/conduction/contactcatalogus-nginx"
+                    ]
+                },
+                "tag": {
+                    "$id": "#/properties/nginx/properties/tag",
+                    "type": "string",
+                    "title": "The tag schema",
+                    "description": "",
+                    "default": "",
+                    "examples": [
+                        "latest"
+                    ]
+                },
+                "pullPolicy": {
+                    "$id": "#/properties/nginx/properties/pullPolicy",
+                    "type": "string",
+                    "title": "The pullPolicy schema",
+                    "description": "",
+                    "default": "",
+                    "examples": [
+                        "Always"
+                    ]
+                },
+                "replicaCount": {
+                    "$id": "#/properties/nginx/properties/replicaCount",
+                    "type": "integer",
+                    "title": "The replicaCount schema",
+                    "description": "",
+                    "default": 0,
+                    "examples": [
+                        2
+                    ]
+                }
+            },
+            "additionalProperties": true
+        },
+        "postgresql": {
+            "$id": "#/properties/postgresql",
+            "type": "object",
+            "title": "The postgresql schema",
+            "description": "",
+            "default": {},
+            "examples": [
+                {
+                    "enabled": true,
+                    "imageTag": "10-alpine",
+                    "url": "",
+                    "postgresqlUsername": "example",
+                    "postgresqlPassword": "!ChangeMe!",
+                    "postgresqlDatabase": "api",
+                    "persistence": {
+                        "enabled": true
+                    },
+                    "pullPolicy": "IfNotPresent"
+                }
+            ],
+            "required": [
+                "enabled",
+                "imageTag",
+                "persistence",
+                "pullPolicy"
+            ],
+            "properties": {
+                "enabled": {
+                    "$id": "#/properties/postgresql/properties/enabled",
+                    "type": "boolean",
+                    "title": "The enabled schema",
+                    "description": "",
+                    "default": false,
+                    "examples": [
+                        true
+                    ]
+                },
+                "imageTag": {
+                    "$id": "#/properties/postgresql/properties/imageTag",
+                    "type": "string",
+                    "title": "The imageTag schema",
+                    "description": "",
+                    "default": "",
+                    "examples": [
+                        "10-alpine"
+                    ]
+                },
+                "url": {
+                    "$id": "#/properties/postgresql/properties/url",
+                    "title": "The url schema",
+                    "description": "",
+                    "default": "",
+                    "examples": [
+                        ""
+                    ]
+                },
+                "postgresqlUsername": {
+                    "$id": "#/properties/postgresql/properties/postgresqlUsername",
+                    "type": "string",
+                    "title": "The postgresqlUsername schema",
+                    "description": "",
+                    "default": "",
+                    "examples": [
+                        "example"
+                    ]
+                },
+                "postgresqlPassword": {
+                    "$id": "#/properties/postgresql/properties/postgresqlPassword",
+                    "type": "string",
+                    "title": "The postgresqlPassword schema",
+                    "description": "",
+                    "default": "",
+                    "examples": [
+                        "!ChangeMe!"
+                    ]
+                },
+                "postgresqlDatabase": {
+                    "$id": "#/properties/postgresql/properties/postgresqlDatabase",
+                    "type": "string",
+                    "title": "The postgresqlDatabase schema",
+                    "description": "",
+                    "default": "",
+                    "examples": [
+                        "api"
+                    ]
+                },
+                "persistence": {
+                    "$id": "#/properties/postgresql/properties/persistence",
+                    "type": "object",
+                    "title": "The persistence schema",
+                    "description": "",
+                    "default": {},
+                    "examples": [
+                        {
+                            "enabled": true
+                        }
+                    ],
+                    "required": [
+                        "enabled"
+                    ],
+                    "properties": {
+                        "enabled": {
+                            "$id": "#/properties/postgresql/properties/persistence/properties/enabled",
+                            "type": "boolean",
+                            "title": "The enabled schema",
+                            "description": "",
+                            "default": false,
+                            "examples": [
+                                true
+                            ]
+                        }
+                    },
+                    "additionalProperties": true
+                },
+                "pullPolicy": {
+                    "$id": "#/properties/postgresql/properties/pullPolicy",
+                    "type": "string",
+                    "title": "The pullPolicy schema",
+                    "description": "",
+                    "default": "",
+                    "examples": [
+                        "IfNotPresent"
+                    ]
+                }
+            },
+            "additionalProperties": true
+        },
+        "ingress": {
+            "$id": "#/properties/ingress",
+            "type": "object",
+            "title": "The ingress schema",
+            "description": "",
+            "default": {},
+            "examples": [
+                {
+                    "enabled": false,
+                    "hostname": "contactcatalogus.local",
+                    "path": "/",
+                    "annotations": null,
+                    "tls": null
+                }
+            ],
+            "required": [
+                "enabled",
+                "hostname",
+                "path"
+            ],
+            "properties": {
+                "enabled": {
+                    "$id": "#/properties/ingress/properties/enabled",
+                    "type": "boolean",
+                    "title": "The enabled schema",
+                    "description": "",
+                    "default": false,
+                    "examples": [
+                        false
+                    ]
+                },
+                "hostname": {
+                    "$id": "#/properties/ingress/properties/hostname",
+                    "type": "string",
+                    "title": "The hostname schema",
+                    "description": "",
+                    "default": "",
+                    "examples": [
+                        "contactcatalogus.local"
+                    ]
+                },
+                "path": {
+                    "$id": "#/properties/ingress/properties/path",
+                    "type": "string",
+                    "title": "The path schema",
+                    "description": "",
+                    "default": "",
+                    "examples": [
+                        "/"
+                    ]
+                },
+                "annotations": {
+                    "$id": "#/properties/ingress/properties/annotations",
+                    "type": "null",
+                    "title": "The annotations schema",
+                    "description": "",
+                    "default": null,
+                    "examples": [
+                        null
+                    ]
+                },
+                "tls": {
+                    "$id": "#/properties/ingress/properties/tls",
+                    "type": "null",
+                    "title": "The tls schema",
+                    "description": "",
+                    "default": null,
+                    "examples": [
+                        null
+                    ]
+                }
+            },
+            "additionalProperties": true
+        },
+        "resources": {
+            "$id": "#/properties/resources",
+            "type": "object",
+            "title": "The resources schema",
+            "description": "",
+            "default": {},
+            "examples": [
+                {}
+            ],
+            "required": [],
+            "additionalProperties": true
         }
-    }
+    },
+    "additionalProperties": true
 }

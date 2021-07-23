@@ -1,9 +1,6 @@
-#index:
-#    path: /
-#    test: App\Controller\DefaultController::index
-saml_metadata:
-    path:     /saml
-    defaults: { _controller: Hslavich\OneloginSamlBundle\Controller\SamlController::metadataAction }
+#saml_metadata:
+#    path:     /saml
+#    defaults: { _controller: Hslavich\OneloginSamlBundle\Controller\SamlController::metadataAction }
 
 saml_acs:
     path:     /saml/SAML2/POST
