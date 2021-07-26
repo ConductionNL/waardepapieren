@@ -1,21 +1,16 @@
-{{ if false }}
-apiVersion: cert-manager.io/v1alpha2
-kind: Certificate
+{{- if and (eq .Values.config.mode "digid") (not .Values.security.certificate.existingSecret) }}
+apiVersion: v1
+kind: Secret
 metadata:
-    name: {{ .Release.Name }}-cert
+    name: {{ template "fullname" . }}-certificate
     labels:
         app.kubernetes.io/name: {{ .Release.Name }}
         app.kubernetes.io/part-of: {{ .Release.Name }}
         helm.sh/chart: {{ include "chart" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
         app.kubernetes.io/managed-by: {{ .Release.Service }}
-spec:
-  secretName: {{ template "fullname" . }}
-  duration: 24h
-  renewBefore: 12h
-  dnsNames:
-    - {{ $.Values.ingress.hostname }}.{{ $.Values.ingress.path }}
-  issuerRef:
-    name: letsencrypt-prod
-    kind: ClusterIssuer
-{{ end }}
+type: kubernetes.io/tls
+data:
+    tls.crt: {{ .Values.security.certificate.certificate | quote }}
+    tls.key: {{ .Values.security.certificate.privateKey | quote }}
+{{- end }}

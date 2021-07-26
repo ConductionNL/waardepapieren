@@ -27,6 +27,16 @@ spec:
             secret:
               secretName: {{ template "fullname" . }}-dependencies
               defaultMode: 420
+          {{- if eq .Values.config.mode "digid" }}
+          - name: certificates
+            secret:
+              {{ if .Values.security.certificate.existingSecret }}
+                secretName: {{ .Values.security.certificate.existingSecret }}
+              {{ else }}
+                secretName: {{ template "fullname" . }}-certificate
+              {{ end }}
+                defaultMode: 420
+          {{- end }}
       containers:
         - name: {{ .Release.Name }}-php
           image: "{{ .Values.php.image }}:{{ .Values.php.tag }}"
@@ -38,6 +48,11 @@ spec:
               subPath: dependencies.yaml
               name: dependencies
               readOnly: true
+            {{- if eq .Values.config.mode "digid" }}
+            - mountPath: /var/run/certs
+              name: certificates
+              readOnly: true
+            {{- end }}
           env:
             - name: JWT_SECRET_KEY
               value: '%kernel.project_dir%/config/jwt/private.pem'
@@ -104,6 +119,23 @@ spec:
                 configMapKeyRef:
                   key: url
                   name: {{ template "fullname" . }}
+            - name: APP_MODE
+              valueFrom:
+                  configMapKeyRef:
+                      key: mode
+                      name: {{ template "fullname" . }}
+            {{- if (eq .Values.config.mode "digid") }}
+            - name: APP_CERT
+              valueFrom:
+                    secretKeyRef:
+                         key: certificate
+                         name: {{ template "fullname" . }}
+            - name: APP_KEY
+              valueFrom:
+                    secretKeyRef:
+                        key: private_key
+                        name: {{ template "fullname" . }}
+            {{- end }}
             -   name: APP_SHASIGN
                 valueFrom:
                     secretKeyRef:
@@ -112,13 +144,21 @@ spec:
             -   name: SAML_PRIVATE_KEY
                 valueFrom:
                     secretKeyRef:
-                        name: {{ template "fullname" . }}
-                        key: saml_private_key
+                      {{ if .Values.security.certificate.existingSecret }}
+                        name: {{ .Values.security.certificate.existingSecret }}
+                      {{ else }}
+                        name: {{ template "fullname" . }}-certificate
+                      {{ end }}
+                        key: tls.key
             -   name: SAML_X509_CERT
                 valueFrom:
                     secretKeyRef:
-                        name: {{ template "fullname" . }}
-                        key: saml_x509_cert
+                      {{ if .Values.security.certificate.existingSecret }}
+                        name: {{ .Values.security.certificate.existingSecret }}
+                      {{ else }}
+                        name: {{ template "fullname" . }}-certificate
+                      {{ end }}
+                        key: tls.crt
           resources:
 {{ toYaml .Values.resources | indent 12 }}
     {{- if .Values.nodeSelector }}
