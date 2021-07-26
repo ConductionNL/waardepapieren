@@ -122,15 +122,15 @@ spec:
                       name: {{ template "fullname" . }}
             {{- if (eq .Values.config.mode "digid") }}
             - name: APP_CERT
-                  valueFrom:
-                  secretKeyRef:
-                      key: certificate
-                      name: {{ template "fullname" . }}
+              valueFrom:
+                    secretKeyRef:
+                         key: certificate
+                         name: {{ template "fullname" . }}
             - name: APP_KEY
               valueFrom:
-                  secretKeyRef:
-                      key: private_key
-                      name: {{ template "fullname" . }}
+                    secretKeyRef:
+                        key: private_key
+                        name: {{ template "fullname" . }}
             {{- end }}
             -   name: APP_SHASIGN
                 valueFrom:
