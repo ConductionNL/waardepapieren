@@ -1,17 +1,14 @@
-#index:
-#    path: /
-#    test: App\Controller\DefaultController::index
-saml_metadata:
-    path:     /saml/metadata
-    defaults: { _controller: Hslavich\OneloginSamlBundle\Controller\SamlController::metadataAction }
+#saml_metadata:
+#    path:     /saml
+#    defaults: { _controller: Hslavich\OneloginSamlBundle\Controller\SamlController::metadataAction }
 
 saml_acs:
-    path:     /saml/acs
+    path:     /saml/SAML2/POST
     methods:  ['POST']
     defaults: { _controller: Hslavich\OneloginSamlBundle\Controller\SamlController::assertionConsumerServiceAction }
 
 saml_login:
-    path:     /saml/login
+    path:     /saml/Login
     defaults: { _controller: Hslavich\OneloginSamlBundle\Controller\SamlController::loginAction }
 
 saml_logout:

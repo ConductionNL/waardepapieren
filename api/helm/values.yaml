@@ -2,136 +2,105 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-settings:
-  registryBase: docker.io/conduction
-  projectName: waardepapieren
-  name: waardepapieren
-  version: V1.0
-  majorVersion: v1
-  description: 'Naast deze JSON rest API is er ook een [graphql](/graphql) interface beschikbaar.'
-  repro: https://github.com/ConductionNL/waardepapieren
-  demo: dev.waardepapieren-gemeentehoorn.commonground.nu
-  domain: waardepapieren-gemeentehoorn.commonground.nu
-  subdomain: waardepapieren
-  subpath: 
-  subpathRouting: true
-  env: dev
-  web: false
-  debug: 1
-  cache: false
-  type: application
-  id: 
-  replicaCount: 1
-  corsAllowOrigin: ['*']
-  trustedHosts: '^.+$'
-  pullPolicy: Always
-  # You will need these proxies on kubernetes
-  trustedProxies:
-    - 10.0.0.0/8
-    - 172.16.0.0/12
-    - 192.168.0.0/16
-  # If you are running a single component on a kubernetes cluster you can just easily enable the load balancer, if not you need to set up a multi component load balancer
-  loadbalancerEnabled: false
-  # If you are running a single component on a kubernetes cluster you can just easily enable the load balancer, if not you need to set up a multi component load balancer
-  notificationEnabled: false
-  audittrailEnabled: false
-  authorisationEnabled: false
-  healthEnabled: false
-  archiveEnabled: false
+config:
+    version: V1.0
+    debug: 0
+    cache: true
+    internal: false
 
 security:
-  applicationKey: "47e971de-2272-4e09-a141-134612e46a22"
-
+    applicationKey: "a78828b4-f577-4425-a17c-c217980409e9"
+    secret: ""
+    samlPrivateKey: "%example%"
+    samlX509Cert: "%example%"
+    shasign: "%example%"
+    jwt:
+        id:
+        privateKey:
+    dependencies:
+        waar:
+            auth: apikey
+            location: waardepapieren-service.local
+            apikey: 45c1a4b6-59d3-4a6e-86bf-88a872f35845
+        cc:
+            auth: apikey
+            location: contactcatalogus.local
+            apikey: 45c1a4b6-59d3-4a6e-86bf-88a872f35845
+        brp:
+            auth: apikey
+            location: brpservice.local
+            apikey: 45c1a4b6-59d3-4a6e-86bf-88a872f35845
+        ds:
+            auth: apikey
+            location: digispoof-interface.local
+            apikey: 45c1a4b6-59d3-4a6e-86bf-88a872f35845
 
 php:
-  repository: docker.io/conduction/protocomponent-php
-  tag: latest
-  mercure:
-    jwtSecret: ""
-  env: prod
-  secret: ""
-  replicaCount: 2
+    repository: docker.io/conduction/protocomponent-php
+    image: ghcr.io/conductionnl/waardepapieren-php
+    tag: latest
+    env: prod
+    replicaCount: 2
+    pullPolicy: Always
+    trustedHosts: "^.+$"
+    corsAllowOrigin: ["*"]
+    trustedProxies:
+        - 10.0.0.0/8
+        - 172.16.0.0/12
+        - 192.168.0.0/16
 
 redis:
-  cluster:
+    cluster:
+        enabled: false
+    redisPort: 6379
+    usePassword: false
     enabled: false
-  redisPort: 6379
-  usePassword: false
-  enabled: true
-commonground:
-  eherkenning:
-    location: https://waardepapieren-gemeentehoorn.commonground.nu/eherkenning
-  digispoof:
-    location: https://waardepapieren-gemeentehoorn.commonground.nu/digispoof
+    pullPolicy: IfNotPresent
 
 nginx:
-  repository: docker.io/conduction/protocomponent-nginx
-  tag: latest
-  pullPolicy: Always
-  replicaCount: 2
-
-varnish:
-  enabled: true
-  #url: https://example.com
-  repository: docker.io/conduction/protocomponent-varnish
-  tag: latest
-  pullPolicy: Always
-  replicaCount: 1
+    repository: docker.io/conduction/protocomponent-nginx
+    image: ghcr.io/conductionnl/waardepapieren-nginx
+    tag: latest
+    pullPolicy: Always
+    replicaCount: 2
 
 postgresql:
-  enabled: true
-  imageTag: 10-alpine
-  # If bringing your own PostgreSQL, the full uri to use
-  #url: pgsql://api-platform:!ChangeMe!@example.com/api?serverVersion=10.1
-  postgresqlUsername: "example"
-  postgresqlPassword: "!ChangeMe!"
-  postgresqlDatabase: "api"
-  # Persistent Volume Storage configuration.
-  # ref: https://kubernetes.io/docs/user-guide/persistent-volumes
-  persistence:
-    enabled: false
-  pullPolicy: IfNotPresent
-#  image:
-#    repository: postgres
-#    tag: alpine
-
-mercure:
-  enabled: true
-  publishUrl: http://mercure/hub
-  subscribeUrl: https://mercure.example.com/hub
-  allowAnonymous: "1"
-  corsAllowedOrigins: "^https?://.*?\\.example\\.com$"
-  acmeHosts: "" # TODO: Fix the Mercure chart
-  service:
-    type: NodePort
-    port: 80
+    enabled: true
+    imageTag: 10-alpine
+    # If bringing your own PostgreSQL, the full uri to use
+    url: "psql://a:b@example.com/c"
+    postgresqlUsername: "example"
+    postgresqlPassword: "!ChangeMe!"
+    postgresqlDatabase: "api"
+    # Persistent Volume Storage configuration.
+    # ref: https://kubernetes.io/docs/user-guide/persistent-volumes
+    persistence:
+        enabled: true
+    pullPolicy: IfNotPresent
 
 ingress:
-  annotations:
-    # kubernetes.io/ingress.global-static-ip-name: chart-ip
-    # kubernetes.io/ingress.class: gce
-    # kubernetes.io/tls-acme: "true"
-  tls:
-    # Secrets must be manually created in the namespace, you can also use cert-manager.
-    # - hosts:
-      # - example.com
-      # - mercure.example.com
-  hosts:
-    api:
-      host: example.com
-      serviceName: varnish
-    mercure:
-      host: mercure.example.com
-      serviceName: mercure
+    enabled: false
+    type: "nginx"
+    hostname: .local
+    path: /
+    annotations:
+        # kubernetes.io/ingress.global-static-ip-name: chart-ip
+        # kubernetes.io/ingress.class: gce
+        # kubernetes.io/tls-acme: "true"
+    tls:
+        # Secrets must be manually created in the namespace, you can also use cert-manager.
+        # - hosts:
+        # - example.com
 
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #  cpu: 100m
-  #  memory: 128Mi
-  # requests:
-  #  cpu: 100m
-  #  memory: 128Mi
+resources:
+    {}
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits:
+    #  cpu: 100m
+    #  memory: 128Mi
+    # requests:
+    #  cpu: 100m
+    #  memory: 128Mi
