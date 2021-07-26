@@ -250,7 +250,7 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
      * @Route("/saml/SLO/Artifact")
      * @Template
      */
-    public function SamlTestAction(CommonGroundService $commonGroundService, Request $request, \OneLogin\Saml2\Auth $samlAuth)
+    public function SamlTestAction(Request $request, \OneLogin\Saml2\Auth $samlAuth, ParameterBagInterface $params)
     {
 
         $date = date('Y-m-d\TH:i:s\Z');
@@ -285,6 +285,8 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
         $client = new Client([
             'base_uri' => 'https://was-preprod1.digid.nl',
             'timeout'  => 5.0,
+            'ssl_key'  => $params->get('app_ssl_key'),
+            'cert'     => $params->get('app_certificate'),
         ]);
 
         $response = $client->request('POST', '/saml/idp/resolve_artifact', [
@@ -294,6 +296,8 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
             ],
             'body' => $soap,
         ]);
+
+        var_dump($response->getBody());
 
         var_dump($response->getBody()->getContents());
         die;

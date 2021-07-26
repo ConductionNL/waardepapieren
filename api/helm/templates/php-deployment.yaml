@@ -27,6 +27,12 @@ spec:
             secret:
               secretName: {{ template "fullname" . }}-dependencies
               defaultMode: 420
+          {{- if eq .Values.config.mode "digid" }}
+          - name: certificates
+            secret:
+                secretName: {{ template "fullname" . }}-certificate
+                defaultMode: 420
+          {{- end }}
       containers:
         - name: {{ .Release.Name }}-php
           image: "{{ .Values.php.image }}:{{ .Values.php.tag }}"
@@ -38,6 +44,11 @@ spec:
               subPath: dependencies.yaml
               name: dependencies
               readOnly: true
+            {{- if eq .Values.config.mode "digid" }}
+            - mountPath: /var/run/certs
+              name: certificates
+              readOnly: true
+            {{- end }}
           env:
             - name: JWT_SECRET_KEY
               value: '%kernel.project_dir%/config/jwt/private.pem'
@@ -104,6 +115,23 @@ spec:
                 configMapKeyRef:
                   key: url
                   name: {{ template "fullname" . }}
+            - name: APP_MODE
+              valueFrom:
+                  configMapKeyRef:
+                      key: mode
+                      name: {{ template "fullname" . }}
+            {{- if (eq .Values.config.mode "digid") }}
+            - name: APP_CERT
+                  valueFrom:
+                  secretKeyRef:
+                      key: certificate
+                      name: {{ template "fullname" . }}
+            - name: APP_KEY
+              valueFrom:
+                  secretKeyRef:
+                      key: private_key
+                      name: {{ template "fullname" . }}
+            {{- end }}
             -   name: APP_SHASIGN
                 valueFrom:
                     secretKeyRef:

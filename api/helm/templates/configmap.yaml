@@ -24,3 +24,4 @@ data:
   redis-port: {{ .Values.redis.redisPort | toString | quote }}
 
   {{- end }}
+  mode: {{ .Values.config.mode }}
