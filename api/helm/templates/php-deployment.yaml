@@ -30,7 +30,11 @@ spec:
           {{- if eq .Values.config.mode "digid" }}
           - name: certificates
             secret:
+              {{ if .Values.security.certificate.existingSecret }}
+                secretName: {{ .Values.security.certificate.existingSecret }}
+              {{ else }}
                 secretName: {{ template "fullname" . }}-certificate
+              {{ end }}
                 defaultMode: 420
           {{- end }}
       containers:
