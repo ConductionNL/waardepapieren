@@ -359,6 +359,10 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
     ) {
         $variables = [];
 
+        if(!$params->get('app_shasign')){
+            return $this->redirectToRoute('app_default_index');
+        }
+
         $shaSignature = $params->get('app_shasign');
 
         if (isset($shaSignature) && $request->query->get('orderID') && $request->query->get('PAYID') && $request->query->get('SHASIGN') && $this->getUser()) {
