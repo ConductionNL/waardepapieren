@@ -9,7 +9,7 @@ parameters:
         brp:
             auth: username-password
             locale: null
-            location: http://vrij-brp.demodam.nl/haal-centraal-brp-bevragen/api/v1.3
+            location: https://vrij-brp.demodam.nl/haal-centraal-brp-bevragen/api/v1.3
             password: demodam
             username: waardepapieren
             accept: application/hal+json
