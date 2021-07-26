@@ -141,6 +141,7 @@ spec:
                     secretKeyRef:
                         name: {{ template "fullname" . }}
                         key: app_shasign
+            {{- if eq .Values.config.mode "digid" }}
             -   name: SAML_PRIVATE_KEY
                 valueFrom:
                     secretKeyRef:
@@ -159,6 +160,7 @@ spec:
                         name: {{ template "fullname" . }}-certificate
                       {{ end }}
                         key: tls.crt
+            {{- end }}
           resources:
 {{ toYaml .Values.resources | indent 12 }}
     {{- if .Values.nodeSelector }}
