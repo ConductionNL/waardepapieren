@@ -14,8 +14,10 @@ security:
     secret: ""
     samlPrivateKey: "%example%"
     samlX509Cert: "%example%"
-    certificate: ""
-    privateKey: ""
+    certificate:
+        certificate: ""
+        privateKey: ""
+        existingSecret: ""
     shasign: "%example%"
     jwt:
         id:

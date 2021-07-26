@@ -1,11 +1,11 @@
-{{- if eq .Values.config.mode "digid" }}
+{{- if and (eq .Values.config.mode "digid") (not .Values.security.certificate.existingSecret) }}
 apiVersion: v1
 kind: Secret
 metadata:
     name: {{ template "fullname" . }}-certificate
     labels:
-        app.kubernetes.io/name: {{ .Release.name }}
-        app.kubernetes.io/part-of: {{ .Release.name }}
+        app.kubernetes.io/name: {{ .Release.Name }}
+        app.kubernetes.io/part-of: {{ .Release.Name }}
         helm.sh/chart: {{ include "chart" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
         app.kubernetes.io/managed-by: {{ .Release.Service }}

@@ -10,3 +10,5 @@ api/helm/kubeconfig.yaml
 api/helm/*-kubeconfig.yaml
 api/helm/kubeconfig*
 api/helm/huwelijksplanner-kubeconfig.yaml
+
+api/config/packages/dependencies.yaml
