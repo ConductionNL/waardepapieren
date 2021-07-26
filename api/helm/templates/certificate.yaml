@@ -1,21 +1,16 @@
-{{ if false }}
-apiVersion: cert-manager.io/v1alpha2
-kind: Certificate
+{{- if eq .Values.config.mode "digid" }}
+apiVersion: v1
+kind: Secret
 metadata:
-    name: {{ .Release.Name }}-cert
+    name: {{ template "fullname" . }}-certificate
     labels:
-        app.kubernetes.io/name: {{ .Release.Name }}
-        app.kubernetes.io/part-of: {{ .Release.Name }}
+        app.kubernetes.io/name: {{ .Release.name }}
+        app.kubernetes.io/part-of: {{ .Release.name }}
         helm.sh/chart: {{ include "chart" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
         app.kubernetes.io/managed-by: {{ .Release.Service }}
-spec:
-  secretName: {{ template "fullname" . }}
-  duration: 24h
-  renewBefore: 12h
-  dnsNames:
-    - {{ $.Values.ingress.hostname }}.{{ $.Values.ingress.path }}
-  issuerRef:
-    name: letsencrypt-prod
-    kind: ClusterIssuer
-{{ end }}
+type: kubernetes.io/tls
+data:
+    digid.crt: {{ .Values.security.samlX509Cert | quote }}
+    digid.key: {{ .Values.security.samlPrivateKey | quote }}
+{{- end }}

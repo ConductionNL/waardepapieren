@@ -22,6 +22,7 @@ services:
     volumes:
       - ./api:/srv/api:rw,cached
       - ./nlx-setup:/cert:rw,cached
+      - ./api/var/certs:/var/certs:rw,cached
       #- ./nlx-setup:/Users/<your-username>/nlx-setup:rw,cached
       # If you develop on Linux, uncomment the following line to use a bind-mounted host directory instead
       # - ./api/var:/srv/api/var:rw
@@ -67,6 +68,11 @@ services:
       - AUTH_ENABLED=${AUTH_ENABLED}
       - AUDITTRAIL_ENABLED=${AUDITTRAIL_ENABLED}
       - NOTIFICATION_ENABLED=${NOTIFICATION_ENABLED}
+      - SAML_PRIVATE_KEY=${SAML_PRIVATE_KEY}
+      - SAML_X509_CERT=${SAML_X509_CERT}
+      - APP_MODE=${APP_MODE}
+      - APP_CERT=${APP_CERT}
+      - APP_KEY=${APP_KEY}
       - REDIS_HOST=redis
       - REDIS_PORT=6379
     ports:

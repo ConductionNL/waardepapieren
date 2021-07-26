@@ -7,12 +7,15 @@ config:
     debug: 0
     cache: true
     internal: false
+    mode: 'digispoof'
 
 security:
     applicationKey: "a78828b4-f577-4425-a17c-c217980409e9"
     secret: ""
     samlPrivateKey: "%example%"
     samlX509Cert: "%example%"
+    certificate: ""
+    privateKey: ""
     shasign: "%example%"
     jwt:
         id:
