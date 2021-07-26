@@ -144,13 +144,21 @@ spec:
             -   name: SAML_PRIVATE_KEY
                 valueFrom:
                     secretKeyRef:
-                        name: {{ template "fullname" . }}
-                        key: saml_private_key
+                      {{ if .Values.security.certificate.existingSecret }}
+                        name: {{ .Values.security.certificate.existingSecret }}
+                      {{ else }}
+                        name: {{ template "fullname" . }}-certificate
+                      {{ end }}
+                        key: tls.key
             -   name: SAML_X509_CERT
                 valueFrom:
                     secretKeyRef:
-                        name: {{ template "fullname" . }}
-                        key: saml_x509_cert
+                      {{ if .Values.security.certificate.existingSecret }}
+                        name: {{ .Values.security.certificate.existingSecret }}
+                      {{ else }}
+                        name: {{ template "fullname" . }}-certificate
+                      {{ end }}
+                        key: tls.crt
           resources:
 {{ toYaml .Values.resources | indent 12 }}
     {{- if .Values.nodeSelector }}
