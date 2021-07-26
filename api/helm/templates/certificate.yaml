@@ -11,6 +11,6 @@ metadata:
         app.kubernetes.io/managed-by: {{ .Release.Service }}
 type: kubernetes.io/tls
 data:
-    digid.crt: {{ .Values.security.samlX509Cert | quote }}
-    digid.key: {{ .Values.security.samlPrivateKey | quote }}
+    tls.crt: {{ .Values.security.certificate.certificate | quote }}
+    tls.key: {{ .Values.security.certificate.privateKey | quote }}
 {{- end }}
