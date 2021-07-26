@@ -47,6 +47,8 @@ parameters:
     env(APP_BUILD): "prod"
     env(APP_CHART): ""
     env(APP_SESSION_DURATION): "900"
+    env(SAML_X509_CERT): "placeholder"
+    env(SAML_PRIVATE_KEY): "placeholder"
     env(LICENCE_NAME): "EUPL"
     env(OWNER_NAME): "Conduction"
     env(OWNER_URL): "https://www.conduction.nl"
@@ -102,6 +104,8 @@ parameters:
     idin_id: "%env(IDIN_ID)%"
     idin_secret: "%env(IDIN_SECRET)%"
     badges: "%env(BADGES)%"
+    saml_x509_cert: "%env(SAML_X509_CERT)%"
+    saml_private_key: "%env(SAML_PRIVATE_KEY)%"
 
     mode: "%env(APP_MODE)%"
 
@@ -345,7 +349,7 @@ twig:
         app_type: "%env(APP_TYPE)%"
         badges: "%env(BADGES)%"
         app_mode: "%env(APP_MODE)%"
-        
+
         # Security Details
         app_commonground_id: "%env(APP_COMMONGROUND_ID)%"
         app_commonground_secret: "%env(APP_COMMONGROUND_SECRET)%"
