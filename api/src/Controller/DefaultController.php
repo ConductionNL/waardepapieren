@@ -12,7 +12,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\UrlHelper;
 use Symfony\Component\Routing\Annotation\Route;
@@ -252,9 +251,8 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
      */
     public function SamlTestAction(Request $request, \OneLogin\Saml2\Auth $samlAuth, ParameterBagInterface $params)
     {
-
         $date = date('Y-m-d\TH:i:s\Z');
-        $artifact  = $request->query->get('SAMLart');
+        $artifact = $request->query->get('SAMLart');
         $config = $samlAuth->getSettings()->getSPData();
 
         $xml = '
@@ -263,13 +261,13 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
         xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
         xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
         xmlns:ec="http://www.w3.org/2001/10/xml-exc-c14n#"
-        ID="_1330416073" Version="2.0" IssueInstant="'. $date .'">
-        <saml:Issuer>'. $config['entityId'] .'</saml:Issuer>
-        <samlp:Artifact>'. $artifact .'</samlp:Artifact>
+        ID="_1330416073" Version="2.0" IssueInstant="'.$date.'">
+        <saml:Issuer>'.$config['entityId'].'</saml:Issuer>
+        <samlp:Artifact>'.$artifact.'</samlp:Artifact>
         </samlp:ArtifactResolve>';
 
         $signed = \OneLogin\Saml2\Utils::addSign($xml, $config['privateKey'], $config['x509cert']);
-        $signed = str_replace('<?xml version="1.0"?>', "", $signed);
+        $signed = str_replace('<?xml version="1.0"?>', '', $signed);
 
         $soap = '
         <?xml version="1.0" encoding="UTF-8"?>
@@ -278,7 +276,7 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
         xmlns:xsd="http://www.w3.org/2001/XMLSchema"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
         <soapenv:Body>
-        '. $signed .'
+        '.$signed.'
         </soapenv:Body>
         </soapenv:Envelope>';
 
@@ -292,7 +290,7 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
         $response = $client->request('POST', '/saml/idp/resolve_artifact', [
             'headers' => [
                 'Content-Type' => 'text/xml',
-                'SOAPAction' => $config['entityId'],
+                'SOAPAction'   => $config['entityId'],
             ],
             'body' => $soap,
         ]);
@@ -300,7 +298,7 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
         var_dump($response->getBody());
 
         var_dump($response->getBody()->getContents());
-        die;
+        exit;
 
         return $artifact;
     }
