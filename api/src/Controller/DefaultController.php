@@ -307,7 +307,7 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
      * @Route("/")
      * @Template
      */
-    public function indexAction(CommonGroundService $commonGroundService, Request $request, ParameterBagInterface $params)
+    public function indexAction(CommonGroundService $commonGroundService, Request $request, ParameterBagInterface $params, Session $session)
     {
         // On an index route we might want to filter based on user input
         $variables['query'] = array_merge($request->query->all(), $variables['post'] = $request->request->all());
@@ -345,6 +345,16 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
 //            $variables['certificates'][] = array('type' => 'geboorte akte', 'created' => '17-09-2020', 'id' => '1');
         }
 
+        if ($session->get('type') && !$params->has('app_shasign')) {
+            $variables['certificate']['type'] = $session->get('type');
+            $variables['certificate']['organization'] = '001516814';
+            $variables['certificate']['person'] = $this->getUser()->getPerson();
+            $variables['certificate'] = $commonGroundService->createResource($variables['certificate'], ['component' => 'waar', 'type' => 'certificates']);
+            $variables['certificate']['claim'] = base64_encode(json_encode($variables['certificate']['claim']));
+
+            $variables['certificates'] = $commonGroundService->getResourceList(['component' => 'wari', 'type' => 'certificates'], ['person' => $this->getUser()->getPerson()])['hydra:member'];
+        }
+
         return $variables;
     }
 
@@ -360,6 +370,18 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
         Session $session
     ) {
         $variables = [];
+
+        if(!$params->has('app_shasign')){
+            $variables['values'] = $request->request->all();
+            $typeinfo = json_decode($variables['values']['typeinfo']);
+
+            $orderId = (string) Uuid::uuid4();
+            if (isset($typeinfo)) {
+                $session->set('type', $typeinfo->type);
+                $session->set('orderId', $orderId);
+            }
+            return $this->redirectToRoute('app_default_index');
+        }
 
         $shaSignature = $params->get('app_shasign');
 
