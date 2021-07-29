@@ -16,7 +16,7 @@ security:
         certificate: ""
         privateKey: ""
         existingSecret: ""
-    shasign: "%example%"
+    shasign: ""
     jwt:
         id:
         privateKey:

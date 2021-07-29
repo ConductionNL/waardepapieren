@@ -64,6 +64,8 @@ parameters:
     env(APP_CERT): ""
     env(APP_KEY): ""
 
+    env(APP_SHASIGN): ""
+
     app_env: "%env(APP_ENV)%"
     app_container: "%env(APP_CONTAINER)%"
     app_debug: "%env(APP_DEBUG)%"
@@ -106,6 +108,8 @@ parameters:
     badges: "%env(BADGES)%"
     saml_x509_cert: "%env(SAML_X509_CERT)%"
     saml_private_key: "%env(SAML_PRIVATE_KEY)%"
+
+    app_shasign: "%env(APP_SHASIGN)%"
 
     mode: "%env(APP_MODE)%"
 

@@ -345,7 +345,7 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
 //            $variables['certificates'][] = array('type' => 'geboorte akte', 'created' => '17-09-2020', 'id' => '1');
         }
 
-        if ($session->get('type') && !$params->has('app_shasign')) {
+        if ($session->get('type') && (!$params->has('app_shasign') || !$this->getParameter('app_shasign'))) {
             $variables['certificate']['type'] = $session->get('type');
             $variables['certificate']['organization'] = '001516814';
             $variables['certificate']['person'] = $this->getUser()->getPerson();
@@ -353,6 +353,12 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
             $variables['certificate']['claim'] = base64_encode(json_encode($variables['certificate']['claim']));
 
             $variables['certificates'] = $commonGroundService->getResourceList(['component' => 'wari', 'type' => 'certificates'], ['person' => $this->getUser()->getPerson()])['hydra:member'];
+        }
+        if($params->has('app_shasign') && $this->getParameter('app_shasign')){
+            var_Dump($params->get('app_shasign'));
+            $variables['paymentEnabled'] = true;
+        } else {
+            $variables['paymentEnabled'] = false;
         }
 
         return $variables;
@@ -371,7 +377,7 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
     ) {
         $variables = [];
 
-        if(!$params->has('app_shasign')){
+        if(!$params->has('app_shasign') || !$this->getParameter('app_shasign')){
             $variables['values'] = $request->request->all();
             $typeinfo = json_decode($variables['values']['typeinfo']);
 

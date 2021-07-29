@@ -25,7 +25,7 @@
                                         <option value="{}" style="color: lightgrey;">Maak een keuze</option>
                                         {% for type in types %}
                                             <option
-                                                value='{"type":"{{ type.type }}"{% if type.price|default %},"price":"{{ type.price }}"{% endif %}}'>{{ type.name }} {% if type.price|default %}&euro; {{ type.price }}{% endif %}</option>
+                                                value='{"type":"{{ type.type }}"{% if type.price|default and paymentEnabled %},"price":"{{ type.price }}"{% endif %}}'>{{ type.name }} {% if type.price|default and paymentEnabled %}&euro; {{ type.price }}{% endif %}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
