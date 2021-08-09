@@ -280,8 +280,8 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
         </soapenv:Envelope>';
 
 
-        echo "<pre>".htmlentities($soap)."</pre>";
-        die;
+//        echo "<pre>".htmlentities($soap)."</pre>";
+//        die;
 
         $client = new Client([
             'base_uri' => 'https://was-preprod1.digid.nl',
