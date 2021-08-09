@@ -270,7 +270,6 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
         $signed = str_replace('<?xml version="1.0"?>', '', $signed);
 
         $soap = '
-        <?xml version="1.0" encoding="UTF-8"?>
         <soapenv:Envelope
         xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
         xmlns:xsd="http://www.w3.org/2001/XMLSchema"
