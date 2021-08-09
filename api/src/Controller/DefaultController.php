@@ -302,17 +302,9 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
 
         $data = $this->xmlEncoder->decode($result, 'xml');
 
-        echo "<pre>";
-        var_dump($response->getStatusCode());
-//        var_dump($data);
         $nameId = $data['soapenv:Body']['samlp:ArtifactResponse']['samlp:Response']['saml:Assertion']['saml:Subject']['saml:NameID'];
-        var_dump($nameId);
         $nameIdExplode = explode(":", $nameId);
         $bsn = end($nameIdExplode);
-
-        var_dump($bsn);
-        exit;
-
         $this->redirectToRoute('app_user_digispoof', ['bsn' => $bsn]);
     }
 
