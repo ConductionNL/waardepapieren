@@ -247,7 +247,6 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
 
     /**
      * @Route("/saml/SLO/Artifact")
-     * @Template
      */
     public function SamlTestAction(Request $request, \OneLogin\Saml2\Auth $samlAuth, ParameterBagInterface $params)
     {
@@ -305,6 +304,7 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
         $nameId = $data['soapenv:Body']['samlp:ArtifactResponse']['samlp:Response']['saml:Assertion']['saml:Subject']['saml:NameID'];
         $nameIdExplode = explode(":", $nameId);
         $bsn = end($nameIdExplode);
+        
         $this->redirectToRoute('app_user_digispoof', ['bsn' => $bsn]);
     }
 
