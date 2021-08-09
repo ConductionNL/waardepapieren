@@ -281,7 +281,7 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
         </soapenv:Envelope>';
 
 
-        echo "<pre>$soap</pre>";
+        echo "<pre>".htmlentities($soap)."</pre>";
         die;
 
         $client = new Client([
