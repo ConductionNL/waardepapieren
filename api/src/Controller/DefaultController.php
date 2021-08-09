@@ -250,6 +250,8 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
      */
     public function SamlTestAction(Request $request, \OneLogin\Saml2\Auth $samlAuth, ParameterBagInterface $params)
     {
+        var_dump($request->attributes->get('_route'));
+        var_dump($request->getMethod());
         $date = date('Y-m-d\TH:i:s\Z');
         $artifact = $request->query->get('SAMLart');
         $config = $samlAuth->getSettings()->getSPData();
@@ -303,8 +305,11 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
 
         $nameId = $data['soapenv:Body']['samlp:ArtifactResponse']['samlp:Response']['saml:Assertion']['saml:Subject']['saml:NameID'];
         $nameIdExplode = explode(":", $nameId);
-        $bsn = end($nameIdExplode);
+        $variables['bsn'] = end($nameIdExplode);
 
+        var_dump($variables['bsn']);
+
+        die;
 
     }
 
@@ -360,7 +365,6 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
             $variables['certificates'] = $commonGroundService->getResourceList(['component' => 'wari', 'type' => 'certificates'], ['person' => $this->getUser()->getPerson()])['hydra:member'];
         }
         if($params->has('app_shasign') && $this->getParameter('app_shasign')){
-            var_Dump($params->get('app_shasign'));
             $variables['paymentEnabled'] = true;
         } else {
             $variables['paymentEnabled'] = false;
