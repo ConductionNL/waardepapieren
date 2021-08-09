@@ -280,6 +280,10 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
         </soapenv:Body>
         </soapenv:Envelope>';
 
+
+        echo "<pre>$soap</pre>";
+        die;
+
         $client = new Client([
             'base_uri' => 'https://was-preprod1.digid.nl',
             'timeout'  => 5.0,
