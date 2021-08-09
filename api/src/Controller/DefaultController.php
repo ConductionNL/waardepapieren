@@ -297,8 +297,8 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
             ],
             'body' => $soap,
         ]);
-
-        var_dump($response->getBody());
+        echo "<pre>";
+        var_dump($response->getStatusCode());
 
         var_dump($response->getBody()->getContents());
         exit;
