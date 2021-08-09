@@ -40,7 +40,7 @@ class CommongroundDigidAuthenticator extends AbstractGuardAuthenticator
     private Auth $samlAuth;
     private XmlEncoder $xmlEncoder;
 
-    public function __construct(EntityManagerInterface $em, ParameterBagInterface $params, CommonGroundService $commonGroundService, CsrfTokenManagerInterface $csrfTokenManager, RouterInterface $router, UrlGeneratorInterface $urlGenerator, SessionInterface $session, Auth $samlAuth, XmlEncoder $xmlEncoder)
+    public function __construct(EntityManagerInterface $em, ParameterBagInterface $params, CommonGroundService $commonGroundService, CsrfTokenManagerInterface $csrfTokenManager, RouterInterface $router, UrlGeneratorInterface $urlGenerator, SessionInterface $session, Auth $samlAuth)
     {
         $this->em = $em;
         $this->params = $params;
@@ -50,7 +50,7 @@ class CommongroundDigidAuthenticator extends AbstractGuardAuthenticator
         $this->urlGenerator = $urlGenerator;
         $this->session = $session;
         $this->samlAuth = $samlAuth;
-        $this->xmlEncoder = $xmlEncoder;
+        $this->xmlEncoder = new XmlEncoder(['xml_root_node_name' => 'md:EntityDescriptor']);
     }
 
     /**
