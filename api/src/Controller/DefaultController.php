@@ -305,7 +305,8 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
         echo "<pre>";
         var_dump($response->getStatusCode());
         var_dump($data);
-        var_dump($data['soapenv:envelope']['soapenv:body']['samlp:artifactresponse']['samlp:response']['saml:assertion']['saml:subject']['saml:nameid']);
+        $nameId = $data['soapenv:Body']['samlp:ArtifactResponse']['samlp:Response']['saml:Assertion']['saml:Subject']['saml:NameID'];
+        var_dump($nameId);
 
         exit;
 
