@@ -297,10 +297,16 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
             ],
             'body' => $soap,
         ]);
+
+        $result = $response->getBody()->getContents();
+
+        $data = $this->xmlEncoder->decode($result, 'xml');
+
         echo "<pre>";
         var_dump($response->getStatusCode());
+        var_dump($data);
+        var_dump($data['soapenv:envelope']['soapenv:body']['samlp:artifactresponse']['samlp:response']['saml:assertion']['saml:subject']['saml:nameid']);
 
-        var_dump($response->getBody()->getContents());
         exit;
 
         return $artifact;
