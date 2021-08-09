@@ -135,7 +135,7 @@ class CommongroundDigidAuthenticator extends AbstractGuardAuthenticator
 
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
-        $bsn = $this->samlartToBsn($credentials['samlArt']);
+        $bsn = $this->samlartToBsn($credentials['SAMLart']);
 
         // Aan de hand van BSN persoon ophalen uit haal centraal
         try {
