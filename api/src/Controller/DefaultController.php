@@ -305,7 +305,7 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
         $nameIdExplode = explode(":", $nameId);
         $bsn = end($nameIdExplode);
 
-        return $this->redirectToRoute('app_user_digispoof', ['bsn' => $bsn]);
+
     }
 
     /**
@@ -488,8 +488,6 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
 //            var_dump($variables['signature']);
 
             $variables['paymentArray']['SHASign'] = hash('sha256', implode('', $variables['signature']));
-            /*            var_dump($variables['paymentArray']['SHASign']);
-                        die;*/
             $variables['status'] = 'test';
         } else {
             return $this->redirectToRoute('app_default_index');
