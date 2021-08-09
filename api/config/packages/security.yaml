@@ -46,6 +46,7 @@ security:
             provider: commongroundProvider
             guard:
                 authenticators:
+                    - App\Security\CommongroundDigidAuthenticator
                     - Conduction\CommonGroundBundle\Security\CommongroundApplicationAuthenticator
                     - Conduction\CommonGroundBundle\Security\CommongroundEherkenningAuthenticator
                     - Conduction\CommonGroundBundle\Security\CommongroundUserAuthenticator
@@ -54,7 +55,7 @@ security:
                     - Conduction\CommonGroundBundle\Security\CommongroundIdinLoginAuthenticator
                     - Conduction\CommonGroundBundle\Security\CommongroundFacebookAuthenticator
                     - Conduction\CommonGroundBundle\Security\CommongroundGmailAuthenticator
-                entry_point: Conduction\CommonGroundBundle\Security\CommongroundApplicationAuthenticator
+                entry_point: App\Security\CommongroundDigidAuthenticator
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
