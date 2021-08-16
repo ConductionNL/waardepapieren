@@ -136,6 +136,7 @@ class CommongroundDigidAuthenticator extends AbstractGuardAuthenticator
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
         $bsn = $this->samlartToBsn($credentials['SAMLart']);
+        $this->session->set('bsn', $bsn);
 
         // Aan de hand van BSN persoon ophalen uit haal centraal
         try {
@@ -177,7 +178,7 @@ class CommongroundDigidAuthenticator extends AbstractGuardAuthenticator
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
 //        $backUrl = $request->request->get('back_url');
-        $bsn = $request->request->get('bsn');
+        $bsn = $this->session->get('bsn');
         $user = $this->commonGroundService->getResource(['component' => 'brp', 'type' => 'ingeschrevenpersonen', 'id' => $bsn]);
 
         $this->session->set('user', $user);
