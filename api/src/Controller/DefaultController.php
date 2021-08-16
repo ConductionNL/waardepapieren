@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 use Ramsey\Uuid\Uuid;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -345,10 +346,17 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
             'type'  => 'uittreksel_basis_registratie_personen',
             'price' => '14',
         ];
-//        $variables['types'][] = [
-//            'name'=> 'Historisch uittreksel basis registratie personen',
-//            'type'=> 'historisch_uittreksel_basis_registratie_personen',
-//        ];
+        if($this->getUser()){
+            try{
+                $commonGroundService->getResource($this->getUser()->getPerson() . '/verblijfplaatshistorie');
+                $variables['types'][] = [
+                    'name'=> 'Historisch uittreksel basis registratie personen',
+                    'type'=> 'historisch_uittreksel_basis_registratie_personen',
+                ];
+            } catch(ClientException $exception){
+
+            }
+        }
 
         if ($this->getUser() && $this->getUser()->getPerson()) {
             $variables['certificates'] = $commonGroundService->getResourceList(['component' => 'wari', 'type' => 'certificates'], ['person' => $this->getUser()->getPerson()])['hydra:member'];
