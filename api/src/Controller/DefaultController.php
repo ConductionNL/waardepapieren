@@ -352,6 +352,7 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
                 $variables['types'][] = [
                     'name'=> 'Historisch uittreksel basis registratie personen',
                     'type'=> 'historisch_uittreksel_basis_registratie_personen',
+                    'price' => '14',
                 ];
             } catch(ClientException $exception){
 
