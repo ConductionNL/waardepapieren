@@ -7,13 +7,16 @@ config:
     debug: 0
     cache: true
     internal: false
+    mode: 'digispoof'
 
 security:
     applicationKey: "a78828b4-f577-4425-a17c-c217980409e9"
     secret: ""
-    samlPrivateKey: "%example%"
-    samlX509Cert: "%example%"
-    shasign: "%example%"
+    certificate:
+        certificate: ""
+        privateKey: ""
+        existingSecret: ""
+    shasign: ""
     jwt:
         id:
         privateKey:
@@ -22,17 +25,24 @@ security:
             auth: apikey
             location: waardepapieren-service.local
             apikey: 45c1a4b6-59d3-4a6e-86bf-88a872f35845
-        cc:
+        wari:
             auth: apikey
-            location: contactcatalogus.local
+            location: waardepapieren-register.local
             apikey: 45c1a4b6-59d3-4a6e-86bf-88a872f35845
         brp:
-            auth: apikey
-            location: brpservice.local
-            apikey: 45c1a4b6-59d3-4a6e-86bf-88a872f35845
+            auth: username-password
+            locale: null
+            location: http://brpservice.local
+            password: changeme
+            username: changeme
+            accept: application/hal+json
         ds:
             auth: apikey
             location: digispoof-interface.local
+            apikey: 45c1a4b6-59d3-4a6e-86bf-88a872f35845
+        wrc:
+            auth: apikey
+            location: webresourcecatalogus.local
             apikey: 45c1a4b6-59d3-4a6e-86bf-88a872f35845
 
 php:
@@ -83,11 +93,11 @@ ingress:
     type: "nginx"
     hostname: .local
     path: /
-    annotations:
+    annotations: {}
         # kubernetes.io/ingress.global-static-ip-name: chart-ip
         # kubernetes.io/ingress.class: gce
         # kubernetes.io/tls-acme: "true"
-    tls:
+    tls: []
         # Secrets must be manually created in the namespace, you can also use cert-manager.
         # - hosts:
         # - example.com

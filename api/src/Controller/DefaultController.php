@@ -6,13 +6,13 @@ namespace App\Controller;
 
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 use Ramsey\Uuid\Uuid;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\UrlHelper;
 use Symfony\Component\Routing\Annotation\Route;
@@ -248,13 +248,13 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
 
     /**
      * @Route("/saml/SLO/Artifact")
-     * @Template
      */
-    public function SamlTestAction(CommonGroundService $commonGroundService, Request $request, \OneLogin\Saml2\Auth $samlAuth)
+    public function SamlTestAction(Request $request, \OneLogin\Saml2\Auth $samlAuth, ParameterBagInterface $params)
     {
-
+        var_dump($request->attributes->get('_route'));
+        var_dump($request->getMethod());
         $date = date('Y-m-d\TH:i:s\Z');
-        $artifact  = $request->query->get('SAMLart');
+        $artifact = $request->query->get('SAMLart');
         $config = $samlAuth->getSettings()->getSPData();
 
         $xml = '
@@ -263,49 +263,62 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
         xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
         xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
         xmlns:ec="http://www.w3.org/2001/10/xml-exc-c14n#"
-        ID="_1330416073" Version="2.0" IssueInstant="'. $date .'">
-        <saml:Issuer>'. $config['entityId'] .'</saml:Issuer>
-        <samlp:Artifact>'. $artifact .'</samlp:Artifact>
+        ID="_1330416073" Version="2.0" IssueInstant="'.$date.'">
+        <saml:Issuer>'.$config['entityId'].'</saml:Issuer>
+        <samlp:Artifact>'.$artifact.'</samlp:Artifact>
         </samlp:ArtifactResolve>';
 
         $signed = \OneLogin\Saml2\Utils::addSign($xml, $config['privateKey'], $config['x509cert']);
-        $signed = str_replace('<?xml version="1.0"?>', "", $signed);
+        $signed = str_replace('<?xml version="1.0"?>', '', $signed);
 
         $soap = '
-        <?xml version="1.0" encoding="UTF-8"?>
         <soapenv:Envelope
         xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
         xmlns:xsd="http://www.w3.org/2001/XMLSchema"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
         <soapenv:Body>
-        '. $signed .'
+        '.$signed.'
         </soapenv:Body>
         </soapenv:Envelope>';
+
+
+//        echo "<pre>".htmlentities($soap)."</pre>";
+//        die;
 
         $client = new Client([
             'base_uri' => 'https://was-preprod1.digid.nl',
             'timeout'  => 5.0,
+            'ssl_key'  => $params->get('app_ssl_key'),
+            'cert'     => $params->get('app_certificate'),
         ]);
 
         $response = $client->request('POST', '/saml/idp/resolve_artifact', [
             'headers' => [
                 'Content-Type' => 'text/xml',
-                'SOAPAction' => $config['entityId'],
+                'SOAPAction'   => $config['entityId'],
             ],
             'body' => $soap,
         ]);
 
-        var_dump($response->getBody()->getContents());
+        $result = $response->getBody()->getContents();
+
+        $data = $this->xmlEncoder->decode($result, 'xml');
+
+        $nameId = $data['soapenv:Body']['samlp:ArtifactResponse']['samlp:Response']['saml:Assertion']['saml:Subject']['saml:NameID'];
+        $nameIdExplode = explode(":", $nameId);
+        $variables['bsn'] = end($nameIdExplode);
+
+        var_dump($variables['bsn']);
+
         die;
 
-        return $artifact;
     }
 
     /**
      * @Route("/")
      * @Template
      */
-    public function indexAction(CommonGroundService $commonGroundService, Request $request, ParameterBagInterface $params)
+    public function indexAction(CommonGroundService $commonGroundService, Request $request, ParameterBagInterface $params, Session $session)
     {
         // On an index route we might want to filter based on user input
         $variables['query'] = array_merge($request->query->all(), $variables['post'] = $request->request->all());
@@ -333,14 +346,37 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
             'type' => 'uittreksel_basis_registratie_personen',
             'price' => '14',
         ];
-//        $variables['types'][] = [
-//            'name'=> 'Historisch uittreksel basis registratie personen',
-//            'type'=> 'historisch_uittreksel_basis_registratie_personen',
-//        ];
+        if($this->getUser()){
+            try{
+                $commonGroundService->getResource($this->getUser()->getPerson() . '/verblijfplaatshistorie');
+                $variables['types'][] = [
+                    'name'=> 'Historisch uittreksel basis registratie personen',
+                    'type'=> 'historisch_uittreksel_basis_registratie_personen',
+                    'price' => '14',
+                ];
+            } catch(ClientException $exception){
+
+            }
+        }
 
         if ($this->getUser() && $this->getUser()->getPerson()) {
             $variables['certificates'] = $commonGroundService->getResourceList(['component' => 'wari', 'type' => 'certificates'], ['person' => $this->getUser()->getPerson()])['hydra:member'];
 //            $variables['certificates'][] = array('type' => 'geboorte akte', 'created' => '17-09-2020', 'id' => '1');
+        }
+
+        if ($session->get('type') && (!$params->has('app_shasign') || !$this->getParameter('app_shasign'))) {
+            $variables['certificate']['type'] = $session->get('type');
+            $variables['certificate']['organization'] = '001516814';
+            $variables['certificate']['person'] = $this->getUser()->getPerson();
+            $variables['certificate'] = $commonGroundService->createResource($variables['certificate'], ['component' => 'waar', 'type' => 'certificates']);
+            $variables['certificate']['claim'] = base64_encode(json_encode($variables['certificate']['claim']));
+
+            $variables['certificates'] = $commonGroundService->getResourceList(['component' => 'wari', 'type' => 'certificates'], ['person' => $this->getUser()->getPerson()])['hydra:member'];
+        }
+        if($params->has('app_shasign') && $this->getParameter('app_shasign')){
+            $variables['paymentEnabled'] = true;
+        } else {
+            $variables['paymentEnabled'] = false;
         }
 
         return $variables;
@@ -360,6 +396,18 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
     )
     {
         $variables = [];
+
+        if(!$params->has('app_shasign') || !$this->getParameter('app_shasign')){
+            $variables['values'] = $request->request->all();
+            $typeinfo = json_decode($variables['values']['typeinfo']);
+
+            $orderId = (string) Uuid::uuid4();
+            if (isset($typeinfo)) {
+                $session->set('type', $typeinfo->type);
+                $session->set('orderId', $orderId);
+            }
+            return $this->redirectToRoute('app_default_index');
+        }
 
         $shaSignature = $params->get('app_shasign');
 
@@ -446,6 +494,11 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
                 $session->set('type', $typeinfo->type);
                 $session->set('orderId', $orderId);
             }
+//            var_dump(implode('?', $variables['signature']));
+//            var_dump($variables['signature']);
+
+            $variables['paymentArray']['SHASign'] = hash('sha256', implode('', $variables['signature']));
+            $variables['status'] = 'test';
         } else {
             return $this->redirectToRoute('app_default_index');
         }
