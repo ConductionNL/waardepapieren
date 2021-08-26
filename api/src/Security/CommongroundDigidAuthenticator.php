@@ -140,7 +140,7 @@ class CommongroundDigidAuthenticator extends AbstractGuardAuthenticator
 
         // Aan de hand van BSN persoon ophalen uit haal centraal
         try {
-            $user = $this->commonGroundService->getResource(['component' => 'brp', 'type' => 'ingeschrevenpersonen', 'id' => $bsn]);
+            $user = $this->commonGroundService->getResource(['component' => 'brp', 'type' => 'ingeschrevenpersonen', 'id' => $bsn], [], false);
         } catch (\Throwable $e) {
             return;
         }
