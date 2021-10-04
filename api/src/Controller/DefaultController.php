@@ -251,66 +251,6 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
      */
     public function SamlTestAction(Request $request, \OneLogin\Saml2\Auth $samlAuth, ParameterBagInterface $params)
     {
-        var_dump($request->attributes->get('_route'));
-        var_dump($request->getMethod());
-        $date = date('Y-m-d\TH:i:s\Z');
-        $artifact = $request->query->get('SAMLart');
-        $config = $samlAuth->getSettings()->getSPData();
-
-        $xml = '
-                <samlp:ArtifactResolve
-        xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
-        xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-        xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
-        xmlns:ec="http://www.w3.org/2001/10/xml-exc-c14n#"
-        ID="_1330416073" Version="2.0" IssueInstant="'.$date.'">
-        <saml:Issuer>'.$config['entityId'].'</saml:Issuer>
-        <samlp:Artifact>'.$artifact.'</samlp:Artifact>
-        </samlp:ArtifactResolve>';
-
-        $signed = \OneLogin\Saml2\Utils::addSign($xml, $config['privateKey'], $config['x509cert']);
-        $signed = str_replace('<?xml version="1.0"?>', '', $signed);
-
-        $soap = '
-        <soapenv:Envelope
-        xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
-        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-        <soapenv:Body>
-        '.$signed.'
-        </soapenv:Body>
-        </soapenv:Envelope>';
-
-
-//        echo "<pre>".htmlentities($soap)."</pre>";
-//        die;
-
-        $client = new Client([
-            'base_uri' => 'https://was-preprod1.digid.nl',
-            'timeout'  => 5.0,
-            'ssl_key'  => $params->get('app_ssl_key'),
-            'cert'     => $params->get('app_certificate'),
-        ]);
-
-        $response = $client->request('POST', '/saml/idp/resolve_artifact', [
-            'headers' => [
-                'Content-Type' => 'text/xml',
-                'SOAPAction'   => $config['entityId'],
-            ],
-            'body' => $soap,
-        ]);
-
-        $result = $response->getBody()->getContents();
-
-        $data = $this->xmlEncoder->decode($result, 'xml');
-
-        $nameId = $data['soapenv:Body']['samlp:ArtifactResponse']['samlp:Response']['saml:Assertion']['saml:Subject']['saml:NameID'];
-        $nameIdExplode = explode(":", $nameId);
-        $variables['bsn'] = end($nameIdExplode);
-
-        var_dump($variables['bsn']);
-
-        die;
 
     }
 
