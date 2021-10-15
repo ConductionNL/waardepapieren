@@ -47,14 +47,6 @@ security:
             guard:
                 authenticators:
                     - App\Security\CommongroundDigidAuthenticator
-                    - Conduction\CommonGroundBundle\Security\CommongroundApplicationAuthenticator
-                    - Conduction\CommonGroundBundle\Security\CommongroundEherkenningAuthenticator
-                    - Conduction\CommonGroundBundle\Security\CommongroundUserAuthenticator
-                    - Conduction\CommonGroundBundle\Security\CommongroundDigispoofAuthenticator
-                    - Conduction\CommonGroundBundle\Security\CommongroundIdinAuthenticator
-                    - Conduction\CommonGroundBundle\Security\CommongroundIdinLoginAuthenticator
-                    - Conduction\CommonGroundBundle\Security\CommongroundFacebookAuthenticator
-                    - Conduction\CommonGroundBundle\Security\CommongroundGmailAuthenticator
                 entry_point: App\Security\CommongroundDigidAuthenticator
 
             # activate different ways to authenticate

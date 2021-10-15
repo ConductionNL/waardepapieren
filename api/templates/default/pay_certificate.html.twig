@@ -11,25 +11,29 @@
                     {% if hashResult|default and hashResult == 'success' %}
                         <p>Returned data is correct</p>
 
-                        {% if paramsArray['STATUS']|default and paramsArray['STATUS'] == '9' %}
-                            <p>Your payment has been accepted. <i class="fa fa-check" style="color: limegreen"></i></p>
-                        {% elseif paramsArray['STATUS']|default and paramsArray['STATUS'] == '5' %}
-                            <p>Your payment has been authorized. <i class="fa fa-check" style="color: limegreen"></i>
-                            </p>
-                        {% elseif paramsArray['STATUS']|default and (paramsArray['STATUS'] == '51' or paramsArray['STATUS'] == '91') %}
-                            <p>Your payment is in queue awaiting acceptance. <i class="fa fa-hourglass"
-                                                                                style="color: lightskyblue"></i></p>
-                        {% elseif paramsArray['STATUS']|default and paramsArray['STATUS'] == '2' %}
-                            <p>The authorizer has refused connection after too many faults. <b style="color: red">X</b>
-                            </p>
-                            <a href="{{ path('app_default_index') }}" class="btn btn--primary">Back to home</a>
-                        {% elseif paramsArray['STATUS']|default and (paramsArray['STATUS'] == '52' or paramsArray['STATUS'] == '92') %}
-                            <p>The result of your payment is unsure. <b style="color: red">X</b></p>
-                            <a href="{{ path('app_default_index') }}" class="btn btn--primary">Back to home</a>
-                        {% elseif paramsArray['STATUS']|default and paramsArray['STATUS'] == '1' %}
-                            <p>The payment has been cancelled. <b style="color: red">X</b></p>
-                            <a href="{{ path('app_default_index') }}" class="btn btn--primary">Back to home</a>
-                        {% endif %}
+                            {% if paramsArray['STATUS']|default and paramsArray['STATUS'] == '9' %}
+                                {% if certificate|default %}
+                                <p>Your payment has been accepted. <i class="fa fa-check" style="color: limegreen"></i></p>
+                                {% else %}
+                                    <p>The request was invalid. You probably tried to request the certificate twice on one payment.</p>
+                                {% endif %}
+                            {% elseif paramsArray['STATUS']|default and paramsArray['STATUS'] == '5' %}
+                                <p>Your payment has been authorized. <i class="fa fa-check" style="color: limegreen"></i>
+                                </p>
+                            {% elseif paramsArray['STATUS']|default and (paramsArray['STATUS'] == '51' or paramsArray['STATUS'] == '91') %}
+                                <p>Your payment is in queue awaiting acceptance. <i class="fa fa-hourglass"
+                                                                                    style="color: lightskyblue"></i></p>
+                            {% elseif paramsArray['STATUS']|default and paramsArray['STATUS'] == '2' %}
+                                <p>The authorizer has refused connection after too many faults. <b style="color: red">X</b>
+                                </p>
+                                <a href="{{ path('app_default_index') }}" class="btn btn--primary">Back to home</a>
+                            {% elseif paramsArray['STATUS']|default and (paramsArray['STATUS'] == '52' or paramsArray['STATUS'] == '92') %}
+                                <p>The result of your payment is unsure. <b style="color: red">X</b></p>
+                                <a href="{{ path('app_default_index') }}" class="btn btn--primary">Back to home</a>
+                            {% elseif paramsArray['STATUS']|default and paramsArray['STATUS'] == '1' %}
+                                <p>The payment has been cancelled. <b style="color: red">X</b></p>
+                                <a href="{{ path('app_default_index') }}" class="btn btn--primary">Back to home</a>
+                            {% endif %}
 
 
 

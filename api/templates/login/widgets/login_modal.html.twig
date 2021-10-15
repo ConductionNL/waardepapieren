@@ -19,13 +19,6 @@
 
 {#              Hardcoded link  #}
 {#                {% if application['defaultConfiguration']['configuration']['login']['digid'] is defined and application['defaultConfiguration']['configuration']['login']['digid'] %}#}
-
-                <h2 id="inloggen-verzuimloket">Digispoof</h2>
-                <p>
-                    <a class="pointer" href="{{ digispoof }}{% if '?' in digispoof %}&{% else %}?{% endif %}responceUrl={{ url('app_user_digispoof') }}&backUrl={{ url('app_default_index') }}"><i
-                                style="margin-right: 10px" class="fas fa-lock"></i> Log in met Digispoof
-                    </a>
-                </p>
                 <h2 id="inloggen-verzuimloket">DigiD</h2>
                 <p>
                     <a class="pointer" href="/saml/Login"><i

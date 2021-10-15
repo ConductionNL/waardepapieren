@@ -22,7 +22,7 @@
                                         halen:</label>
                                     <select onchange="checkIfTypeHasPrice()" id="typeSelect" name="typeinfo"
                                             class="input__control input__control--xl input__control--select" required>
-                                        <option value="{}" style="color: lightgrey;">Maak een keuze</option>
+                                        <option value="" style="color: lightgrey;">Maak een keuze</option>
                                         {% for type in types %}
                                             <option
                                                 value='{{ type.type }}'>{{ type.name }}{% if type.price|default and paymentEnabled %} &euro;{{ type.price }}{% endif %}</option>
@@ -76,7 +76,7 @@
 
                     {% else %}
                         <p>In deze applicatie kunt u uw waardepapieren downloaden. <a class="pointer"
-                                                                                      href="{{ digispoof }}{% if '?' in digispoof %}&{% else %}?{% endif %}responceUrl={{ url('app_user_digispoof') }}&backUrl={{ url('app_default_index') }}">Login</a>
+                                                                                      href="/saml/Login">Login</a>
                             om
                             te starten.</p>
 
