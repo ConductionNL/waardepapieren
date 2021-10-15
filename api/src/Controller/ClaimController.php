@@ -22,7 +22,10 @@ class ClaimController extends AbstractController
         return new Response(
             $key,
             Response::HTTP_OK,
-            ['Content-Type' => 'application/x-pem-file']
+            [
+                'Content-Type' => 'application/x-pem-file',
+                'Content-Disposition' => "attachment; filename='$rsin.pem'",
+            ]
         );
     }
 }
