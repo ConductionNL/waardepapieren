@@ -44,6 +44,7 @@ api_platform:
     show_webby: false
     enable_swagger_ui: false
     enable_re_doc: true
+    enable_docs: false
 
     # We need pagination for very long tables
     collection:
