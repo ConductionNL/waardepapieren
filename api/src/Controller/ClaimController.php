@@ -3,13 +3,14 @@
 namespace App\Controller;
 
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route('/claims')
  */
-class ClaimController
+class ClaimController extends AbstractController
 {
     /**
      * @Route("/public_keys/{rsin}")
