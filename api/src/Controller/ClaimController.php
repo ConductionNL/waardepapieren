@@ -24,7 +24,7 @@ class ClaimController extends AbstractController
             Response::HTTP_OK,
             [
                 'Content-Type' => 'application/x-pem-file',
-                'Content-Disposition' => "attachment; filename='$rsin.pem'",
+                'Content-Disposition' => "attachment; filename=$rsin.pem",
             ]
         );
     }
