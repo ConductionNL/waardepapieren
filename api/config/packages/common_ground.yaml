@@ -56,7 +56,7 @@ parameters:
     env(ARTIFACTHUB_USER): ""
     env(HELM_REPOSITORY): ""
     env(APP_MAJOR_VERSION): "v1"
-    env(APP_DIGISPOOF_LOCATION): "https://zuid-drecht.nl/digispoof"
+    env(APP_DIGISPOOF_LOCATION): "https://acc-waardepapieren.hoorn.nl/digispoof?brpUrl=localhost"
     env(APP_EHERKENNING_LOCATION): "https://zuid-drecht.nl/eherkenning"
     env(BADGES): ""
 

@@ -254,6 +254,46 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
 
     }
 
+    public function getTypes(): array
+    {
+        return [
+            [
+                'name'  => 'Akte van geboorte',
+                'type'  => 'akte_van_geboorte',
+                'price' => '14',
+            ],
+//        [
+//            'name'=> 'Akte van overlijden',
+//            'type'=> 'akte_van_overlijden',
+//        ],
+            [
+                'name'  => 'Verklaring van in leven zijn',
+                'type'  => 'verklaring_van_in_leven_zijn',
+                'price' => '14',
+            ],
+//        [
+//            'name'=> 'Verklaring van Nederlanderschap',
+//            'type'=> 'verklaring_van_nederlanderschap',
+//        ],
+            [
+                'name'  => 'Uittreksel basis registratie personen',
+                'type'  => 'uittreksel_basis_registratie_personen',
+                'price' => '14',
+            ],
+        ];
+    }
+
+    public function getTypeInfo(?string $typeId): array
+    {
+        foreach($this->getTypes() as $type)
+        {
+            if($type['type'] == $typeId){
+                return $type;
+            }
+        }
+        return [];
+    }
+
     /**
      * @Route("/")
      * @Template
@@ -262,30 +302,8 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
     {
         // On an index route we might want to filter based on user input
         $variables['query'] = array_merge($request->query->all(), $variables['post'] = $request->request->all());
+        $variables['types'] = $this->getTypes();
 
-        $variables['types'][] = [
-            'name'  => 'Akte van geboorte',
-            'type'  => 'akte_van_geboorte',
-            'price' => '14',
-        ];
-//        $variables['types'][] = [
-//            'name'=> 'Akte van overlijden',
-//            'type'=> 'akte_van_overlijden',
-//        ];
-        $variables['types'][] = [
-            'name'  => 'Verklaring van in leven zijn',
-            'type'  => 'verklaring_van_in_leven_zijn',
-            'price' => '14',
-        ];
-//        $variables['types'][] = [
-//            'name'=> 'Verklaring van Nederlanderschap',
-//            'type'=> 'verklaring_van_nederlanderschap',
-//        ];
-        $variables['types'][] = [
-            'name'  => 'Uittreksel basis registratie personen',
-            'type'  => 'uittreksel_basis_registratie_personen',
-            'price' => '14',
-        ];
         if($this->getUser()){
             try{
                 $commonGroundService->getResource($this->getUser()->getPerson() . '/verblijfplaatshistorie');
@@ -337,11 +355,11 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
 
         if(!$params->has('app_shasign') || !$this->getParameter('app_shasign')){
             $variables['values'] = $request->request->all();
-            $typeinfo = json_decode($variables['values']['typeinfo']);
+            $typeinfo = $this->getTypeInfo($variables['values']['typeinfo']);
 
             $orderId = (string) Uuid::uuid4();
             if (isset($typeinfo)) {
-                $session->set('type', $typeinfo->type);
+                $session->set('type', $typeinfo['type']);
                 $session->set('orderId', $orderId);
             }
             return $this->redirectToRoute('app_default_index');
@@ -378,7 +396,7 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
             if (isset($variables['paramsArray']['STATUS']) && ($variables['paramsArray']['STATUS'] == '5' ||
                     $variables['paramsArray']['STATUS'] == '9' || $variables['paramsArray']['STATUS'] == '51' ||
                     $variables['paramsArray']['STATUS'] == '91') && isset($orderId) && isset($receivedOrderId) && $orderId == $receivedOrderId) {
-
+                $session->remove('orderId');
 //                Create certificate if type is in session
                 if ($session->get('type')) {
                     $variables['certificate']['type'] = $session->get('type');
@@ -395,11 +413,11 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
             }
         } elseif (isset($shaSignature) && $request->isMethod('POST') && $this->getUser()) {
             $variables['values'] = $request->request->all();
-            $typeinfo = json_decode($variables['values']['typeinfo']);
+            $typeinfo = $this->getTypeInfo($variables['values']['typeinfo']);
 
             $orderId = (string) Uuid::uuid4();
             if (isset($typeinfo)) {
-                $session->set('type', $typeinfo->type);
+                $session->set('type', $typeinfo['type']);
                 $session->set('orderId', $orderId);
             }
 
@@ -407,7 +425,7 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
             $variables['paymentArray'] = [
                 'PSPID'          => 'gemhoorn',
                 'orderid'        => $orderId,
-                'amount'         => $typeinfo->price * 100,
+                'amount'         => $typeinfo['price'] * 100,
                 'currency'       => 'EUR',
                 'language'       => 'nl_NL',
                 'CN'             => $this->getUser()->getName(),
