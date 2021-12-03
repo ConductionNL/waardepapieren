@@ -411,7 +411,7 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
                 $session->set('type', null);
                 $session->set('orderId', null);
             }
-        } elseif (isset($shaSignature) && $request->isMethod('POST'))) {
+        } elseif (isset($shaSignature) && $request->isMethod('POST')) {
             $variables['values'] = $request->request->all();
             $typeinfo = $this->getTypeInfo($variables['values']['typeinfo']);
 
