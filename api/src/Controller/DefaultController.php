@@ -251,7 +251,6 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
      */
     public function SamlTestAction(Request $request, \OneLogin\Saml2\Auth $samlAuth, ParameterBagInterface $params)
     {
-
     }
 
     public function getTypes(): array
@@ -262,19 +261,19 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
                 'type'  => 'akte_van_geboorte',
                 'price' => '14',
             ],
-//        [
-//            'name'=> 'Akte van overlijden',
-//            'type'=> 'akte_van_overlijden',
-//        ],
+            //        [
+            //            'name'=> 'Akte van overlijden',
+            //            'type'=> 'akte_van_overlijden',
+            //        ],
             [
                 'name'  => 'Verklaring van in leven zijn',
                 'type'  => 'verklaring_van_in_leven_zijn',
                 'price' => '14',
             ],
-//        [
-//            'name'=> 'Verklaring van Nederlanderschap',
-//            'type'=> 'verklaring_van_nederlanderschap',
-//        ],
+            //        [
+            //            'name'=> 'Verklaring van Nederlanderschap',
+            //            'type'=> 'verklaring_van_nederlanderschap',
+            //        ],
             [
                 'name'  => 'Uittreksel basis registratie personen',
                 'type'  => 'uittreksel_basis_registratie_personen',
@@ -285,9 +284,8 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
 
     public function getTypeInfo(?string $typeId): array
     {
-        foreach($this->getTypes() as $type)
-        {
-            if($type['type'] == $typeId){
+        foreach ($this->getTypes() as $type) {
+            if ($type['type'] == $typeId) {
                 return $type;
             }
         }
@@ -304,23 +302,25 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
         $variables['query'] = array_merge($request->query->all(), $variables['post'] = $request->request->all());
         $variables['types'] = $this->getTypes();
 
-        if($this->getUser()){
-            try{
-                $commonGroundService->getResource($this->getUser()->getPerson() . '/verblijfplaatshistorie');
-                $variables['types'][] = [
-                    'name'=> 'Historisch uittreksel basis registratie personen',
-                    'type'=> 'historisch_uittreksel_basis_registratie_personen',
-                    'price' => '14',
-                ];
-            } catch(ClientException $exception){
+        // if($this->getUser()){
+        //     try{
+        //         $commonGroundService->getResource($this->getUser()->getPerson() . '/verblijfplaatshistorie');
+        //         $variables['types'][] = [
+        //             'name'=> 'Historisch uittreksel basis registratie personen',
+        //             'type'=> 'historisch_uittreksel_basis_registratie_personen',
+        //             'price' => '14',
+        //         ];
+        //     } catch(ClientException $exception){
 
-            }
-        }
+        //     }
+        // }
 
-        if ($this->getUser() && $this->getUser()->getPerson()) {
-            $variables['certificates'] = $commonGroundService->getResourceList(['component' => 'wari', 'type' => 'certificates'], ['person' => $this->getUser()->getPerson()])['hydra:member'];
-//            $variables['certificates'][] = array('type' => 'geboorte akte', 'created' => '17-09-2020', 'id' => '1');
-        }
+        // if ($this->getUser() && $this->getUser()->getPerson()) {
+        //     $variables['certificates'] = $commonGroundService->getResourceList(['component' => 'wari', 'type' => 'certificates'], ['person' => $this->getUser()->getPerson()])['hydra:member'];
+        //     //            $variables['certificates'][] = array('type' => 'geboorte akte', 'created' => '17-09-2020', 'id' => '1');
+        // }
+
+        $variables['certificates'] = [];
 
         if ($session->get('type') && (!$params->has('app_shasign') || !$this->getParameter('app_shasign'))) {
             $variables['certificate']['type'] = $session->get('type');
@@ -331,7 +331,7 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
 
             $variables['certificates'] = $commonGroundService->getResourceList(['component' => 'wari', 'type' => 'certificates'], ['person' => $this->getUser()->getPerson()])['hydra:member'];
         }
-        if($params->has('app_shasign') && $this->getParameter('app_shasign')){
+        if ($params->has('app_shasign') && $this->getParameter('app_shasign')) {
             $variables['paymentEnabled'] = true;
         } else {
             $variables['paymentEnabled'] = false;
@@ -353,7 +353,7 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
     ) {
         $variables = [];
 
-        if(!$params->has('app_shasign') || !$this->getParameter('app_shasign')){
+        if (!$params->has('app_shasign') || !$this->getParameter('app_shasign')) {
             $variables['values'] = $request->request->all();
             $typeinfo = $this->getTypeInfo($variables['values']['typeinfo']);
 
@@ -367,7 +367,7 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
 
         $shaSignature = $params->get('app_shasign');
 
-        if (isset($shaSignature) && $request->query->get('orderID') && $request->query->get('PAYID') && $request->query->get('SHASIGN') && $this->getUser()) {
+        if (isset($shaSignature) && $request->query->get('orderID') && $request->query->get('PAYID') && $request->query->get('SHASIGN')) {
             $variables['paramsArray'] = $request->query->all();
 
             $keyArray = [];
@@ -381,7 +381,7 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
 
             $signature = [];
             foreach ($keyArray as $key => $value) {
-                $signature[] = $key.'='.$value.$shaSignature;
+                $signature[] = $key . '=' . $value . $shaSignature;
             }
             $hashedSign = strtoupper(hash('sha256', implode('', $signature)));
 
@@ -394,10 +394,10 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
             $receivedOrderId = $request->query->get('orderID');
             $orderId = $session->get('orderId');
             if (isset($variables['paramsArray']['STATUS']) && ($variables['paramsArray']['STATUS'] == '5' ||
-                    $variables['paramsArray']['STATUS'] == '9' || $variables['paramsArray']['STATUS'] == '51' ||
-                    $variables['paramsArray']['STATUS'] == '91') && isset($orderId) && isset($receivedOrderId) && $orderId == $receivedOrderId) {
+                $variables['paramsArray']['STATUS'] == '9' || $variables['paramsArray']['STATUS'] == '51' ||
+                $variables['paramsArray']['STATUS'] == '91') && isset($orderId) && isset($receivedOrderId) && $orderId == $receivedOrderId) {
                 $session->remove('orderId');
-//                Create certificate if type is in session
+                //                Create certificate if type is in session
                 if ($session->get('type')) {
                     $variables['certificate']['type'] = $session->get('type');
                     $variables['certificate']['organization'] = '001516814';
@@ -428,7 +428,7 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
                 'amount'         => $typeinfo['price'] * 100,
                 'currency'       => 'EUR',
                 'language'       => 'nl_NL',
-                'CN'             => $this->getUser()->getName(),
+                'CN'             => 'jan klaas',
                 'TITLE'          => 'Certificate',
                 'BGCOLOR'        => 'white',
                 'TXTCOLOR'       => 'black',
@@ -449,14 +449,14 @@ hbLnCGV7d+nY520FypigadljbcU/siU8VnQPQkgUVw==',
             }
 
             ksort($variables['keyArray']);
-//            var_dump($variables['keyArray']);
+            //            var_dump($variables['keyArray']);
             $variables['signature'] = [];
 
             foreach ($variables['keyArray'] as $key => $value) {
-                $variables['signature'][] = $key.'='.$value.$shaSignature;
+                $variables['signature'][] = $key . '=' . $value . $shaSignature;
             }
-//            var_dump(implode('?', $variables['signature']));
-//            var_dump($variables['signature']);
+            //            var_dump(implode('?', $variables['signature']));
+            //            var_dump($variables['signature']);
 
             $variables['paymentArray']['SHASign'] = hash('sha256', implode('', $variables['signature']));
             $variables['status'] = 'test';

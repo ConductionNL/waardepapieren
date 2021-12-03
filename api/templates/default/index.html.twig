@@ -12,8 +12,7 @@
 
                     <h2>Waardepapieren</h2>
 
-                    {% if app.user|default %}
-
+                    
                         {% if not certificate|default %}
 
                             <form id="form" class="mb4" action="{{ url('app_default_paycertificate') }}" method="post">
@@ -37,7 +36,7 @@
                             </form>
 
                         {% endif %}
-
+{# 
                         {% if certificate|default %}
                             {% include '/widgets/certificate.html.twig' with {
                                 'certificate': certificate
@@ -48,7 +47,7 @@
                             {% include '/widgets/certificates.html.twig' with {
                                 'certificates': certificates
                             } %}
-                        {% endif %}
+                        {% endif %} #}
 
 
                         {# {% if certificates|default %} #}
@@ -74,13 +73,6 @@
                         {# {% endfor %} #}
                         {# {% endif %} #}
 
-                    {% else %}
-                        <p>In deze applicatie kunt u uw waardepapieren downloaden. <a class="pointer"
-                                                                                      href="/saml/Login">Login</a>
-                            om
-                            te starten.</p>
-
-                    {% endif %}
 
                 </div><!-- /.content -->
             </div><!-- /.content-background -->
